@@ -29,6 +29,6 @@
   display: flex;
   justify-content: center;
   margin-top: 3%;
-  margin-bottom: 3%; /* khoảng cách giữa các component */
+  margin-bottom: 3%; 
 }
 </style>

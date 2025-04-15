@@ -5,39 +5,30 @@ import IconTextLibrary from './IconTextLibrary.vue'
 </script>
 <template>
 <div class = "main-logo">
-    <IconLogoWhite class="icon logo-white" />
-    <IconTextBookWorm class="icon bookworm" />
-    <IconTextLibrary class="icon library" />
+    <div class="slot"><IconLogoWhite class="icon logo-white" /></div>
+    <div class="slot"><IconTextBookWorm class="icon bookworm" /></div>
+    <div class  ="slot"><IconTextLibrary class="icon library" /></div>
 </div>
 </template>
 
 <style scoped>
 .main-logo {
   position: relative;
-  margin: 125px 102px 293px 103px;
   width: 264.375px;
   height: 157.414px;
   flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.icon {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* Icon đầu - căn trên */
-.logo-white {
-  top: 0;
-}
-
-/* Icon giữa - cách top 91.4px */
-.bookworm {
-  top: 91.4px;
-}
-
-/* Icon cuối - căn đáy */
-.library {
-  bottom: 0;
+.slot {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1%;
+  margin-bottom: 1%; 
 }
 </style>

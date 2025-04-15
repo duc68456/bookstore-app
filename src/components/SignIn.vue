@@ -13,6 +13,9 @@
     import ForgotPass from './texts/ForgotPass.vue'
 
     import MainLogo from './icons/MainLogo.vue'
+    import WhiteText from './texts/WhiteText.vue'
+    import ShortButton from './buttons/ShortButton.vue'
+
 </script>
 
 <template>
@@ -72,7 +75,27 @@
         </template>
         <template #pad-right>
             <RightPad>
-                <MainLogo/>
+                <template #logo>
+                    <MainLogo/>
+                </template>
+                <template #small-text>
+                    <WhiteText>
+                        <template #note>
+                            New to our platform? Sign Up now.
+                        </template>
+                    </WhiteText>
+                </template>
+                <template #button>
+                    <ShortButton>
+                        <template #btn-text>
+                            <ButtonText>
+                                <template #btnText>
+                                    SIGN UP
+                                </template>
+                            </ButtonText>
+                        </template>
+                    </ShortButton>
+                </template>        
             </RightPad>
         </template>
     </MainForm1>
