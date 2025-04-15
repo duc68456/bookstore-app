@@ -1,3 +1,4 @@
+HEAD
 # bookstore-app
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -27,3 +28,6 @@ npm run dev
 ```sh
 npm run build
 ```
+=======
+# bookstore-app
+>>>>>>> 149a3af9b111cb745c79de95cf2d57e363890c2c
