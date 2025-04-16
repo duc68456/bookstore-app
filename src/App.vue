@@ -4,8 +4,7 @@ import SignIn from './components/SignIn.vue'
 
 <template>
   <div class="wrapper">
-  <SignIn>
-  </SignIn>
+    <router-view></router-view>
   </div>
 
 </template>

@@ -21,7 +21,7 @@
 
 .btn:hover {  
     border: 1px solid var(--vt-c-second-bg-color);
-    background: var(--vt-c-main-bg-color);
+    background: var(--vt-c-main-bg-color); 
 }
 
 .btn:hover ::v-deep(.text) {  

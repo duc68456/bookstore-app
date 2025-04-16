@@ -1,7 +1,7 @@
 <template>
-    <p class="title">
-        <slot name="fg"/>
-    </p>
+  <router-link class="title" to="/forgot-password">
+    <slot name="fg"/>
+  </router-link>
 </template>
 <style scoped>
 .title {
@@ -11,5 +11,7 @@
     font-style: normal;
     font-weight: 500;
     line-height: 140%; /* 18.2px */
+    cursor: pointer;
 }
+
 </style>

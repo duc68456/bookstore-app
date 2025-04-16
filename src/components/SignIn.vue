@@ -10,7 +10,7 @@
     import TextInput from './TextInput.vue'
     import LongButton from './buttons/LongButton.vue'
     import ButtonText from './texts/ButtonText.vue'
-    import ForgotPass from './texts/ForgotPass.vue'
+    import ForgotPassText from './texts/ForgotPassText.vue'
 
     import MainLogo from './icons/MainLogo.vue'
     import WhiteText from './texts/WhiteText.vue'
@@ -54,11 +54,11 @@
                     </Frame4>
                 </template>
                 <template #forgot-password>
-                    <ForgotPass>
+                    <ForgotPassText>
                         <template #fg>
                             Forgot password?
                         </template>
-                    </ForgotPass>
+                    </ForgotPassText>
                 </template>
                 <template #button>
                     <LongButton>
