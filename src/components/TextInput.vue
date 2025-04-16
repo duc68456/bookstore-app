@@ -1,11 +1,6 @@
 <template>
-  <input
-    class="text-input"
-    type="text"
-    :placeholder="placeholder"
-    :value="modelValue"         
-    @input="$emit('update:modelValue', $event.target.value)"
-  />
+  <input class="text-input" type="text" :placeholder="placeholder" :value="modelValue"
+    @input="$emit('update:modelValue', $event.target.value)" />
 </template>
 
 <script setup>
@@ -29,8 +24,10 @@ defineEmits(['update:modelValue'])
   font-weight: 400;
   line-height: 140%;
 }
+
 .text-input {
-  all: unset; /* Reset hầu hết các style mặc định của input */
+  all: unset;
+  /* Reset hầu hết các style mặc định của input */
   color: #727374;
   font-family: Montserrat;
   font-size: 13px;
@@ -38,5 +35,4 @@ defineEmits(['update:modelValue'])
   font-weight: 400;
   line-height: 140%;
 }
-
 </style>

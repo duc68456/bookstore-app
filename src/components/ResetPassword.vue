@@ -1,35 +1,36 @@
 <script setup>
-import WhitePad from './pads/WhitePad.vue'
+import MainForm1 from './Forms/MainForm1.vue'
 import LeftPad from './pads/LeftPad.vue'
+import WhitePad from './pads/WhitePad.vue'
 
+import MainLogo from './icons/MainLogo.vue'
+import LargeWhiteText from './texts/largeWhiteText.vue'
+import IconLogoBlack from './icons/IconLogoBlack.vue'
 import MainTitle from './texts/MainTitle.vue'
 import Note from './texts/Note.vue'
-import MainForm1 from './Forms/MainForm1.vue'
-import IconLogoBlack from './icons/IconLogoBlack.vue'
 import Frame4 from './frames/Frame4.vue'
 import TextInput from './TextInput.vue'
 import LongButton from './buttons/LongButton.vue'
 import ButtonText from './texts/ButtonText.vue'
-
-import MainLogo from './icons/MainLogo.vue'
-import LargeWhiteText from './texts/largeWhiteText.vue'
 import RightButton from './buttons/RightButton.vue'
 
-import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const username = ref('')
+const newPassword = ref('')
+const confirmPassword = ref('')
 
 const handleReset = () => {
-  console.log('Username entered:', username.value)
-  router.push('/forgot-password/otp-form')
+  console.log('New Password:', newPassword.value)
+  console.log('Confirm Password:', confirmPassword.value)
+  // Bạn có thể xử lý xác minh hoặc chuyển hướng tiếp theo ở đây
 }
 </script>
 
 <template>
   <MainForm1>
-    <!-- LeftPad đen -->
+    <!-- LeftPad (đen) -->
     <template #pad-left>
       <LeftPad>
         <template #logo>
@@ -46,10 +47,10 @@ const handleReset = () => {
       </LeftPad>
     </template>
 
-    <!-- RightPad trắng -->
+    <!-- RightPad (trắng) -->
     <template #pad-right>
       <div style="position: relative; width: 100%; height: 100%;">
-        <!-- Nút BACK ở góc phải -->
+        <!-- Nút BACK góc phải -->
         <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
           <RightButton @click="router.back()">BACK</RightButton>
         </div>
@@ -62,7 +63,7 @@ const handleReset = () => {
           <template #main-title>
             <MainTitle>
               <template #main-title>
-                Forgot Password
+                Reset Password
               </template>
             </MainTitle>
           </template>
@@ -70,7 +71,7 @@ const handleReset = () => {
           <template #note>
             <Note>
               <template #note>
-                Please enter your username
+                Please enter your new password
               </template>
             </Note>
           </template>
@@ -78,7 +79,23 @@ const handleReset = () => {
           <template #frame1>
             <Frame4>
               <template #txtInput>
-                <TextInput v-model="username" placeholder="Username" />
+                <TextInput
+                  v-model="newPassword"
+                  placeholder="New Password"
+                  type="password"
+                />
+              </template>
+            </Frame4>
+          </template>
+
+          <template #frame2>
+            <Frame4>
+              <template #txtInput>
+                <TextInput
+                  v-model="confirmPassword"
+                  placeholder="Confirm Password"
+                  type="password"
+                />
               </template>
             </Frame4>
           </template>
