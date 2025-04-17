@@ -15,19 +15,19 @@
   flex-shrink: 0;
 
   border-radius: 10px;
-  background: #000000;
-  color: #FFFFFF;
+  background: var(--vt-c-second-bg-color);
+  color: var(--vt-c-main-bg-color);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 /* Hover: đổi màu nền sang trắng, chữ đen */
 .medium-btn:hover {
-  background: #FFFFFF;
-  color: #000000;
+  background: var(--vt-c-main-bg-color);
+  color: var(--vt-c-second-bg-color);
 }
 
 .medium-btn:hover ::v-deep(.text) {
-  color: #000000;
+  color: var(--vt-c-second-bg-color);
 }
 </style>

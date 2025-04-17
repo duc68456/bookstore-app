@@ -21,20 +21,20 @@ import BackText from '../texts/BackText.vue'
   height: 22px;
   padding: 4px 13px 5px 13px;
   border-radius: 0 20px 20px 0;
-  border: 1px solid #000;
-  background: #fff;
+  border: 1px solid var(--vt-c-second-bg-color);
+  background: var(--vt-c-main-bg-color);
   cursor: pointer;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Hover effect */
 .left-btn:hover {
-  background: #000;
+  background: var(--vt-c-second-bg-color);
   /* selection color */
 }
 
 /* Đổi màu chữ bên trong */
 .left-btn:hover ::v-deep(.back-text) {
-  color: #fff;
+  color: var(--vt-c-main-bg-color);;
 }
 </style>

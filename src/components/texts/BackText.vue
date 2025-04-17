@@ -6,7 +6,7 @@
 
 <style scoped>
 .back-text {
-  color: #000000;
+  color: var(--vt-c-second-bg-color);
   font-family: Montserrat;
   font-size: 9px;
   font-style: normal;

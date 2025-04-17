@@ -6,7 +6,7 @@
 
 <style scoped>
 .large-white-text {
-  color: #FFFFFF;
+  color: var(--vt-c-main-bg-color);
   text-align: center;
   font-family: Montserrat;
   font-size: 19px;

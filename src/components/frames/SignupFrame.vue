@@ -28,7 +28,7 @@ defineEmits(['update:modelValue'])
   padding: 12px 16px;
   border-radius: 12px;
   border: 1px solid #3D3E3E;
-  background: #FFF;
+  background: var(--vt-c-main-bg-color);
 
   font-family: Montserrat;
   font-size: 12px;

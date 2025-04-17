@@ -5,7 +5,7 @@
 </template>
 <style scoped>
 .title {
-    color: #000;
+    color: var(--vt-c-second-bg-color);
     font-family: Montserrat;
     font-size: 30px;
     font-style: normal;
