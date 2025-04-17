@@ -33,5 +33,11 @@ defineEmits(['update:modelValue'])
   font-family: Montserrat;
   font-size: 12px;
   outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-box:hover {
+  border-color: #727374;
+  /* selection color khi hover */
 }
 </style>

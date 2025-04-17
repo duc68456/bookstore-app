@@ -21,7 +21,19 @@ import BackText from '../texts/BackText.vue'
   height: 22px;
   padding: 4px 13px 5px 13px;
   border-radius: 20px 0 0 20px;
+  /* Bo ngược lại */
   border: 1px solid #000;
   background: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.right-btn:hover {
+  background: #000;
+  /* selection color */
+}
+
+.right-btn:hover ::v-deep(.back-text) {
+  color: #fff;
 }
 </style>
