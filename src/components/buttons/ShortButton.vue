@@ -17,6 +17,7 @@
     border: 1px solid var(--vt-c-main-bg-color);
     background: var(--vt-c-second-bg-color);
     transition: background 0.3s ease;
+    cursor: pointer;
 }
 
 .btn:hover {  
