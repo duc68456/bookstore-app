@@ -51,9 +51,10 @@ const handleReset = () => {
     <template #pad-right>
       <div style="position: relative; width: 100%; height: 100%;">
         <!-- Nút BACK góc phải -->
-        <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
+        <div style="position: absolute; top: 12px; right: 0;">
           <RightButton @click="router.back()">BACK</RightButton>
         </div>
+
 
         <WhitePad>
           <template #logo>
@@ -79,11 +80,7 @@ const handleReset = () => {
           <template #frame1>
             <Frame4>
               <template #txtInput>
-                <TextInput
-                  v-model="newPassword"
-                  placeholder="New Password"
-                  type="password"
-                />
+                <TextInput v-model="newPassword" placeholder="New Password" type="password" />
               </template>
             </Frame4>
           </template>
@@ -91,11 +88,7 @@ const handleReset = () => {
           <template #frame2>
             <Frame4>
               <template #txtInput>
-                <TextInput
-                  v-model="confirmPassword"
-                  placeholder="Confirm Password"
-                  type="password"
-                />
+                <TextInput v-model="confirmPassword" placeholder="Confirm Password" type="password" />
               </template>
             </Frame4>
           </template>

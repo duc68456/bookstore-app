@@ -1,21 +1,31 @@
 <script setup>
-    import WhitePad from './pads/WhitePad.vue'
-    import RightPad from './pads/RightPad.vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-    import MainTitle from './texts/MainTitle.vue'
-    import Note from './texts/Note.vue'
-    import MainForm1 from './Forms/MainForm1.vue'
-    import IconLogoBlack from './icons/IconLogoBlack.vue'
-    import Frame4 from './frames/Frame4.vue'
-    import TextInput from './TextInput.vue'
-    import LongButton from './buttons/LongButton.vue'
-    import ButtonText from './texts/ButtonText.vue'
-    import ForgotPassText from './texts/ForgotPassText.vue'
+import WhitePad from './pads/WhitePad.vue'
+import RightPad from './pads/RightPad.vue'
 
-    import MainLogo from './icons/MainLogo.vue'
-    import WhiteText from './texts/WhiteText.vue'
-    import ShortButton from './buttons/ShortButton.vue'
+import MainTitle from './texts/MainTitle.vue'
+import Note from './texts/Note.vue'
+import MainForm1 from './Forms/MainForm1.vue'
+import IconLogoBlack from './icons/IconLogoBlack.vue'
+import Frame4 from './frames/Frame4.vue'
+import TextInput from './TextInput.vue'
+import LongButton from './buttons/LongButton.vue'
+import ButtonText from './texts/ButtonText.vue'
+import ForgotPassText from './texts/ForgotPassText.vue'
 
+import MainLogo from './icons/MainLogo.vue'
+import WhiteText from './texts/WhiteText.vue'
+import ShortButton from './buttons/ShortButton.vue'
+
+const router = useRouter()
+const username = ref('')
+const password = ref('')
+
+const goToSignUp = () => {
+    router.push('/sign-up')
+}
 </script>
 
 <template>
@@ -73,10 +83,11 @@
                 </template>
             </WhitePad>
         </template>
+
         <template #pad-right>
             <RightPad>
                 <template #logo>
-                    <MainLogo/>
+                    <MainLogo />
                 </template>
                 <template #small-text>
                     <WhiteText>
@@ -86,7 +97,7 @@
                     </WhiteText>
                 </template>
                 <template #button>
-                    <ShortButton>
+                    <ShortButton @click="goToSignUp">
                         <template #btn-text>
                             <ButtonText>
                                 <template #btnText>
@@ -95,9 +106,8 @@
                             </ButtonText>
                         </template>
                     </ShortButton>
-                </template>        
+                </template>
             </RightPad>
         </template>
     </MainForm1>
 </template>
-

@@ -50,9 +50,10 @@ const handleReset = () => {
     <template #pad-right>
       <div style="position: relative; width: 100%; height: 100%;">
         <!-- Nút BACK ở góc phải -->
-        <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
+        <div style="position: absolute; top: 12px; right: 0;">
           <RightButton @click="router.back()">BACK</RightButton>
         </div>
+
 
         <WhitePad>
           <template #logo>

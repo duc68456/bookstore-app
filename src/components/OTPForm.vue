@@ -32,7 +32,7 @@ const handleVerify = () => {
     <template #pad-left>
       <div style="position: relative; width: 100%; height: 100%;">
         <!-- Nút BACK góc trái -->
-        <div style="position: absolute; top: 12px; left: 12px; z-index: 10;">
+        <div style="position: absolute; top: 12px; left: 0;">
           <LeftButton @click="router.back()">BACK</LeftButton>
         </div>
 
