@@ -15,7 +15,7 @@ import LongButton from './buttons/LongButton.vue'
 import ButtonText from './texts/ButtonText.vue'
 import ForgotPassText from './texts/ForgotPassText.vue'
 
-import MainLogo from './icons/MainLogo.vue'
+import MainLogo from '../MainLogo/MainLogo.vue'
 import WhiteText from './texts/WhiteText.vue'
 import ShortButton from './buttons/ShortButton.vue'
 

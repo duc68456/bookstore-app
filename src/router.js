@@ -1,10 +1,10 @@
 // src/router.js
 import { createRouter, createWebHistory } from 'vue-router'
-import SignIn from './components/SignIn.vue'
-import ForgotPass from './components/ForgotPass.vue'
-import OTPForm from './components/OTPForm.vue'
-import ResetPassword from './components/ResetPassword.vue'
-import SignUp from './components/SignUp.vue'
+import SignIn from './components/account/SignIn.vue'
+import ForgotPass from './components/account/ForgotPass.vue'
+import OTPForm from './components/account/OTPForm.vue'
+import ResetPassword from './components/account/ResetPassword.vue'
+import SignUp from './components/account/SignUp.vue'
 
 const routes = [
   { path: '/', component: SignIn },

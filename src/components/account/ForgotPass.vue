@@ -11,7 +11,7 @@ import TextInput from './TextInput.vue'
 import LongButton from './buttons/LongButton.vue'
 import ButtonText from './texts/ButtonText.vue'
 
-import MainLogo from './icons/MainLogo.vue'
+import MainLogo from '../MainLogo/MainLogo.vue'
 import LargeWhiteText from './texts/largeWhiteText.vue'
 import RightButton from './buttons/RightButton.vue'
 

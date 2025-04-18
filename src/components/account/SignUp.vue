@@ -3,7 +3,7 @@ import MainForm1 from './Forms/MainForm1.vue'
 import LeftPad from './pads/LeftPad.vue'
 import WhitePad from './pads/WhitePad.vue'
 
-import MainLogo from './icons/MainLogo.vue'
+import MainLogo from '../MainLogo/MainLogo.vue'
 import IconLogoBlack from './icons/IconLogoBlack.vue'
 import MainTitle from './texts/MainTitle.vue'
 import Note from './texts/Note.vue'
