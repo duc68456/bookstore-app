@@ -7,13 +7,13 @@ import MainLogo from '../MainLogo/MainLogo.vue'
 import IconLogoBlack from './icons/IconLogoBlack.vue'
 import MainTitle from './texts/MainTitle.vue'
 import Note from './texts/Note.vue'
-import LargeWhiteText from './texts/largeWhiteText.vue'
 import SignupFrame from './frames/SignupFrame.vue'
 import ContactFrame from './frames/ContactFrame.vue'
 import EmailFrame from './frames/EmailFrame.vue'
 import LongButton from './buttons/LongButton.vue'
 import ShortButton from './buttons/ShortButton.vue'
 import ButtonText from './texts/ButtonText.vue'
+import WhiteText from './texts/WhiteText.vue'
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -48,11 +48,11 @@ const handleSignUp = () => {
           <MainLogo />
         </template>
         <template #small-text>
-          <LargeWhiteText>
+          <WhiteText>
             <template #note>
               Already have Account? Sign In now.
             </template>
-          </LargeWhiteText>
+          </WhiteText>
         </template>
         <template #button>
           <ShortButton @click="router.push('/')">
