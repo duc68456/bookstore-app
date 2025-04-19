@@ -1,48 +1,35 @@
-<script setup>
-</script>
-
 <template>
-  <div class="app-wrapper">
-    <transition name="slide" mode="out-in">
-      <router-view :key="$route.fullPath" class="view-container" />
+  <div class="wrapper">
+    <transition name="slide-fade" mode="out-in">
+      <router-view />
     </transition>
   </div>
 </template>
 
 <style scoped>
-.app-wrapper {
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  overflow: hidden;
+.wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.view-container {
-  width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: black;
-  /* Đây là màu nền chuẩn, có thể đổi theo thiết kế của bạn */
+  overflow: hidden;
 }
 
-/* Hiệu ứng trượt ngang */
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.5s ease;
+/* Slide hiệu ứng */
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all 0.6s ease;
   position: absolute;
   width: 100%;
-  height: 100%;
 }
 
-.slide-enter-from {
+.slide-fade-enter-from {
   transform: translateX(100%);
-  opacity: 0.5;
+  opacity: 0;
 }
 
-.slide-leave-to {
+.slide-fade-leave-to {
   transform: translateX(-100%);
-  opacity: 0.5;
+  opacity: 0;
 }
 </style>

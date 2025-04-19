@@ -1,5 +1,7 @@
 <script setup>
-defineProps({
+import { defineAsyncComponent, computed } from 'vue'
+
+const props = defineProps({
   name: {
     type: String,
     required: true
@@ -10,19 +12,19 @@ defineProps({
   }
 })
 
-const iconPath = new URL(`../../assets/icons/${name}.svg`, import.meta.url).href
+// Dynamic import icon component
+const IconComponent = computed(() =>
+  defineAsyncComponent(() => import(`../../assets/icons/${props.name}.vue`))
+)
 </script>
 
 <template>
-  <img :src="iconPath" :alt="name" class="icon" :width="size" :height="size" />
+  <component :is="IconComponent" :style="{ width: size + 'px', height: size + 'px' }" class="icon" />
 </template>
 
 <style scoped>
 .icon {
-  width: 24px;
-  height: 24px;
   flex-shrink: 0;
   display: inline-block;
-  object-fit: contain;
 }
 </style>
