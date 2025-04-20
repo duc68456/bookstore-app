@@ -1,18 +1,32 @@
 <template>
-<div class="window">
-    <div class="logo"><slot name="logo"></slot></div>
-    <div class="slot"><slot name="btn1"></slot></div>
-    <div class="slot"><slot name="btn2"></slot></div>
-    <div class="slot"><slot name="btn3"></slot></div>
-    <div class="slot"><slot name="btn4"></slot></div>
-    <div class="slot"><slot name="btn5"></slot></div>
-    <div class="slot"><slot name="btn6"></slot></div>
-    <div class="slot"><slot name="btn7"></slot></div>
-    <div class="slot"><slot name="btn8"></slot></div>
-    <div class="slot"><slot name="btn9"></slot></div>
-    <div class="bottom"><slot name="btn-log-out"></slot></div>
-</div>
+  <div class="window">
+    <div class="logo">
+      <slot name="logo"></slot>
+    </div>
+    <div class="slot" style="margin-top: 20px;">
+      <slot name="btn1"></slot>
+    </div>
+    <div class="slot">
+      <slot name="btn2"></slot>
+    </div>
+    <div class="slot">
+      <slot name="btn3"></slot>
+    </div>
+    <div class="slot">
+      <slot name="btn4"></slot>
+    </div>
+    <div class="slot">
+      <slot name="btn5"></slot>
+    </div>
+    <div class="slot">
+      <slot name="btn6"></slot>
+    </div>
+    <div class="bottom" style="margin-bottom: 50px;">
+      <slot name="btn-log-out"></slot>
+    </div>
+  </div>
 </template>
+
 <style scoped>
 .window {
   width: 222px;
@@ -41,10 +55,10 @@
 }
 
 .slot {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 </style>
