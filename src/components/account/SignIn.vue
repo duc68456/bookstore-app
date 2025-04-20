@@ -26,6 +26,10 @@ const password = ref('')
 const goToSignUp = () => {
     router.push('/sign-up')
 }
+
+const goToDashboard = () => {
+    router.push('/dash-board')
+}
 </script>
 
 <template>
@@ -71,7 +75,7 @@ const goToSignUp = () => {
                     </ForgotPassText>
                 </template>
                 <template #button>
-                    <LongButton>
+                    <LongButton @click="goToDashboard">
                         <template #btn-text>
                             <ButtonText>
                                 <template #btnText>

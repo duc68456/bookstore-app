@@ -5,6 +5,7 @@ import ForgotPass from './components/account/ForgotPass.vue'
 import OTPForm from './components/account/OTPForm.vue'
 import ResetPassword from './components/account/ResetPassword.vue'
 import SignUp from './components/account/SignUp.vue'
+import Dashboard from './components/admin/Dashboard.vue'
 
 const routes = [
   { path: '/', component: SignIn },
@@ -12,6 +13,7 @@ const routes = [
   { path: '/forgot-password/otp-form', component: OTPForm },
   { path: '/forgot-password/reset-password', component: ResetPassword },
   { path: '/sign-up', component: SignUp },
+  { path: '/dash-board', component: Dashboard },
 ]
 
 const router = createRouter({
