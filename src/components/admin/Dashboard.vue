@@ -14,6 +14,8 @@ import PeopleIcon from '@/assets/icons-vue/people.vue'
 import PeopleIconWhite from '@/assets/icons-vue-white/people.vue'
 import CatalogIcon from '@/assets/icons-vue/vector.vue'
 import CatalogIconWhite from '@/assets/icons-vue-white/vector.vue'
+import DiscoverIcon from '@/assets/icons-vue/discover.vue'
+import DiscoverIconWhite from '@/assets/icons-vue-white/discover.vue'
 import BookIcon from '@/assets/icons-vue/book.vue'
 import BookIconWhite from '@/assets/icons-vue-white/book.vue'
 import UserIcon from '@/assets/icons-vue/user.vue'
@@ -22,6 +24,15 @@ import BranchesIcon from '@/assets/icons-vue/buildings.vue'
 import BranchesIconWhite from '@/assets/icons-vue-white/buildings.vue'
 import LogOutIcon from '@/assets/icons-vue/logout.vue'
 import LogOutIconWhite from '@/assets/icons-vue-white/logout.vue'
+
+import TopBar from './pads/TopBar.vue'
+import BigUserIcon from '@/assets/icons-vue/big-user.vue'
+import BigSettingIcon from '@/assets/icons-vue/big-setting.vue'
+import NameText from './texts/NameText.vue'
+import RoleText from './texts/RoleText.vue'
+import TimeText from './texts/TimeText.vue'
+import DayText from './texts/DayText.vue'
+import LineTopBar from './lines/LineTopBar.vue'
 
 const router = useRouter()
 const username = ref('')
@@ -36,6 +47,47 @@ const logOut = () => {
 
 <template>
     <MainFormAdmin>
+        <template #top-bar>
+            <TopBar>
+                <template #logo>
+                    <BigUserIcon />
+                </template>
+                <template #name>
+                    <NameText>
+                        <template #text>
+                            Nisan Gunasekara
+                        </template>
+                    </NameText>
+                </template>
+                <template #time>
+                    <TimeText>
+                        <template #text>
+                            12:29 PM
+                        </template>
+                    </TimeText>
+                </template>
+                <template #day>
+                    <DayText>
+                        <template #text>
+                            Sep 02, 2023
+                        </template>
+                    </DayText>
+                </template>
+                <template #role>
+                    <RoleText>
+                        <template #text>
+                            Admin
+                        </template>
+                    </RoleText>
+                </template>
+                <template #line>
+                    <LineTopBar />
+                </template>
+                <template #setting>
+                    <BigSettingIcon />
+                </template>
+            </TopBar>
+        </template>
         <template #side-bar>
             <SideBar>
                 <template #logo>
@@ -72,7 +124,7 @@ const logOut = () => {
                 <template #btn3>
                     <ButtonSideBar>
                         <template #btn-icon="{ hover }">
-                            <component :is="hover ? CatalogIcon : CatalogIconWhite" />
+                            <component :is="hover ? DiscoverIcon : DiscoverIconWhite" />
                         </template>
                         <template #btn-text>
                             <ButtonText>
