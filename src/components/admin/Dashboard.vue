@@ -107,7 +107,7 @@ const logOut = () => {
                         </template>
                     </ButtonSideBar>
                 </template>
-                <template #btn2>
+                <template #btn4>
                     <ButtonSideBar>
                         <template #btn-icon="{ hover }">
                             <component :is="hover ? PeopleIcon : PeopleIconWhite" />
@@ -121,7 +121,7 @@ const logOut = () => {
                         </template>
                     </ButtonSideBar>
                 </template>
-                <template #btn3>
+                <template #btn2>
                     <ButtonSideBar>
                         <template #btn-icon="{ hover }">
                             <component :is="hover ? DiscoverIcon : DiscoverIconWhite" />
@@ -135,7 +135,7 @@ const logOut = () => {
                         </template>
                     </ButtonSideBar>
                 </template>
-                <template #btn4>
+                <template #btn3>
                     <ButtonSideBar>
                         <template #btn-icon="{ hover }">
                             <component :is="hover ? BookIcon : BookIconWhite" />

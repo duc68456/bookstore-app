@@ -38,20 +38,16 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 8px 0;
+  padding: 12px 20px;
+  /* Thêm khoảng cách trái và phải */
   gap: 10px;
 }
 
 .left-group {
   display: flex;
   flex-direction: column;
-}
-
-
-.right-group {
-  align-items: flex-end;
-  display: flex;
-  flex-direction: column;
+  margin-right: 20px;
+  /* Tạo khoảng cách nhỏ giữa logo và thông tin người dùng */
 }
 
 .right-section {
@@ -59,8 +55,16 @@
   flex-direction: row;
   align-items: center;
   margin-left: auto;
-  gap: 10px;
+  gap: 20px;
+  /* Khoảng cách giữa các phần tử bên phải */
 }
+
+.right-group {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+}
+
 .logo,
 .name,
 .role,
@@ -71,5 +75,4 @@
   display: flex;
   align-items: center;
 }
-
 </style>
