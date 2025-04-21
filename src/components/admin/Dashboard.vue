@@ -7,6 +7,7 @@ import SideBar from './pads/SideBar.vue'
 import ButtonSideBar from './buttons/ButtonSideBar.vue'
 import ButtonText from './texts/ButtonText.vue'
 import SmallMainLogo from '../MainLogo/SmallMainLogo.vue'
+import RoundChart from './charts/RoundChart.vue'
 
 import ElementIcon from '@/assets/icons-vue/element.vue'
 import ElementIconWhite from '@/assets/icons-vue-white/element.vue'
@@ -107,20 +108,7 @@ const logOut = () => {
                         </template>
                     </ButtonSideBar>
                 </template>
-                <template #btn4>
-                    <ButtonSideBar>
-                        <template #btn-icon="{ hover }">
-                            <component :is="hover ? PeopleIcon : PeopleIconWhite" />
-                        </template>
-                        <template #btn-text>
-                            <ButtonText>
-                                <template #text>
-                                    Users
-                                </template>
-                            </ButtonText>
-                        </template>
-                    </ButtonSideBar>
-                </template>
+
                 <template #btn2>
                     <ButtonSideBar>
                         <template #btn-icon="{ hover }">
@@ -135,6 +123,7 @@ const logOut = () => {
                         </template>
                     </ButtonSideBar>
                 </template>
+
                 <template #btn3>
                     <ButtonSideBar>
                         <template #btn-icon="{ hover }">
@@ -149,6 +138,22 @@ const logOut = () => {
                         </template>
                     </ButtonSideBar>
                 </template>
+
+                <template #btn4>
+                    <ButtonSideBar>
+                        <template #btn-icon="{ hover }">
+                            <component :is="hover ? PeopleIcon : PeopleIconWhite" />
+                        </template>
+                        <template #btn-text>
+                            <ButtonText>
+                                <template #text>
+                                    Users
+                                </template>
+                            </ButtonText>
+                        </template>
+                    </ButtonSideBar>
+                </template>
+
                 <template #btn5>
                     <ButtonSideBar>
                         <template #btn-icon="{ hover }">
@@ -163,6 +168,7 @@ const logOut = () => {
                         </template>
                     </ButtonSideBar>
                 </template>
+
                 <template #btn-log-out>
                     <ButtonSideBar @click="logOut">
                         <template #btn-icon="{ hover }">
@@ -177,7 +183,14 @@ const logOut = () => {
                         </template>
                     </ButtonSideBar>
                 </template>
+
             </SideBar>
         </template>
+
+        <!-- Đây là phần content thực sự của màn hình -->
+        <template #main-content>
+            <RoundChart />
+        </template>
+
     </MainFormAdmin>
 </template>
