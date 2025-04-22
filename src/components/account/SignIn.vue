@@ -28,7 +28,7 @@ const goToSignUp = () => {
 }
 
 const goToDashboard = () => {
-    router.push('/dash-board')
+    router.push('/dashboard')
 }
 </script>
 

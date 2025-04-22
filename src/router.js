@@ -1,11 +1,16 @@
-// src/router.js
 import { createRouter, createWebHistory } from 'vue-router'
 import SignIn from './components/account/SignIn.vue'
 import ForgotPass from './components/account/ForgotPass.vue'
 import OTPForm from './components/account/OTPForm.vue'
 import ResetPassword from './components/account/ResetPassword.vue'
 import SignUp from './components/account/SignUp.vue'
+
+import MainFormAdmin from './components/admin/MainFormAdmin.vue'
 import Dashboard from './components/admin/Dashboard.vue'
+import Catalog from './components/admin/Catalog.vue'
+import Books from './components/admin/Books.vue'
+import Users from './components/admin/Users.vue'
+import Branches from './components/admin/Branches.vue'
 
 const routes = [
   { path: '/', component: SignIn },
@@ -13,7 +18,18 @@ const routes = [
   { path: '/forgot-password/otp-form', component: OTPForm },
   { path: '/forgot-password/reset-password', component: ResetPassword },
   { path: '/sign-up', component: SignUp },
-  { path: '/dash-board', component: Dashboard },
+
+  {
+    path: '/',
+    component: MainFormAdmin,
+    children: [
+      { path: 'dashboard', component: Dashboard },
+      { path: 'catalog', component: Catalog },
+      { path: 'books', component: Books },
+      { path: 'users', component: Users },
+      { path: 'branches', component: Branches }
+    ]
+  }
 ]
 
 const router = createRouter({

@@ -1,30 +1,40 @@
+<script setup>
+import BigUserIcon from '@/assets/icons-vue/big-user.vue'
+import BigSettingIcon from '@/assets/icons-vue/big-setting.vue'
+import NameText from '@/components/admin/texts/NameText.vue'
+import RoleText from '@/components/admin/texts/RoleText.vue'
+import TimeText from '@/components/admin/texts/TimeText.vue'
+import DayText from '@/components/admin/texts/DayText.vue'
+import LineTopBar from '@/components/admin/lines/LineTopBar.vue'
+</script>
+
 <template>
   <div class="window">
     <div class="logo">
-      <slot name="logo"></slot>
+      <BigUserIcon />
     </div>
     <div class="left-group">
       <div class="name">
-        <slot name="name"></slot>
+        <NameText><template #text>Nisan Gunasekara</template></NameText>
       </div>
       <div class="role">
-        <slot name="role"></slot>
+        <RoleText><template #text>Admin</template></RoleText>
       </div>
     </div>
     <div class="right-section">
       <div class="right-group">
         <div class="time">
-          <slot name="time"></slot>
+          <TimeText><template #text>12:29 PM</template></TimeText>
         </div>
         <div class="day">
-          <slot name="day"></slot>
+          <DayText><template #text>Sep 02, 2023</template></DayText>
         </div>
       </div>
       <div class="line">
-        <slot name="line"></slot>
+        <LineTopBar />
       </div>
       <div class="setting">
-        <slot name="setting"></slot>
+        <BigSettingIcon />
       </div>
     </div>
   </div>
@@ -39,7 +49,6 @@
   flex-direction: row;
   align-items: center;
   padding: 12px 20px;
-  /* Thêm khoảng cách trái và phải */
   gap: 10px;
 }
 
@@ -47,7 +56,6 @@
   display: flex;
   flex-direction: column;
   margin-right: 20px;
-  /* Tạo khoảng cách nhỏ giữa logo và thông tin người dùng */
 }
 
 .right-section {
@@ -56,7 +64,6 @@
   align-items: center;
   margin-left: auto;
   gap: 20px;
-  /* Khoảng cách giữa các phần tử bên phải */
 }
 
 .right-group {
