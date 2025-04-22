@@ -33,50 +33,52 @@ const Branches = () => router.push('/branches')
       <SmallMainLogo />
     </div>
 
-    <ButtonSideBar @click="Dashboard">
-      <template #btn-icon="{ hover }">
-        <component :is="hover ? ElementIcon : ElementIconWhite" />
-      </template>
-      <template #btn-text>
-        <ButtonText><template #text>Dashboard</template></ButtonText>
-      </template>
-    </ButtonSideBar>
+    <div class="menu">
+      <ButtonSideBar @click="Dashboard">
+        <template #btn-icon="{ hover }">
+          <component :is="hover ? ElementIcon : ElementIconWhite" />
+        </template>
+        <template #btn-text>
+          <ButtonText><template #text>Dashboard</template></ButtonText>
+        </template>
+      </ButtonSideBar>
 
-    <ButtonSideBar @click="Catalog">
-      <template #btn-icon="{ hover }">
-        <component :is="hover ? DiscoverIcon : DiscoverIconWhite" />
-      </template>
-      <template #btn-text>
-        <ButtonText><template #text>Catalog</template></ButtonText>
-      </template>
-    </ButtonSideBar>
+      <ButtonSideBar @click="Catalog">
+        <template #btn-icon="{ hover }">
+          <component :is="hover ? DiscoverIcon : DiscoverIconWhite" />
+        </template>
+        <template #btn-text>
+          <ButtonText><template #text>Catalog</template></ButtonText>
+        </template>
+      </ButtonSideBar>
 
-    <ButtonSideBar @click="Books">
-      <template #btn-icon="{ hover }">
-        <component :is="hover ? BookIcon : BookIconWhite" />
-      </template>
-      <template #btn-text>
-        <ButtonText><template #text>Books</template></ButtonText>
-      </template>
-    </ButtonSideBar>
+      <ButtonSideBar @click="Books">
+        <template #btn-icon="{ hover }">
+          <component :is="hover ? BookIcon : BookIconWhite" />
+        </template>
+        <template #btn-text>
+          <ButtonText><template #text>Books</template></ButtonText>
+        </template>
+      </ButtonSideBar>
 
-    <ButtonSideBar @click="Users">
-      <template #btn-icon="{ hover }">
-        <component :is="hover ? PeopleIcon : PeopleIconWhite" />
-      </template>
-      <template #btn-text>
-        <ButtonText><template #text>Users</template></ButtonText>
-      </template>
-    </ButtonSideBar>
+      <ButtonSideBar @click="Users">
+        <template #btn-icon="{ hover }">
+          <component :is="hover ? PeopleIcon : PeopleIconWhite" />
+        </template>
+        <template #btn-text>
+          <ButtonText><template #text>Users</template></ButtonText>
+        </template>
+      </ButtonSideBar>
 
-    <ButtonSideBar @click="Branches">
-      <template #btn-icon="{ hover }">
-        <component :is="hover ? BranchesIcon : BranchesIconWhite" />
-      </template>
-      <template #btn-text>
-        <ButtonText><template #text>Branches</template></ButtonText>
-      </template>
-    </ButtonSideBar>
+      <ButtonSideBar @click="Branches">
+        <template #btn-icon="{ hover }">
+          <component :is="hover ? BranchesIcon : BranchesIconWhite" />
+        </template>
+        <template #btn-text>
+          <ButtonText><template #text>Branches</template></ButtonText>
+        </template>
+      </ButtonSideBar>
+    </div>
 
     <div class="bottom">
       <ButtonSideBar @click="logOut">
@@ -99,15 +101,25 @@ const Branches = () => router.push('/branches')
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8px 0;
+  padding-top: 12px;
+  padding-bottom: 20px;
 }
 
 .logo {
-  margin-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Khoảng cách giữa các nút */
+  width: 100%;
+  align-items: center;
+  margin-bottom: auto;
 }
 
 .bottom {
   margin-top: auto;
-  margin-bottom: 8px;
+  margin-bottom: 60px; /* Không quá sát đáy */
 }
 </style>
