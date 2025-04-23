@@ -42,7 +42,6 @@ const Branches = () => router.push('/branches')
           <ButtonText><template #text>Dashboard</template></ButtonText>
         </template>
       </ButtonSideBar>
-
       <ButtonSideBar @click="Catalog">
         <template #btn-icon="{ hover }">
           <component :is="hover ? DiscoverIcon : DiscoverIconWhite" />
