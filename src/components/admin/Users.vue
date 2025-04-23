@@ -1,11 +1,11 @@
 <script setup>
+import UserTable from './tables/UserTable.vue';
 </script>
 
 <template>
-  <div style="padding: 20px; font-size: 24px">
-    User Management Page
-  </div>
+  <UserTable />
 </template>
+
 
 <style scoped>
 .content {

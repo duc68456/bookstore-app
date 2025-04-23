@@ -1,7 +1,8 @@
 <script setup>
-import RoundChart from './charts/RoundChart.vue'
+import DashboardChart from './charts/DashboardChart.vue'
+
 </script>
 
-<template>
-    <RoundChart />
+<template #main-content>
+  <DashboardChart />
 </template>

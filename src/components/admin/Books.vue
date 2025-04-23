@@ -1,10 +1,11 @@
 <script setup>
+import BookTable from './tables/BookTable.vue';
+
+
 </script>
 
 <template>
-  <div style="padding: 20px; font-size: 24px">
-    Books Management Page
-  </div>
+  <BookTable />
 </template>
 
 <style scoped>

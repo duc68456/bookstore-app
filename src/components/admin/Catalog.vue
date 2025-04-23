@@ -1,9 +1,10 @@
 <script setup>
+import CatalogTable from './tables/CatalogTable.vue'
 </script>
 
 <template>
-  <div style="padding: 20px; font-size: 24px">
-    Catalog Management Page
+  <div class="content">
+    <CatalogTable />
   </div>
 </template>
 

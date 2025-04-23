@@ -1,10 +1,9 @@
 <script setup>
+import BranchesTable from './tables/BranchesTable.vue';
 </script>
 
 <template>
-  <div style="padding: 20px; font-size: 24px">
-    Branches Management Page
-  </div>
+  <BranchesTable />
 </template>
 
 <style scoped>
