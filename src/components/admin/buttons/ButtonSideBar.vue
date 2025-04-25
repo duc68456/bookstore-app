@@ -25,12 +25,12 @@ const isHover = ref(false)
     cursor: pointer;
 }
 
-.btn:hover {  
+.btn:hover, .btn.active {  
     border: 1px solid var(--vt-c-second-bg-color);
     background: var(--vt-c-main-bg-color); 
 }
 
-.btn:hover ::v-deep(.text) {  
+.btn:hover ::v-deep(.text), .btn.active ::v-deep(.text) {  
     color: var(--vt-c-second-bg-color);
 }
 </style>

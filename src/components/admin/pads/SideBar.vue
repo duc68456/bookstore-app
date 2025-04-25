@@ -25,6 +25,13 @@ const Books = () => router.push('/books')
 const Users = () => router.push('/users')
 const Branches = () => router.push('/branches')
 
+const isActive = (path) => {
+  return route.path === path
+}
+
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 </script>
 
 <template>
@@ -34,49 +41,62 @@ const Branches = () => router.push('/branches')
     </div>
 
     <div class="menu">
-      <ButtonSideBar @click="Dashboard">
+
+    <router-link to="/dashboard" class="no-underline">
+      <ButtonSideBar :class="{ 'active': isActive('/dashboard') }">
         <template #btn-icon="{ hover }">
-          <component :is="hover ? ElementIcon : ElementIconWhite" />
+          <component :is="isActive('/dashboard') || hover ? ElementIcon : ElementIconWhite" />
         </template>
         <template #btn-text>
           <ButtonText><template #text>Dashboard</template></ButtonText>
         </template>
       </ButtonSideBar>
-      <ButtonSideBar @click="Catalog">
+    </router-link>
+
+    <router-link to="/catalog" class="no-underline">
+      <ButtonSideBar :class="{ 'active': isActive('/catalog') }">
         <template #btn-icon="{ hover }">
-          <component :is="hover ? DiscoverIcon : DiscoverIconWhite" />
+          <component :is="isActive('/catalog') || hover ? DiscoverIcon : DiscoverIconWhite" />
         </template>
         <template #btn-text>
           <ButtonText><template #text>Catalog</template></ButtonText>
         </template>
       </ButtonSideBar>
+    </router-link>
 
-      <ButtonSideBar @click="Books">
+    <router-link to="/books" class="no-underline">
+      <ButtonSideBar :class="{ 'active': isActive('/books') }">
         <template #btn-icon="{ hover }">
-          <component :is="hover ? BookIcon : BookIconWhite" />
+          <component :is="isActive('/books') || hover ? BookIcon : BookIconWhite" />
         </template>
         <template #btn-text>
           <ButtonText><template #text>Books</template></ButtonText>
         </template>
       </ButtonSideBar>
+    </router-link>
 
-      <ButtonSideBar @click="Users">
+    <router-link to="/users" class="no-underline">
+      <ButtonSideBar :class="{ 'active': isActive('/users') }">
         <template #btn-icon="{ hover }">
-          <component :is="hover ? PeopleIcon : PeopleIconWhite" />
+          <component :is="isActive('/users') || hover ? PeopleIcon : PeopleIconWhite" />
         </template>
         <template #btn-text>
           <ButtonText><template #text>Users</template></ButtonText>
         </template>
       </ButtonSideBar>
+    </router-link>
 
-      <ButtonSideBar @click="Branches">
+    <router-link to="/branches" class="no-underline">
+      <ButtonSideBar :class="{ 'active': isActive('/branches') }">
         <template #btn-icon="{ hover }">
-          <component :is="hover ? BranchesIcon : BranchesIconWhite" />
+          <component :is="isActive('/branches') || hover ? BranchesIcon : BranchesIconWhite" />
         </template>
         <template #btn-text>
           <ButtonText><template #text>Branches</template></ButtonText>
         </template>
       </ButtonSideBar>
+    </router-link>
+
     </div>
 
     <div class="bottom">
@@ -120,5 +140,14 @@ const Branches = () => router.push('/branches')
 .bottom {
   margin-top: auto;
   margin-bottom: 60px; /* Không quá sát đáy */
+}
+
+.router-link-active {
+  background-color: var(--vt-c-active-bg-color); /* Add the background color for active button */
+  color: var(--vt-c-active-text-color); /* Change text color */
+}
+
+.no-underline {
+  text-decoration: none; /* Tắt gạch chân */
 }
 </style>
