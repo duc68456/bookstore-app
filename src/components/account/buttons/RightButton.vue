@@ -26,10 +26,12 @@ import BackText from '../texts/BackText.vue'
   background: var(--vt-c-main-bg-color);
   cursor: pointer;
   transition: background 0.3s ease, color 0.3s ease;
+  transition: 0.3s ease-in-out;
 }
 
 .right-btn:hover {
   background: var(--vt-c-second-bg-color);
+  letter-spacing: 0.3px;
   /* selection color */
 }
 

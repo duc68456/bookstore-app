@@ -22,7 +22,6 @@
 }
 
 .btn:hover {  
-    border: 1px solid var(--vt-c-second-bg-color);
     background: var(--vt-c-main-bg-color); 
     letter-spacing: 0.3px;
 }
