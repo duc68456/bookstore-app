@@ -13,24 +13,21 @@
 </template>
 
 <style scoped>
-/* Grid nền */
 .background-grid {
   position: absolute;
   top: 0;
   left: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, calc(4vw - 3px));
-  grid-auto-rows: calc(4vw - 3px);
-  gap: 3px;
+  grid-template-columns: repeat(auto-fill, calc(4vw - 0px));
+  grid-auto-rows: calc(4vw - 0px);
+  gap: 0px;
   width: 100vw;
   height: 100vh;
   z-index: 0;
-  /* XÓA dòng này nếu muốn hover */
-  /* pointer-events: none; */
 }
 
 .background-grid span {
-  background: #181818;
+  background: #f000;
   transition: 1.5s;
 }
 
@@ -40,7 +37,6 @@
 }
 
 
-/* Khung chính */
 .main-form {
   width: 930px;
   height: 575px;
@@ -50,9 +46,9 @@
   z-index: 1;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25) 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-/* Toàn màn hình */
 .window {
   width: 100vw;
   height: 100vh;
@@ -63,3 +59,4 @@
   overflow: hidden;
 }
 </style>
+ 	
