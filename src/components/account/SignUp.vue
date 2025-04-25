@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 
 import MainForm1 from './Forms/MainForm1.vue'
 import RightPad from './pads/RightPad.vue'
+import LeftPad from './pads/LeftPad.vue'
 import WhitePad from './pads/WhitePad.vue'
 
 import MainLogo from '../MainLogo/MainLogo.vue'
@@ -29,7 +30,7 @@ const goToSignIn = () => router.push('/')
 <template>
   <MainForm1>
     <template #pad-left>
-      <RightPad>
+      <LeftPad>
         <template #logo>
           <MainLogo />
         </template>
@@ -49,7 +50,7 @@ const goToSignIn = () => router.push('/')
             </template>
           </ShortButton>
         </template>
-      </RightPad>
+      </LeftPad>
     </template>
 
     <template #pad-right>
