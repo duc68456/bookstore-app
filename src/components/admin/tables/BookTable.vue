@@ -90,9 +90,14 @@ const items = ref([
 
 <style scoped>
 .v-data-table {
-  background-color: white;
+  background-color: var(--vt-c-main-bg-color);
   border-radius: 12px;
   padding: 12px;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 140%
 }
 
 .action-icons {

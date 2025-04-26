@@ -139,7 +139,7 @@ const route = useRoute()
 
 .bottom {
   margin-top: auto;
-  margin-bottom: 60px; /* Không quá sát đáy */
+  margin-bottom: 20px; /* Không quá sát đáy */
 }
 
 .router-link-active {
