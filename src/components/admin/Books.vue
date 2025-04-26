@@ -1,15 +1,47 @@
 <script setup>
-import BookTable from './tables/BookTable.vue';
-
-
+import TitleText from './texts/TitleText.vue'
+import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
+import BookTable from '@/components/admin/tables/BookTable.vue'
 </script>
 
 <template>
-  <BookTable />
+  <div class="content">
+    <div class="top-bar">
+      <div class="left">
+        <TitleText>
+          <template #text>
+            Book Management
+          </template>
+        </TitleText>
+      </div>
+      <div class="right">
+        <SearchFrame />
+      </div>
+    </div>
+
+    <BookTable />
+  </div>
 </template>
 
 <style scoped>
 .content {
   width: 100%;
+  padding: 20px;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.right {
+  flex-shrink: 0;
 }
 </style>

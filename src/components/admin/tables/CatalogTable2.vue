@@ -15,20 +15,17 @@ const headers = [
 ]
 
 const items = ref([
-  {
-    id: '001',
-    userId: '001',
-    amount: '002 Books',
-    dueDate: '13 - 03 - 2024',
-    dateTime: '25-02-2024 10:39:43',
-  },
-  {
-    id: '002',
-    userId: '002',
-    amount: '001 Book',
-    dueDate: '15 - 03 - 2024',
-    dateTime: '26-02-2024 11:20:00',
-  },
+  { id: '001', userId: '1', amount: '002 Books', dueDate: '13 - 03 - 2024', dateTime: '25-02-2024 10:39:43' },
+  { id: '001', userId: '1', amount: '002 Books', dueDate: '13 - 03 - 2024', dateTime: '25-02-2024 10:39:43' },
+  { id: '001', userId: '1', amount: '002 Books', dueDate: '13 - 03 - 2024', dateTime: '25-02-2024 10:39:43' },
+  { id: '001', userId: '1', amount: '002 Books', dueDate: '13 - 03 - 2024', dateTime: '25-02-2024 10:39:43' },
+  { id: '001', userId: '1', amount: '002 Books', dueDate: '13 - 03 - 2024', dateTime: '25-02-2024 10:39:43' },
+  { id: '001', userId: '1', amount: '002 Books', dueDate: '13 - 03 - 2024', dateTime: '25-02-2024 10:39:43' },
+  { id: '001', userId: '1', amount: '002 Books', dueDate: '13 - 03 - 2024', dateTime: '25-02-2024 10:39:43' },
+  { id: '001', userId: '1', amount: '002 Books', dueDate: '13 - 03 - 2024', dateTime: '25-02-2024 10:39:43' },
+  { id: '001', userId: '1', amount: '002 Books', dueDate: '13 - 03 - 2024', dateTime: '25-02-2024 10:39:43' },
+  { id: '001', userId: '1', amount: '002 Books', dueDate: '13 - 03 - 2024', dateTime: '25-02-2024 10:39:43' },
+  { id: '001', userId: '1', amount: '002 Books', dueDate: '13 - 03 - 2024', dateTime: '25-02-2024 10:39:43' },
 ])
 </script>
 
@@ -76,7 +73,7 @@ const items = ref([
   font-size: 15px;
   font-style: normal;
   font-weight: 500;
-  line-height: 140% 
+  line-height: 140%;
 }
 
 .action-icons {
