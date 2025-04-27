@@ -39,7 +39,7 @@ const items = ref([
       :items="items"
       class="elevation-1"
       item-value="id"
-      :items-per-page="10"
+      :items-per-page="-1"
       hide-default-footer
     >
       <template #item.action="{ item }">
@@ -76,7 +76,8 @@ const items = ref([
   font-size: 15px;
   font-style: normal;
   font-weight: 500;
-  line-height: 140% 
+  line-height: 140%;
+  color: var(--vt-c-second-bg-color);
 }
 
 .action-icons {

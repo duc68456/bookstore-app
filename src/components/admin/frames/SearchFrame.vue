@@ -1,6 +1,9 @@
+<script setup>
+import SearchIcon from '@/assets/icons-vue/search-icon.vue'
+</script>
 <template>
   <div class="search-frame">
-    <span class="material-icons search-icon">search</span>
+    <SearchIcon />
     <input class="search-input" type="text" placeholder="Search by ID" />
   </div>
 </template>
@@ -14,7 +17,8 @@
   padding: 0 16px;
   border-radius: 12px;
   border: 1px solid #E8E8E8;
-  background-color: #FFFFFF;
+  background-color: var(--vt-c-main-bg-color);
+  gap: 15px;
 }
 
 .search-icon {
@@ -27,7 +31,7 @@
   border: none;
   outline: none;
   flex: 1;
-  font-size: 16px;
+  font-size: 15px;
   font-family: Montserrat, sans-serif;
   color: #333;
 }

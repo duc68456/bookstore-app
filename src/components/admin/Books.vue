@@ -5,6 +5,7 @@ import BookTable from '@/components/admin/tables/BookTable.vue'
 </script>
 
 <template>
+  <div style="max-height: 80vh; overflow-y: auto;">
   <div class="content">
     <div class="top-bar">
       <div class="left">
@@ -19,7 +20,8 @@ import BookTable from '@/components/admin/tables/BookTable.vue'
       </div>
     </div>
 
-    <BookTable />
+    <BookTable />   
+  </div>
   </div>
 </template>
 
@@ -43,5 +45,6 @@ import BookTable from '@/components/admin/tables/BookTable.vue'
 
 .right {
   flex-shrink: 0;
+  align-items: center;
 }
 </style>

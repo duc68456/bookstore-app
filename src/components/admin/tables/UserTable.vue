@@ -10,6 +10,8 @@ const headers = [
   { title: 'Name', key: 'name' },
   { title: 'Email', key: 'email' },
   { title: 'Username', key: 'username' },
+  { title: 'Day Of Birth', key: 'dob' },
+  { title: 'Phone', key: 'phone', sortable: false },
   { title: 'Action', key: 'action', sortable: false },
 ]
 
@@ -19,18 +21,24 @@ const items = ref([
     name: 'Prabath Jayasuriya',
     email: 'prabathjaylk@gmail.com',
     username: 'prabathjay',
+    dob: '01/01/2005',
+    phone: '0123456789'
   },
   {
     id: '2',
     name: 'Prabath Jayasuriya',
     email: 'prabathjaylk@gmail.com',
     username: 'prabathjay',
+    dob: '01/01/2005',
+    phone: '0123456789'
   },
   {
     id: '3',
     name: 'Prabath Jayasuriya',
     email: 'prabathjaylk@gmail.com',
     username: 'prabathjay',
+    dob: '01/01/2005',
+    phone: '0123456789'
   },
 ])
 </script>
@@ -42,7 +50,7 @@ const items = ref([
       :items="items"
       class="elevation-1"
       item-value="id"
-      :items-per-page="10"
+      :items-per-page="-1"
       hide-default-footer
     >
       <template #item.action="{ item }">
@@ -79,7 +87,8 @@ const items = ref([
   font-size: 15px;
   font-style: normal;
   font-weight: 500;
-  line-height: 140%
+  line-height: 140%;
+  color: var(--vt-c-second-bg-color);
 }
 
 .action-icons {

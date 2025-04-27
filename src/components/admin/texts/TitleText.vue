@@ -6,7 +6,7 @@
 
 <style scoped>
 .title-text {
-    color: #000000; /* Màu đen */
+    color: var(--vt-c-second-bg-color);
     font-family: Montserrat;
     font-size: 25px;
     font-style: normal;

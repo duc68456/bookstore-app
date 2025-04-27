@@ -9,8 +9,10 @@ const headers = [
   { title: 'ID', key: 'id' },
   { title: 'Name', key: 'name' },
   { title: 'Type', key: 'type' },
-  { title: 'Language', key: 'language' },
-  { title: 'Availability', key: 'availability' },
+  { title: 'Author', key: 'author' },
+  { title: 'Selling Price', key: 'selling_price' },
+  { title: 'Quantity', key: 'quantity' },
+  { title: 'Published Year', key: 'published_year' },
   { title: 'Action', key: 'action', sortable: false },
 ]
 
@@ -19,36 +21,46 @@ const items = ref([
     id: '1',
     name: 'Hibernate Core -11th',
     type: 'Educational',
-    language: 'English',
-    availability: 'Available',
+    author : 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
   },
   {
     id: '2',
     name: 'Hibernate Core -11th',
     type: 'Educational',
-    language: 'English',
-    availability: 'Borrowed',
+    author : 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
   },
   {
     id: '3',
     name: 'Hibernate Core -11th',
     type: 'Educational',
-    language: 'English',
-    availability: 'Available',
+    author : 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
   },
   {
     id: '4',
     name: 'Hibernate Core -11th',
     type: 'Educational',
-    language: 'English',
-    availability: 'Available',
+    author : 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
   },
   {
     id: '5',
     name: 'Hibernate Core -11th',
     type: 'Educational',
-    language: 'English',
-    availability: 'Borrowed',
+    author : 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
   },
 ])
 </script>
@@ -60,7 +72,7 @@ const items = ref([
       :items="items"
       class="elevation-1"
       item-value="id"
-      :items-per-page="10"
+      :items-per-page="-1"
       hide-default-footer
     >
       <template #item.action="{ item }">
@@ -97,7 +109,8 @@ const items = ref([
   font-size: 15px;
   font-style: normal;
   font-weight: 500;
-  line-height: 140%
+  line-height: 140%;
+  color: var(--vt-c-second-bg-color);
 }
 
 .action-icons {

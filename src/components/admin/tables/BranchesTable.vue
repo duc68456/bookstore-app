@@ -75,6 +75,7 @@ const items = ref([
   font-style: normal;
   font-weight: 500;
   line-height: 140%;
+  color: var(--vt-c-second-bg-color);
 }
 
 .action-icons {
