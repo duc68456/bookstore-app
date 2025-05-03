@@ -57,13 +57,17 @@ const items = ref([
       <div class="action-icons">
         <v-tooltip text="View" location="top">
           <template #activator="{ props }">
-            <ViewIcon v-bind="props" />  
+            <div v-bind="props" @click="$emit('view-user', item)" style="cursor: pointer;">
+              <ViewIcon />
+            </div>
           </template>
         </v-tooltip>
 
         <v-tooltip text="Edit" location="top">
           <template #activator="{ props }">
-            <EditIcon v-bind="props" />
+            <div v-bind="props" @click="$emit('edit-user', item)" style="cursor: pointer;">
+              <EditIcon />
+            </div>
           </template>
         </v-tooltip>
 

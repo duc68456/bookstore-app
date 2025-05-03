@@ -14,7 +14,7 @@ const isHover = ref(false)
 <style scoped>
 .btn {
     display: flex;
-    width: 222px;
+    width: 100%;
     height: 48px;
     padding: 12px 50px 14px 41px;
     align-items: flex-start;
@@ -33,4 +33,6 @@ const isHover = ref(false)
 .btn:hover ::v-deep(.text), .btn.active ::v-deep(.text) {  
     color: var(--vt-c-second-bg-color);
 }
+
+
 </style>

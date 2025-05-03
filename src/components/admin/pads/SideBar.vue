@@ -114,7 +114,7 @@ const route = useRoute()
 
 <style scoped>
 .window {
-  width: 222px;
+  width: 14vw;
   height: 100vh;
   background: var(--vt-c-second-bg-color);
   display: flex;
@@ -122,6 +122,7 @@ const route = useRoute()
   align-items: center;
   padding-top: 12px;
   padding-bottom: 20px;
+  overflow: hidden;
 }
 
 .logo {
@@ -133,7 +134,7 @@ const route = useRoute()
   flex-direction: column;
   gap: 10px; /* Khoảng cách giữa các nút */
   width: 100%;
-  align-items: center;
+  align-items: stretch;
   margin-bottom: auto;
 }
 
