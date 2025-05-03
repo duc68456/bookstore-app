@@ -1,16 +1,16 @@
 <script setup>
 import CRUDMainForm from './CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
-defineProps(['user'])
+defineProps(['book'])
 </script>
 
 <template> 
   <div class="detail-wrapper">
-    <CRUDMainForm title="User Detail" :data="user" @close="$emit('close')">
+    <CRUDMainForm title="Book Detail" :data="book" @close="$emit('close')">
       <template #title>
         <TitleText>
           <template #text>
-            User Detail
+            Book Detail
           </template>
         </TitleText>
       </template>
