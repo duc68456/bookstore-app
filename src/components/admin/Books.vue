@@ -5,6 +5,10 @@ import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
 import BookTable from '@/components/admin/tables/BookTable.vue'
 import BookDetail from '@/components/admin/CRUDforms/BookDetail.vue'
 import EditBook from '@/components/admin/CRUDforms/EditBook.vue'
+import AddBook from '@/components/admin/CRUDforms/AddBook.vue'
+
+import ButtonCRUD from './buttons/ButtonCRUD.vue'
+import ButtonText from './texts/ButtonText.vue'
 
 const selectedBook = ref(null)
 
@@ -25,11 +29,26 @@ const handleEditBook = (book) => {
 const closeEdit = () => {
   editingBook.value = null
 }
+
+const addingBook = ref(false)
+
+const handleAddBook = () => {
+  addingBook.value = true
+}
+
+const closeAddBook = () => {
+  addingBook.value = false
+}
+
 </script>
 
 <template>
   <div style="overflow-y: auto;">
-    <div v-if="!selectedBook && !editingBook" class="content">
+    <div v-if="addingBook" class="book-detail-full">
+      <AddBook @close="closeAddBook" />
+    </div>
+
+    <div v-else-if="!selectedBook && !editingBook" class="content">
       <div class="top-bar">
         <div class="left">
           <TitleText>
@@ -44,6 +63,15 @@ const closeEdit = () => {
       </div>
 
       <BookTable @view-book="handleViewBook"  @edit-book="handleEditBook" />
+      <ButtonCRUD @click="handleAddBook">
+        <template #btn-text>
+          <ButtonText>
+            <template #text>
+              ADD BOOK
+            </template>
+          </ButtonText>
+        </template>
+      </ButtonCRUD>
     </div>
 
     <div v-else-if="selectedBook && !editingBook" class="book-detail-full">

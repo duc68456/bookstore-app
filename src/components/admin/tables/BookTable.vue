@@ -5,6 +5,22 @@ import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import EditIcon from '@/assets/icons-vue/edit.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
 
+const dialog = ref(false)
+const bookToDelete = ref(null)
+
+const openDeleteDialog = (book) => {
+  bookToDelete.value = book
+  dialog.value = true
+}
+
+const confirmDelete = () => {
+  if (bookToDelete.value) {
+    items.value = items.value.filter(b => b.id !== bookToDelete.value.id)
+    dialog.value = false
+    bookToDelete.value = null
+  }
+}
+
 const headers = [
   { title: 'ID', key: 'id' },
   { title: 'Name', key: 'name' },
@@ -98,12 +114,34 @@ const emit = defineEmits(['view-book'])
 
         <v-tooltip text="Delete" location="top">
           <template #activator="{ props }">
-            <DeleteIcon v-bind="props" />
+            <div v-bind="props" @click="openDeleteDialog(item)" style="cursor: pointer;">
+              <DeleteIcon />
+            </div>
           </template>
         </v-tooltip>
       </div>
       </template>
     </v-data-table>
+    <v-dialog 
+  v-model="dialog"
+  width="400"
+  class="delete-dialog"
+  persistent
+  scroll-strategy="block">
+  <v-card>
+    <v-card-title class="text-h6">Confirm Deletion</v-card-title>
+    <v-card-text>
+      Are you sure you want to delete the book
+      <strong>{{ bookToDelete?.name }}</strong>?
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer />
+      <v-btn color="grey" variant="text" @click="dialog = false">Cancel</v-btn>
+      <v-btn color="var(--vt-c-second-bg-color)" variant="tonal" @click="confirmDelete">Delete</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
+
   </v-container>
 </template>
 
@@ -123,5 +161,24 @@ const emit = defineEmits(['view-book'])
 .action-icons {
   display: flex;
   gap: 12px;
+}
+
+.delete-dialog .v-card{
+  width: 25vw;
+  height: 25vh;
+  border-radius: 50px;
+  background: var(--vt-c-main-bg-color);
+  allign-items: center;
+}
+
+.delete-dialog .v-card-title {
+  color: var(--vt-c-second-bg-color);
+  font-weight: bold;
+  text-align: center;
+}
+
+.delete-dialog .v-card-text {
+  font-size: 16px;
+  color: var(--vt-c-second-bg-color);
 }
 </style>
