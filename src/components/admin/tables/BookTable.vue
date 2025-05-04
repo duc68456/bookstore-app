@@ -29,6 +29,7 @@ const headers = [
   { title: 'Selling Price', key: 'selling_price' },
   { title: 'Quantity', key: 'quantity' },
   { title: 'Published Year', key: 'published_year' },
+  { key: 'categories' },
   { title: 'Action', key: 'action', sortable: false },
 ]
 

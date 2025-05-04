@@ -90,19 +90,16 @@ const handleSignUp = () => {
         <!-- Combined frame1 + frame2 for vertical alignment -->
         <template #frame1>
           <div style="display: flex; flex-direction: column; gap: 16px; width: 100%; align-items: center;">
-            <!-- First Name & Last Name -->
             <div style="display: flex; gap: 12px;">
               <SignupFrame v-model="firstName" placeholder="First Name" />
               <SignupFrame v-model="lastName" placeholder="Last Name" />
             </div>
 
-            <!-- Contact & Email -->
             <div style="display: flex; gap: 12px;">
               <ContactFrame v-model="contact" placeholder="Contact No" />
               <EmailFrame v-model="email" placeholder="Email" />
             </div>
 
-            <!-- Username & Password -->
             <div style="display: flex; gap: 12px;">
               <SignupFrame v-model="username" placeholder="Username" />
               <SignupFrame v-model="password" placeholder="Password" type="password" />
