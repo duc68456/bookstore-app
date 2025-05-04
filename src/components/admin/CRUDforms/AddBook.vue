@@ -1,6 +1,7 @@
 <script setup>
 import CRUDMainForm from './CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
+import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 defineProps(['book'])
 </script>
 
@@ -13,6 +14,8 @@ defineProps(['book'])
             Add Book
           </template>
         </TitleText>
+      </template>
+      <template #content>
       </template>
     </CRUDMainForm>
   </div>
