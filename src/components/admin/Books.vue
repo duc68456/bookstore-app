@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import TitleText from './texts/TitleText.vue'
 import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
 import BookTable from '@/components/admin/tables/BookTable.vue'
@@ -10,7 +10,6 @@ import AddBook from '@/components/admin/CRUDforms/AddBook.vue'
 import ButtonCRUD from './buttons/ButtonCRUD.vue'
 import ButtonText from './texts/ButtonText.vue'
 
-// Mock data
 const items = ref([
   {
     id: '1',
@@ -79,6 +78,15 @@ const fullBookDetails = reactive({
     publisher: 'TechPress'
   },
 })
+// 👇 Biến tìm kiếm và bộ lọc
+const searchQuery = ref('')
+const filteredBooks = computed(() => {
+  const q = searchQuery.value.toLowerCase()
+  return items.value.filter(book =>
+    book.id.toLowerCase().includes(q) ||
+    book.name.toLowerCase().includes(q)
+  )
+})
 
 // View
 const selectedBook = ref(null)
@@ -104,7 +112,7 @@ const updateBook = (updatedBook) => {
   }
 }
 
-// Add (mock)
+// Add
 const addingBook = ref(false)
 const handleAddBook = () => {
   addingBook.value = true
@@ -125,27 +133,24 @@ const addBook = (newBook) => {
   addingBook.value = false
 }
 
-// Delete (mock)
+// Delete
 const deleteBook = (book) => {
   items.value = items.value.filter(b => b.id !== book.id)
   delete fullBookDetails[book.id]
 }
 
+// Cancel Edit
 const cancelEditDialog = ref(false)
-
 const closeEdit = () => {
   cancelEditDialog.value = true
 }
-
 const confirmCancelEdit = () => {
   editingBook.value = null
   cancelEditDialog.value = false
 }
-
 const cancelCancelEdit = () => {
   cancelEditDialog.value = false
 }
-
 </script>
 
 <template>
@@ -157,19 +162,16 @@ const cancelCancelEdit = () => {
     <div v-else-if="!selectedBook && !editingBook" class="content">
       <div class="top-bar">
         <div class="left">
-          <TitleText>
-            <template #text>
-              Book Management
-            </template>
-          </TitleText>
+          <TitleText><template #text>Book Management</template></TitleText>
         </div>
         <div class="right">
-          <SearchFrame />
+          <SearchFrame v-model="searchQuery" />
         </div>
       </div>
 
-      <BookTable :items="items" :fullBookDetails="fullBookDetails" @view-book="handleViewBook"
+      <BookTable :items="filteredBooks" :fullBookDetails="fullBookDetails" @view-book="handleViewBook"
         @edit-book="handleEditBook" @delete-book="deleteBook" />
+
       <ButtonCRUD @click="handleAddBook">
         <template #btn-text>
           <ButtonText><template #text>ADD BOOK</template></ButtonText>
@@ -200,7 +202,6 @@ const cancelCancelEdit = () => {
       </v-card-actions>
     </v-card>
   </v-dialog>
-
 </template>
 
 <style scoped>

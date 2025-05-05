@@ -1,16 +1,15 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import TitleText from './texts/TitleText.vue'
 import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
 import UserTable from '@/components/admin/tables/UserTable.vue'
 import UserDetail from '@/components/admin/CRUDforms/UserDetail.vue'
 import EditUser from '@/components/admin/CRUDforms/EditUser.vue'
-import AddUser from '@/components/admin/CRUDforms/AddUser.vue' // Thêm dòng này
+import AddUser from '@/components/admin/CRUDforms/AddUser.vue'
 
-import ButtonCRUD from './buttons/ButtonCRUD.vue' // Thêm dòng này
-import ButtonText from './texts/ButtonText.vue'   // Thêm dòng này
+import ButtonCRUD from './buttons/ButtonCRUD.vue'
+import ButtonText from './texts/ButtonText.vue'
 
-// Danh sách mock users
 const users = ref([
   {
     id: '1',
@@ -29,6 +28,19 @@ const users = ref([
     phone: '0987654321'
   }
 ])
+
+// 👇 Biến tìm kiếm
+const searchQuery = ref('')
+
+// 👇 Lọc user theo id hoặc name
+const filteredUsers = computed(() => {
+  const q = searchQuery.value.toLowerCase()
+  return users.value.filter(
+    u =>
+      u.id.toLowerCase().includes(q) ||
+      u.name.toLowerCase().includes(q)
+  )
+})
 
 const selectedUser = ref(null)
 const editingUser = ref(null)
@@ -58,21 +70,18 @@ const addUser = (newUser) => {
   addingUser.value = false
 }
 
+// Cancel Edit dialog
 const cancelEditDialog = ref(false)
-
 const closeEdit = () => {
   cancelEditDialog.value = true
 }
-
 const confirmCancelEdit = () => {
   editingUser.value = null
   cancelEditDialog.value = false
 }
-
 const cancelCancelEdit = () => {
   cancelEditDialog.value = false
 }
-
 </script>
 
 <template>
@@ -84,24 +93,20 @@ const cancelCancelEdit = () => {
     <div v-else-if="!selectedUser && !editingUser" class="content">
       <div class="top-bar">
         <div class="left">
-          <TitleText>
-            <template #text>User Management</template>
-          </TitleText>
+          <TitleText><template #text>User Management</template></TitleText>
         </div>
         <div class="right">
-          <SearchFrame />
+          <SearchFrame v-model="searchQuery" /> <!-- 👈 truyền v-model -->
         </div>
       </div>
 
-      <UserTable :users="users" @view-user="handleViewUser" @edit-user="handleEditUser"
+      <!-- 👇 Dùng filteredUsers thay vì users -->
+      <UserTable :users="filteredUsers" @view-user="handleViewUser" @edit-user="handleEditUser"
         @delete-user="handleDeleteUser" />
 
-      <!-- Nút ADD USER -->
       <ButtonCRUD @click="handleAddUser">
         <template #btn-text>
-          <ButtonText>
-            <template #text>ADD USER</template>
-          </ButtonText>
+          <ButtonText><template #text>ADD USER</template></ButtonText>
         </template>
       </ButtonCRUD>
     </div>
@@ -129,7 +134,6 @@ const cancelCancelEdit = () => {
       </v-card-actions>
     </v-card>
   </v-dialog>
-
 </template>
 
 <style scoped>

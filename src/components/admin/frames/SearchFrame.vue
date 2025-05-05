@@ -1,10 +1,15 @@
 <script setup>
+import { ref, watch } from 'vue'
 import SearchIcon from '@/assets/icons-vue/search-icon.vue'
+
+const model = defineModel() // v-model trong Vue 3.4+
 </script>
+
 <template>
   <div class="search-frame">
     <SearchIcon />
-    <input class="search-input" type="text" placeholder="Search by ID" />
+    <input class="search-input" type="text" :value="model" @input="model = $event.target.value"
+      placeholder="Search by ID / Name" />
   </div>
 </template>
 
@@ -19,12 +24,6 @@ import SearchIcon from '@/assets/icons-vue/search-icon.vue'
   border: 1px solid #E8E8E8;
   background-color: var(--vt-c-main-bg-color);
   gap: 15px;
-}
-
-.search-icon {
-  font-size: 20px;
-  color: #757575;
-  margin-right: 8px;
 }
 
 .search-input {
