@@ -1,15 +1,19 @@
 <script setup>
-defineProps({
+const props = defineProps({
   readonly: Boolean,
   placeholder: String,
   modelValue: String
 })
+
+const emit = defineEmits(['update:modelValue'])
 </script>
+
 <template>
   <div class="wrapper">
     <slot name="text-above"></slot>
     <div class="frame">
-      <input class="input" type="text" :readonly="readonly" :placeholder="placeholder" :value="modelValue"/>
+      <input class="input" type="text" :readonly="readonly" :placeholder="placeholder" :value="modelValue"
+        @input="$emit('update:modelValue', $event.target.value)" />
     </div>
   </div>
 </template>

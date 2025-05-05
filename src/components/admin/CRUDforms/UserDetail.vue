@@ -1,10 +1,13 @@
 <script setup>
 import CRUDMainForm from './CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
+import FrameRU from '../frames/FrameRU.vue'
+import FrameText from '../texts/FrameText.vue'
+
 defineProps(['user'])
 </script>
 
-<template> 
+<template>
   <div class="detail-wrapper">
     <CRUDMainForm title="User Detail" :data="user" @close="$emit('close')">
       <template #title>
@@ -14,11 +17,53 @@ defineProps(['user'])
           </template>
         </TitleText>
       </template>
+
+      <template #content>
+        <div class="frame-wrapper">
+          <FrameRU readonly :modelValue="user.name">
+            <template #text-above>
+              <FrameText>
+                <template #text>Name</template>
+              </FrameText>
+            </template>
+          </FrameRU>
+
+          <FrameRU readonly :modelValue="user.email">
+            <template #text-above>
+              <FrameText>
+                <template #text>Email</template>
+              </FrameText>
+            </template>
+          </FrameRU>
+
+          <FrameRU readonly :modelValue="user.username">
+            <template #text-above>
+              <FrameText>
+                <template #text>Username</template>
+              </FrameText>
+            </template>
+          </FrameRU>
+
+          <FrameRU readonly :modelValue="user.dob">
+            <template #text-above>
+              <FrameText>
+                <template #text>Day Of Birth</template>
+              </FrameText>
+            </template>
+          </FrameRU>
+
+          <FrameRU readonly :modelValue="user.phone">
+            <template #text-above>
+              <FrameText>
+                <template #text>Phone</template>
+              </FrameText>
+            </template>
+          </FrameRU>
+        </div>
+      </template>
     </CRUDMainForm>
   </div>
 </template>
-
-
 
 <style scoped>
 .detail-wrapper {
@@ -28,5 +73,12 @@ defineProps(['user'])
   padding: 12px;
   font-family: Montserrat;
 }
-</style>
 
+.frame-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 5vh 0;
+}
+</style>

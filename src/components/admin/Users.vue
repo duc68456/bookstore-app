@@ -6,7 +6,28 @@ import UserTable from '@/components/admin/tables/UserTable.vue'
 import UserDetail from '@/components/admin/CRUDforms/UserDetail.vue'
 import EditUser from '@/components/admin/CRUDforms/EditUser.vue'
 
+// Danh sách mock users
+const users = ref([
+  {
+    id: '1',
+    name: 'Prabath Jayasuriya',
+    email: 'prabathjaylk@gmail.com',
+    username: 'prabathjay',
+    dob: '01/01/2005',
+    phone: '0123456789'
+  },
+  {
+    id: '2',
+    name: 'John Doe',
+    email: 'john@example.com',
+    username: 'johndoe',
+    dob: '02/02/2000',
+    phone: '0987654321'
+  }
+])
+
 const selectedUser = ref(null)
+const editingUser = ref(null)
 
 const handleViewUser = (user) => {
   selectedUser.value = user
@@ -16,14 +37,19 @@ const closeDetail = () => {
   selectedUser.value = null
 }
 
-const editingUser = ref(null)
-
-const handleEditUser = (user) => {
-  editingUser.value = user
+const handleDeleteUser = (user) => {
+  users.value = users.value.filter(u => u.id !== user.id)
 }
 
 const closeEdit = () => {
   editingUser.value = null
+}
+
+const updateUser = (updatedUser) => {
+  const index = users.value.findIndex(u => u.id === updatedUser.id)
+  if (index !== -1) {
+    users.value[index] = { ...updatedUser }
+  }
 }
 </script>
 
@@ -33,9 +59,7 @@ const closeEdit = () => {
       <div class="top-bar">
         <div class="left">
           <TitleText>
-            <template #text>
-              User Management
-            </template>
+            <template #text>User Management</template>
           </TitleText>
         </div>
         <div class="right">
@@ -43,7 +67,8 @@ const closeEdit = () => {
         </div>
       </div>
 
-      <UserTable @view-user="handleViewUser"  @edit-user="handleEditUser" />
+      <UserTable :users="users" @view-user="handleViewUser" @edit-user="handleEditUser"
+        @delete-user="handleDeleteUser" />
     </div>
 
     <div v-else-if="selectedUser && !editingUser" class="user-detail-full">
@@ -51,14 +76,13 @@ const closeEdit = () => {
     </div>
 
     <div v-else-if="editingUser" class="user-detail-full">
-      <EditUser :user="editingUser" @close="closeEdit" />
+      <EditUser :user="editingUser" @close="closeEdit" @update-user="updateUser" />
     </div>
-    
   </div>
 </template>
 
 <style scoped>
-.content, .handleViewUser {
+.content {
   width: 100%;
   height: 100%;
   padding: 20px;

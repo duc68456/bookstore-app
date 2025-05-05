@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import TitleText from './texts/TitleText.vue'
 import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
 import BookTable from '@/components/admin/tables/BookTable.vue'
@@ -10,36 +10,117 @@ import AddBook from '@/components/admin/CRUDforms/AddBook.vue'
 import ButtonCRUD from './buttons/ButtonCRUD.vue'
 import ButtonText from './texts/ButtonText.vue'
 
-const selectedBook = ref(null)
+// Mock data
+const items = ref([
+  {
+    id: '1',
+    name: 'Hibernate Core -11th',
+    type: 'Educational',
+    author: 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
+  },
+  {
+    id: '2',
+    name: 'Hibernate Core -11th',
+    type: 'Educational',
+    author: 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
+  },
+  {
+    id: '3',
+    name: 'Hibernate Core -11th',
+    type: 'Educational',
+    author: 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
+  },
+])
 
+const fullBookDetails = reactive({
+  '1': {
+    id: '1',
+    name: 'Hibernate Core -11th',
+    type: 'Educational',
+    author: 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
+    categories: ['Java', 'ORM', 'Backend'],
+    description: 'A comprehensive guide to Hibernate for 11th edition',
+    publisher: 'TechPress'
+  },
+  '2': {
+    id: '2',
+    name: 'Hibernate Core -11th',
+    type: 'Educational',
+    author: 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
+    categories: ['Java', 'ORM', 'Backend'],
+    description: 'A comprehensive guide to Hibernate for 11th edition',
+    publisher: 'TechPress'
+  },
+  '3': {
+    id: '3',
+    name: 'Hibernate Core -11th',
+    type: 'Educational',
+    author: 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
+    categories: ['Java', 'ORM', 'Backend'],
+    description: 'A comprehensive guide to Hibernate for 11th edition',
+    publisher: 'TechPress'
+  },
+})
+
+// View
+const selectedBook = ref(null)
 const handleViewBook = (book) => {
   selectedBook.value = book
 }
-
 const closeDetail = () => {
   selectedBook.value = null
 }
 
+// Edit
 const editingBook = ref(null)
-
 const handleEditBook = (book) => {
   editingBook.value = book
 }
-
 const closeEdit = () => {
   editingBook.value = null
 }
+const updateBook = (updatedBook) => {
+  const index = items.value.findIndex(b => b.id === updatedBook.id)
+  if (index !== -1) {
+    items.value[index] = { ...updatedBook }
+  }
+  if (fullBookDetails[updatedBook.id]) {
+    fullBookDetails[updatedBook.id] = { ...updatedBook }
+  }
+}
 
+// Add (mock)
 const addingBook = ref(false)
-
 const handleAddBook = () => {
   addingBook.value = true
 }
-
 const closeAddBook = () => {
   addingBook.value = false
 }
 
+// Delete (mock)
+const deleteBook = (book) => {
+  items.value = items.value.filter(b => b.id !== book.id)
+  delete fullBookDetails[book.id]
+}
 </script>
 
 <template>
@@ -62,14 +143,11 @@ const closeAddBook = () => {
         </div>
       </div>
 
-      <BookTable @view-book="handleViewBook"  @edit-book="handleEditBook" />
+      <BookTable :items="items" :fullBookDetails="fullBookDetails" @view-book="handleViewBook"
+        @edit-book="handleEditBook" @delete-book="deleteBook" />
       <ButtonCRUD @click="handleAddBook">
         <template #btn-text>
-          <ButtonText>
-            <template #text>
-              ADD BOOK
-            </template>
-          </ButtonText>
+          <ButtonText><template #text>ADD BOOK</template></ButtonText>
         </template>
       </ButtonCRUD>
     </div>
@@ -79,14 +157,13 @@ const closeAddBook = () => {
     </div>
 
     <div v-else-if="editingBook" class="book-detail-full">
-      <EditBook :book="editingBook" @close="closeEdit" />
+      <EditBook :book="editingBook" @close="closeEdit" @update-book="updateBook" />
     </div>
-    
   </div>
 </template>
 
 <style scoped>
-.content, .handleViewBook {
+.content {
   width: 100%;
   height: 100%;
   padding: 20px;
