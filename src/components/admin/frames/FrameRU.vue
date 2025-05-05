@@ -1,13 +1,14 @@
 <script setup>
 defineProps({
-  readonly: Boolean
+  readonly: Boolean,
+  placeholder: String
 })
 </script>
 <template>
   <div class="wrapper">
     <slot name="text-above"></slot>
     <div class="frame">
-      <input class="input" type="text" :readonly="readonly" />
+      <input class="input" type="text" :readonly="readonly" :placeholder="placeholder" />
     </div>
   </div>
 </template>

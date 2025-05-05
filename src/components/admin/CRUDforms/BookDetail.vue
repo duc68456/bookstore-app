@@ -22,15 +22,6 @@ defineProps(['book'])
             <template #text-above>
               <FrameText>
                 <template #text>
-                  ID
-                </template>
-              </FrameText>
-            </template>
-          </FrameRU>        
-          <FrameRU readonly>
-            <template #text-above>
-              <FrameText>
-                <template #text>
                   Name
                 </template>
               </FrameText>

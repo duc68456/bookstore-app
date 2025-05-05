@@ -20,16 +20,7 @@ defineProps(['book'])
       </template>
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU readonly>
-            <template #text-above>
-              <FrameText>
-                <template #text>
-                  ID
-                </template>
-              </FrameText>
-            </template>
-          </FrameRU>        
-          <FrameRU readonly>
+          <FrameRU>
             <template #text-above>
               <FrameText>
                 <template #text>
@@ -38,7 +29,7 @@ defineProps(['book'])
               </FrameText>
             </template>
           </FrameRU>        
-          <FrameRU readonly>
+          <FrameRU>
             <template #text-above>
               <FrameText>
                 <template #text>
@@ -47,7 +38,7 @@ defineProps(['book'])
               </FrameText>
             </template>
           </FrameRU>        
-          <FrameRU readonly>
+          <FrameRU>
             <template #text-above>
               <FrameText>
                 <template #text>
@@ -56,7 +47,7 @@ defineProps(['book'])
               </FrameText>
             </template>
           </FrameRU>        
-          <FrameRU readonly>
+          <FrameRU>
             <template #text-above>
               <FrameText>
                 <template #text>
@@ -65,7 +56,7 @@ defineProps(['book'])
               </FrameText>
             </template>
           </FrameRU>        
-          <FrameRU readonly>
+          <FrameRU>
             <template #text-above>
               <FrameText>
                 <template #text>
@@ -74,7 +65,7 @@ defineProps(['book'])
               </FrameText>
             </template>
           </FrameRU>        
-          <FrameRU readonly>
+          <FrameRU>
             <template #text-above>
               <FrameText>
                 <template #text>
