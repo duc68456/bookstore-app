@@ -96,6 +96,54 @@ const fullBookDetails = {
     description: 'A comprehensive guide to Hibernate for 11th edition',
     publisher: 'TechPress'
   },
+  '2': {
+    id: '2',
+    name: 'Hibernate Core -11th',
+    type: 'Educational',
+    author: 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
+    categories: ['Java', 'ORM', 'Backend'],
+    description: 'A comprehensive guide to Hibernate for 11th edition',
+    publisher: 'TechPress'
+  },
+  '3': {
+    id: '3',
+    name: 'Hibernate Core -11th',
+    type: 'Educational',
+    author: 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
+    categories: ['Java', 'ORM', 'Backend'],
+    description: 'A comprehensive guide to Hibernate for 11th edition',
+    publisher: 'TechPress'
+  },
+  '4': {
+    id: '4',
+    name: 'Hibernate Core -11th',
+    type: 'Educational',
+    author: 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
+    categories: ['Java', 'ORM', 'Backend'],
+    description: 'A comprehensive guide to Hibernate for 11th edition',
+    publisher: 'TechPress'
+  },
+  '5': {
+    id: '5',
+    name: 'Hibernate Core -11th',
+    type: 'Educational',
+    author: 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
+    categories: ['Java', 'ORM', 'Backend'],
+    description: 'A comprehensive guide to Hibernate for 11th edition',
+    publisher: 'TechPress'
+  },
 }
 </script>
 
