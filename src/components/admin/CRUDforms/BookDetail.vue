@@ -18,7 +18,7 @@ defineProps(['book'])
       </template>
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU readonly>
+          <FrameRU readonly :modelValue="book.name">
             <template #text-above>
               <FrameText>
                 <template #text>
@@ -27,7 +27,7 @@ defineProps(['book'])
               </FrameText>
             </template>
           </FrameRU>        
-          <FrameRU readonly>
+          <FrameRU readonly :modelValue="book.author">
             <template #text-above>
               <FrameText>
                 <template #text>
@@ -36,7 +36,7 @@ defineProps(['book'])
               </FrameText>
             </template>
           </FrameRU>        
-          <FrameRU readonly>
+          <FrameRU readonly :modelValue="book.selling_price">
             <template #text-above>
               <FrameText>
                 <template #text>
@@ -45,7 +45,7 @@ defineProps(['book'])
               </FrameText>
             </template>
           </FrameRU>        
-          <FrameRU readonly>
+          <FrameRU readonly :modelValue="book.quantity">
             <template #text-above>
               <FrameText>
                 <template #text>
@@ -54,7 +54,7 @@ defineProps(['book'])
               </FrameText>
             </template>
           </FrameRU>        
-          <FrameRU readonly>
+          <FrameRU readonly :modelValue="book.published_year">
             <template #text-above>
               <FrameText>
                 <template #text>
@@ -63,7 +63,7 @@ defineProps(['book'])
               </FrameText>
             </template>
           </FrameRU>        
-          <FrameRU readonly>
+          <FrameRU readonly :modelValue="book.categories">
             <template #text-above>
               <FrameText>
                 <template #text>

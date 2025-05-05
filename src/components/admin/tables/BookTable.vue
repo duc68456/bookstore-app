@@ -83,6 +83,20 @@ const items = ref([
 
 const emit = defineEmits(['view-book'])
 
+const fullBookDetails = {
+  '1': {
+    id: '1',
+    name: 'Hibernate Core -11th',
+    type: 'Educational',
+    author: 'Hibernate',
+    selling_price: '100000',
+    quantity: '100',
+    published_year: '2025',
+    categories: ['Java', 'ORM', 'Backend'],
+    description: 'A comprehensive guide to Hibernate for 11th edition',
+    publisher: 'TechPress'
+  },
+}
 </script>
 
 <template>
@@ -99,7 +113,7 @@ const emit = defineEmits(['view-book'])
       <div class="action-icons">
         <v-tooltip text="View" location="top">
           <template #activator="{ props }">
-            <div v-bind="props" @click="$emit('view-book', item)" style="cursor: pointer;">
+            <div v-bind="props" @click="$emit('view-book', fullBookDetails[item.id])" style="cursor: pointer;">
               <ViewIcon />
             </div>
           </template>
