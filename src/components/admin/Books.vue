@@ -115,6 +115,18 @@ const handleAddBook = () => {
 const closeAddBook = () => {
   addingBook.value = false
 }
+const addBook = (newBook) => {
+  const newId = String(items.value.length + 1)
+  const newBookWithId = { ...newBook, id: newId }
+  items.value.push(newBookWithId)
+  fullBookDetails[newId] = {
+    ...newBookWithId,
+    categories: newBook.categories?.split(',').map(c => c.trim()) ?? [],
+    description: 'No description provided',
+    publisher: 'Unknown'
+  }
+  addingBook.value = false
+}
 
 // Delete (mock)
 const deleteBook = (book) => {
@@ -126,7 +138,7 @@ const deleteBook = (book) => {
 <template>
   <div style="overflow-y: auto;">
     <div v-if="addingBook" class="book-detail-full">
-      <AddBook @close="closeAddBook" />
+      <AddBook @close="closeAddBook" @add-book="addBook" />
     </div>
 
     <div v-else-if="!selectedBook && !editingBook" class="content">

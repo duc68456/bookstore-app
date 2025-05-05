@@ -7,76 +7,59 @@ import FrameText from '../texts/FrameText.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import ButtonText from '../texts/ButtonText.vue'
 
-const emit = defineEmits(['close', 'add-book'])
+const emit = defineEmits(['close', 'add-user'])
 
-const newBook = reactive({
+const newUser = reactive({
   name: '',
-  author: '',
-  selling_price: '',
-  quantity: '',
-  published_year: '',
-  categories: ''
+  email: '',
+  username: '',
+  dob: '',
+  phone: ''
 })
 
 const handleAdd = () => {
-  emit('add-book', { ...newBook })
-  emit('close')
+  emit('add-user', newUser)
 }
 </script>
 
 <template>
   <div class="detail-wrapper">
-    <CRUDMainForm title="Add Book" :data="newBook" @close="$emit('close')">
+    <CRUDMainForm title="Add User" :data="newUser" @close="$emit('close')">
       <template #title>
-        <TitleText>
-          <template #text>
-            Add Book
-          </template>
-        </TitleText>
+        <TitleText><template #text>Add User</template></TitleText>
       </template>
+
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="newBook.name">
+          <FrameRU v-model="newUser.name">
             <template #text-above>
               <FrameText><template #text>Name</template></FrameText>
             </template>
           </FrameRU>
-
-          <FrameRU v-model="newBook.author">
+          <FrameRU v-model="newUser.email">
             <template #text-above>
-              <FrameText><template #text>Author</template></FrameText>
+              <FrameText><template #text>Email</template></FrameText>
             </template>
           </FrameRU>
-
-          <FrameRU v-model="newBook.selling_price">
+          <FrameRU v-model="newUser.username">
             <template #text-above>
-              <FrameText><template #text>Selling Price</template></FrameText>
+              <FrameText><template #text>Username</template></FrameText>
             </template>
           </FrameRU>
-
-          <FrameRU v-model="newBook.quantity">
+          <FrameRU v-model="newUser.dob">
             <template #text-above>
-              <FrameText><template #text>Quantity</template></FrameText>
+              <FrameText><template #text>Day Of Birth</template></FrameText>
             </template>
           </FrameRU>
-
-          <FrameRU v-model="newBook.published_year">
+          <FrameRU v-model="newUser.phone">
             <template #text-above>
-              <FrameText><template #text>Published Year</template></FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU v-model="newBook.categories">
-            <template #text-above>
-              <FrameText><template #text>Categories</template></FrameText>
+              <FrameText><template #text>Phone</template></FrameText>
             </template>
           </FrameRU>
 
           <ButtonCRUD @click="handleAdd">
             <template #btn-text>
-              <ButtonText>
-                <template #text>ADD</template>
-              </ButtonText>
+              <ButtonText><template #text>ADD</template></ButtonText>
             </template>
           </ButtonCRUD>
         </div>

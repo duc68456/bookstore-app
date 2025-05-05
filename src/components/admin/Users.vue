@@ -5,6 +5,10 @@ import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
 import UserTable from '@/components/admin/tables/UserTable.vue'
 import UserDetail from '@/components/admin/CRUDforms/UserDetail.vue'
 import EditUser from '@/components/admin/CRUDforms/EditUser.vue'
+import AddUser from '@/components/admin/CRUDforms/AddUser.vue' // Thêm dòng này
+
+import ButtonCRUD from './buttons/ButtonCRUD.vue' // Thêm dòng này
+import ButtonText from './texts/ButtonText.vue'   // Thêm dòng này
 
 // Danh sách mock users
 const users = ref([
@@ -28,21 +32,18 @@ const users = ref([
 
 const selectedUser = ref(null)
 const editingUser = ref(null)
+const addingUser = ref(false)
 
-const handleViewUser = (user) => {
-  selectedUser.value = user
-}
+const handleViewUser = (user) => selectedUser.value = user
+const handleEditUser = (user) => editingUser.value = user
+const handleAddUser = () => addingUser.value = true
 
-const closeDetail = () => {
-  selectedUser.value = null
-}
+const closeDetail = () => selectedUser.value = null
+const closeEdit = () => editingUser.value = null
+const closeAddUser = () => addingUser.value = false
 
 const handleDeleteUser = (user) => {
   users.value = users.value.filter(u => u.id !== user.id)
-}
-
-const closeEdit = () => {
-  editingUser.value = null
 }
 
 const updateUser = (updatedUser) => {
@@ -51,11 +52,21 @@ const updateUser = (updatedUser) => {
     users.value[index] = { ...updatedUser }
   }
 }
+
+const addUser = (newUser) => {
+  const newId = String(users.value.length + 1)
+  users.value.push({ ...newUser, id: newId })
+  addingUser.value = false
+}
 </script>
 
 <template>
   <div style="overflow-y: auto;">
-    <div v-if="!selectedUser && !editingUser" class="content">
+    <div v-if="addingUser" class="user-detail-full">
+      <AddUser @close="closeAddUser" @add-user="addUser" />
+    </div>
+
+    <div v-else-if="!selectedUser && !editingUser" class="content">
       <div class="top-bar">
         <div class="left">
           <TitleText>
@@ -69,6 +80,15 @@ const updateUser = (updatedUser) => {
 
       <UserTable :users="users" @view-user="handleViewUser" @edit-user="handleEditUser"
         @delete-user="handleDeleteUser" />
+
+      <!-- Nút ADD USER -->
+      <ButtonCRUD @click="handleAddUser">
+        <template #btn-text>
+          <ButtonText>
+            <template #text>ADD USER</template>
+          </ButtonText>
+        </template>
+      </ButtonCRUD>
     </div>
 
     <div v-else-if="selectedUser && !editingUser" class="user-detail-full">
