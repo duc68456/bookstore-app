@@ -94,9 +94,6 @@ const editingBook = ref(null)
 const handleEditBook = (book) => {
   editingBook.value = book
 }
-const closeEdit = () => {
-  editingBook.value = null
-}
 const updateBook = (updatedBook) => {
   const index = items.value.findIndex(b => b.id === updatedBook.id)
   if (index !== -1) {
@@ -133,6 +130,22 @@ const deleteBook = (book) => {
   items.value = items.value.filter(b => b.id !== book.id)
   delete fullBookDetails[book.id]
 }
+
+const cancelEditDialog = ref(false)
+
+const closeEdit = () => {
+  cancelEditDialog.value = true
+}
+
+const confirmCancelEdit = () => {
+  editingBook.value = null
+  cancelEditDialog.value = false
+}
+
+const cancelCancelEdit = () => {
+  cancelEditDialog.value = false
+}
+
 </script>
 
 <template>
@@ -172,6 +185,22 @@ const deleteBook = (book) => {
       <EditBook :book="editingBook" @close="closeEdit" @update-book="updateBook" />
     </div>
   </div>
+
+  <v-dialog v-model="cancelEditDialog" width="400" class="delete-dialog" persistent scroll-strategy="block">
+    <v-card>
+      <v-card-title class="text-h6">Confirm Cancel</v-card-title>
+      <v-card-text>
+        Are you sure you want to cancel editing the book
+        <strong>{{ editingBook?.name }}</strong>?
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn color="grey" variant="text" @click="cancelCancelEdit">Cancel</v-btn>
+        <v-btn color="var(--vt-c-second-bg-color)" variant="tonal" @click="confirmCancelEdit">Yes</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
 </template>
 
 <style scoped>
