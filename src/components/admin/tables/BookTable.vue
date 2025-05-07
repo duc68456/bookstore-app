@@ -35,6 +35,7 @@ const headers = [
   { title: 'Selling Price', key: 'selling_price' },
   { title: 'Quantity', key: 'quantity' },
   { title: 'Published Year', key: 'published_year' },
+  { title: 'Categories', key: 'categories' }, // Thêm cột Categories
   { title: 'Action', key: 'action', sortable: false },
 ]
 </script>
@@ -69,6 +70,11 @@ const headers = [
             </template>
           </v-tooltip>
         </div>
+      </template>
+
+      <!-- Hiển thị categories -->
+      <template #item.categories="{ item }">
+        <span>{{ fullBookDetails[item.id]?.categories.join(', ') }}</span>
       </template>
     </v-data-table>
 

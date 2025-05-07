@@ -3,30 +3,24 @@ import { reactive } from 'vue'
 import CRUDMainForm from './CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
 import FrameRU from '../frames/FrameRU.vue'
+import FrameCategories from '../frames/FrameCategories.vue'
 import FrameText from '../texts/FrameText.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import ButtonText from '../texts/ButtonText.vue'
+import { categoriesList } from '@/data/categories.js' // import danh sách thể loại
 
 const props = defineProps(['book'])
 const emit = defineEmits(['close', 'update-book'])
 
-// Tạo bản sao reactive từ props và chuyển categories thành chuỗi (nếu là mảng)
+// Đảm bảo categories là mảng
 const editedBook = reactive({
   ...props.book,
-  categories: Array.isArray(props.book.categories)
-    ? props.book.categories.join(', ')
-    : props.book.categories || ''
+  categories: Array.isArray(props.book.categories) ? props.book.categories : []
 })
 
 const handleEdit = () => {
-  // Convert categories lại thành mảng
-  const bookToUpdate = {
-    ...editedBook,
-    categories: editedBook.categories.split(',').map(c => c.trim())
-  }
-
-  console.log('Edited book:', bookToUpdate)
-  emit('update-book', bookToUpdate)
+  console.log('Edited book:', editedBook)
+  emit('update-book', { ...editedBook })
   emit('close')
 }
 </script>
@@ -72,11 +66,12 @@ const handleEdit = () => {
             </template>
           </FrameRU>
 
-          <FrameRU v-model="editedBook.categories">
+          <!-- Categories Section -->
+          <FrameCategories v-model="editedBook.categories">
             <template #text-above>
               <FrameText><template #text>Categories</template></FrameText>
             </template>
-          </FrameRU>
+          </FrameCategories>
 
           <ButtonCRUD @click="handleEdit">
             <template #btn-text>

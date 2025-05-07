@@ -50,7 +50,7 @@ const fullBookDetails = reactive({
     selling_price: '100000',
     quantity: '100',
     published_year: '2025',
-    categories: ['Java', 'ORM', 'Backend'],
+    categories: ['Java'],
     description: 'A comprehensive guide to Hibernate for 11th edition',
     publisher: 'TechPress'
   },
@@ -62,7 +62,7 @@ const fullBookDetails = reactive({
     selling_price: '100000',
     quantity: '100',
     published_year: '2025',
-    categories: ['Java', 'ORM', 'Backend'],
+    categories: ['Java', 'ORM'],
     description: 'A comprehensive guide to Hibernate for 11th edition',
     publisher: 'TechPress'
   },
@@ -124,15 +124,20 @@ const closeAddBook = () => {
 const addBook = (newBook) => {
   const newId = String(items.value.length + 1)
   const newBookWithId = { ...newBook, id: newId }
+
+  // Ensure categories is always an array
+  newBookWithId.categories = Array.isArray(newBook.categories) ? newBook.categories : newBook.categories.split(',').map(c => c.trim());
+
   items.value.push(newBookWithId)
   fullBookDetails[newId] = {
     ...newBookWithId,
-    categories: newBook.categories?.split(',').map(c => c.trim()) ?? [],
+    categories: newBookWithId.categories, // Store the categories as an array
     description: 'No description provided',
     publisher: 'Unknown'
   }
   addingBook.value = false
 }
+
 
 // Delete
 const deleteBook = (book) => {

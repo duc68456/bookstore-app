@@ -6,6 +6,7 @@ import FrameRU from '../frames/FrameRU.vue'
 import FrameText from '../texts/FrameText.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import ButtonText from '../texts/ButtonText.vue'
+import FrameCategories from '../frames/FrameCategories.vue'  // Import FrameCategories
 
 const emit = defineEmits(['close', 'add-book'])
 
@@ -15,11 +16,11 @@ const newBook = reactive({
   selling_price: '',
   quantity: '',
   published_year: '',
-  categories: ''
+  categories: []  // Set categories as an array to store selected options
 })
 
 const handleAdd = () => {
-  emit('add-book', { ...newBook })
+  emit('add-book', { ...newBook })  // Pass categories as an array
   emit('close')
 }
 </script>
@@ -66,11 +67,12 @@ const handleAdd = () => {
             </template>
           </FrameRU>
 
-          <FrameRU v-model="newBook.categories">
+          <!-- Categories Section -->
+          <FrameCategories v-model="newBook.categories">
             <template #text-above>
               <FrameText><template #text>Categories</template></FrameText>
             </template>
-          </FrameRU>
+          </FrameCategories>
 
           <ButtonCRUD @click="handleAdd">
             <template #btn-text>
