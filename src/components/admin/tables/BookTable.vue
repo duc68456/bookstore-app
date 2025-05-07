@@ -31,12 +31,10 @@ const confirmDelete = () => {
 const headers = [
   { title: 'ID', key: 'id' },
   { title: 'Name', key: 'name' },
-  { title: 'Type', key: 'type' },
   { title: 'Author', key: 'author' },
   { title: 'Selling Price', key: 'selling_price' },
   { title: 'Quantity', key: 'quantity' },
   { title: 'Published Year', key: 'published_year' },
-  { key: 'categories' },
   { title: 'Action', key: 'action', sortable: false },
 ]
 </script>

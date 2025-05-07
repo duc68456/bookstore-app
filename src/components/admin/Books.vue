@@ -10,13 +10,14 @@ import AddBook from '@/components/admin/CRUDforms/AddBook.vue'
 import ButtonCRUD from './buttons/ButtonCRUD.vue'
 import ButtonText from './texts/ButtonText.vue'
 
+
 const items = ref([
   {
     id: '1',
     name: 'Hibernate Core -11th',
     type: 'Educational',
     author: 'Hibernate',
-    selling_price: '100000',
+    selling_price: '1000000000000',
     quantity: '100',
     published_year: '2025',
   },
@@ -139,18 +140,10 @@ const deleteBook = (book) => {
   delete fullBookDetails[book.id]
 }
 
-// Cancel Edit
-const cancelEditDialog = ref(false)
 const closeEdit = () => {
-  cancelEditDialog.value = true
-}
-const confirmCancelEdit = () => {
   editingBook.value = null
-  cancelEditDialog.value = false
 }
-const cancelCancelEdit = () => {
-  cancelEditDialog.value = false
-}
+
 </script>
 
 <template>
@@ -202,6 +195,7 @@ const cancelCancelEdit = () => {
       </v-card-actions>
     </v-card>
   </v-dialog>
+
 </template>
 
 <style scoped>
