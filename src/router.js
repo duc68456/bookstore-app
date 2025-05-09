@@ -11,6 +11,8 @@ import Catalog from './components/admin/Catalog.vue'
 import Books from './components/admin/Books.vue'
 import Users from './components/admin/Users.vue'
 import Branches from './components/admin/Branches.vue'
+import Manage from './components/admin/Manage.vue'
+import ImportBook from './components/admin/manageforms/ImportBook.vue'
 
 const routes = [
   { path: '/', component: SignIn },
@@ -27,7 +29,9 @@ const routes = [
       { path: 'catalog', component: Catalog },
       { path: 'books', component: Books },
       { path: 'users', component: Users },
-      { path: 'branches', component: Branches }
+      { path: 'branches', component: Branches },
+      { path: 'manage', component: Manage },
+      { path: 'manage/import-book', component: () => import('./components/admin/manageforms/ImportBook.vue') }
     ]
   }
 ]

@@ -2,6 +2,7 @@
 import TitleText from './texts/TitleText.vue'
 import SearchFrame from './frames/SearchFrame.vue'
 import BranchesTable from './tables/BranchesTable.vue'
+
 </script>
 
 <template>

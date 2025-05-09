@@ -47,13 +47,7 @@ const handleEdit = () => {
               <FrameText><template #text>Author</template></FrameText>
             </template>
           </FrameRU>
-
-          <FrameRU v-model="editedBook.selling_price">
-            <template #text-above>
-              <FrameText><template #text>Selling Price</template></FrameText>
-            </template>
-          </FrameRU>
-
+          
           <FrameRU v-model="editedBook.quantity">
             <template #text-above>
               <FrameText><template #text>Quantity</template></FrameText>

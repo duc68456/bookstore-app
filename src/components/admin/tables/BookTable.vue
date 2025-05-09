@@ -32,10 +32,9 @@ const headers = [
   { title: 'ID', key: 'id' },
   { title: 'Name', key: 'name' },
   { title: 'Author', key: 'author' },
-  { title: 'Selling Price', key: 'selling_price' },
   { title: 'Quantity', key: 'quantity' },
   { title: 'Published Year', key: 'published_year' },
-  { title: 'Categories', key: 'categories' }, // Thêm cột Categories
+  { title: 'Categories', key: 'categories' }, 
   { title: 'Action', key: 'action', sortable: false },
 ]
 </script>

@@ -17,7 +17,6 @@ const items = ref([
     name: 'Hibernate Core -11th',
     type: 'Educational',
     author: 'Hibernate',
-    selling_price: '1000000000000',
     quantity: '100',
     published_year: '2025',
   },
@@ -26,7 +25,6 @@ const items = ref([
     name: 'Hibernate Core -11th',
     type: 'Educational',
     author: 'Hibernate',
-    selling_price: '100000',
     quantity: '100',
     published_year: '2025',
   },
@@ -35,7 +33,6 @@ const items = ref([
     name: 'Hibernate Core -11th',
     type: 'Educational',
     author: 'Hibernate',
-    selling_price: '100000',
     quantity: '100',
     published_year: '2025',
   },
@@ -47,7 +44,6 @@ const fullBookDetails = reactive({
     name: 'Hibernate Core -11th',
     type: 'Educational',
     author: 'Hibernate',
-    selling_price: '100000',
     quantity: '100',
     published_year: '2025',
     categories: ['Java'],
@@ -59,7 +55,6 @@ const fullBookDetails = reactive({
     name: 'Hibernate Core -11th',
     type: 'Educational',
     author: 'Hibernate',
-    selling_price: '100000',
     quantity: '100',
     published_year: '2025',
     categories: ['Java', 'ORM'],
@@ -71,7 +66,6 @@ const fullBookDetails = reactive({
     name: 'Hibernate Core -11th',
     type: 'Educational',
     author: 'Hibernate',
-    selling_price: '100000',
     quantity: '100',
     published_year: '2025',
     categories: ['Java', 'ORM', 'Backend'],
@@ -79,7 +73,6 @@ const fullBookDetails = reactive({
     publisher: 'TechPress'
   },
 })
-// 👇 Biến tìm kiếm và bộ lọc
 const searchQuery = ref('')
 const filteredBooks = computed(() => {
   const q = searchQuery.value.toLowerCase()
@@ -113,7 +106,6 @@ const updateBook = (updatedBook) => {
   }
 }
 
-// Add
 const addingBook = ref(false)
 const handleAddBook = () => {
   addingBook.value = true

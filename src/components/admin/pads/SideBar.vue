@@ -13,6 +13,8 @@ import PeopleIcon from '@/assets/icons-vue/people.vue'
 import PeopleIconWhite from '@/assets/icons-vue-white/people.vue'
 import BranchesIcon from '@/assets/icons-vue/buildings.vue'
 import BranchesIconWhite from '@/assets/icons-vue-white/buildings.vue'
+import ManageIcon from '@/assets/icons-vue/manage.vue'
+import ManageIconWhite from '@/assets/icons-vue-white/manage.vue'
 import LogOutIcon from '@/assets/icons-vue/logout.vue'
 import LogOutIconWhite from '@/assets/icons-vue-white/logout.vue'
 
@@ -24,6 +26,7 @@ const Catalog = () => router.push('/catalog')
 const Books = () => router.push('/books')
 const Users = () => router.push('/users')
 const Branches = () => router.push('/branches')
+const Manage = () => router.push('/manage')
 
 const isActive = (path) => {
   return route.path === path
@@ -86,13 +89,13 @@ const route = useRoute()
       </ButtonSideBar>
     </router-link>
 
-    <router-link to="/branches" class="no-underline">
-      <ButtonSideBar :class="{ 'active': isActive('/branches') }">
+    <router-link to="/manage" class="no-underline">
+      <ButtonSideBar :class="{ 'active': isActive('/manage') }">
         <template #btn-icon="{ hover }">
-          <component :is="isActive('/branches') || hover ? BranchesIcon : BranchesIconWhite" />
+          <component :is="isActive('/manage') || hover ? ManageIcon : ManageIconWhite" />
         </template>
         <template #btn-text>
-          <ButtonText><template #text>Branches</template></ButtonText>
+          <ButtonText><template #text>Manage</template></ButtonText>
         </template>
       </ButtonSideBar>
     </router-link>

@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import BigUserIcon from '@/assets/icons-vue/big-user.vue'
 import BigSettingIcon from '@/assets/icons-vue/big-setting.vue'
 import NameText from '@/components/admin/texts/NameText.vue'
@@ -6,6 +7,31 @@ import RoleText from '@/components/admin/texts/RoleText.vue'
 import TimeText from '@/components/admin/texts/TimeText.vue'
 import DayText from '@/components/admin/texts/DayText.vue'
 import LineTopBar from '@/components/admin/lines/LineTopBar.vue'
+
+const currentTime = ref('')
+const currentDay = ref('')
+
+// Function to update time and date
+const updateDateTime = () => {
+  const now = new Date()
+  currentTime.value = now.toLocaleTimeString([], { 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    hour12: true // Sử dụng định dạng AM/PM
+  }).toUpperCase()
+  currentDay.value = now.toLocaleDateString('en-US', { 
+    weekday: 'long', // Hiển thị ngày trong tuần
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  }) // Định dạng: Day, Month Date, Year
+}
+
+// Update time every second
+onMounted(() => {
+  updateDateTime()
+  setInterval(updateDateTime, 1000)  // Update every second
+})
 </script>
 
 <template>
@@ -24,10 +50,10 @@ import LineTopBar from '@/components/admin/lines/LineTopBar.vue'
     <div class="right-section">
       <div class="right-group">
         <div class="time">
-          <TimeText><template #text>12:29 PM</template></TimeText>
+          <TimeText><template #text>{{ currentTime }}</template></TimeText>
         </div>
         <div class="day">
-          <DayText><template #text>Sep 02, 2023</template></DayText>
+          <DayText><template #text>{{ currentDay }}</template></DayText>
         </div>
       </div>
       <div class="line">

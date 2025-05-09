@@ -49,12 +49,6 @@ const handleAdd = () => {
             </template>
           </FrameRU>
 
-          <FrameRU v-model="newBook.selling_price">
-            <template #text-above>
-              <FrameText><template #text>Selling Price</template></FrameText>
-            </template>
-          </FrameRU>
-
           <FrameRU v-model="newBook.quantity">
             <template #text-above>
               <FrameText><template #text>Quantity</template></FrameText>
