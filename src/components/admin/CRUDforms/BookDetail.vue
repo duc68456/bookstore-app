@@ -35,6 +35,15 @@ defineProps(['book'])
                 </template>
               </FrameText>
             </template>
+          </FrameRU>        
+          <FrameRU readonly :modelValue="book.import_price">
+            <template #text-above>
+              <FrameText>
+                <template #text>
+                  Import Price
+                </template>
+              </FrameText>
+            </template>
           </FrameRU>            
           <FrameRU readonly :modelValue="book.quantity">
             <template #text-above>

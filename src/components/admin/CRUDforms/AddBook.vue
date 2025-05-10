@@ -49,6 +49,12 @@ const handleAdd = () => {
             </template>
           </FrameRU>
 
+          <FrameRU v-model="newBook.import_price">
+            <template #text-above>
+              <FrameText><template #text>Import Price</template></FrameText>
+            </template>
+          </FrameRU>
+
           <FrameRU v-model="newBook.quantity">
             <template #text-above>
               <FrameText><template #text>Quantity</template></FrameText>

@@ -16,7 +16,7 @@ const isHover = ref(false)
     display: flex;
     width: 100%;
     height: 48px;
-    padding: 12px 50px 14px 41px;
+    padding: 12px 50px 14px 35px;
     align-items: flex-start;
     gap: 24.006px;
     flex-shrink: 0;

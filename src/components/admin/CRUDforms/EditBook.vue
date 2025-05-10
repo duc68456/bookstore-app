@@ -53,6 +53,12 @@ const handleEdit = () => {
               <FrameText><template #text>Quantity</template></FrameText>
             </template>
           </FrameRU>
+          
+          <FrameRU v-model="editedBook.import_price">
+            <template #text-above>
+              <FrameText><template #text>Import Price</template></FrameText>
+            </template>
+          </FrameRU>
 
           <FrameRU v-model="editedBook.published_year">
             <template #text-above>
