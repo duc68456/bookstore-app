@@ -1,17 +1,29 @@
 <script setup>
 import { ref } from 'vue'
+import { computed } from 'vue'
+import { useBookStore } from '@/data/bookStore' 
 
 import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import EditIcon from '@/assets/icons-vue/edit.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
 
-// Nhận props từ Books.vue
-defineProps({
-  items: Array,
-  fullBookDetails: Object
+const bookStore = useBookStore()
+
+const props = defineProps({
+  showActions: {
+    type: Boolean,
+    default: true
+  },
+  showQuantity: {
+    type: Boolean,
+    default: true
+  },
+  showPrice: {
+    type: Boolean,
+    default: true
+  }
 })
 
-// Emit các sự kiện lên Books.vue
 const emit = defineEmits(['view-book', 'edit-book', 'delete-book'])
 
 const dialog = ref(false)
@@ -28,27 +40,37 @@ const confirmDelete = () => {
   bookToDelete.value = null
 }
 
-const headers = [
+const rawHeaders = [
   { title: 'ID', key: 'id' },
   { title: 'Name', key: 'name' },
   { title: 'Author', key: 'author' },
   { title: 'Quantity', key: 'quantity' },
   { title: 'Published Year', key: 'published_year' },
-  { title: 'Categories', key: 'categories' }, 
+  { title: 'Categories', key: 'categories' },
   { title: 'Import Price', key: 'import_price' },
   { title: 'Action', key: 'action', sortable: false },
 ]
+
+const headers = computed(() => {
+  return rawHeaders.filter(h => {
+    if (h.key === 'action' && !props.showActions) return false
+    if (h.key === 'quantity' && !props.showQuantity) return false
+    if (h.key === 'import_price' && !props.showPrice) return false
+    return true
+  })
+})
+
 </script>
 
 <template>
   <v-container fluid>
-    <v-data-table :headers="headers" :items="items" class="elevation-1" item-value="id" :items-per-page="-1"
+    <v-data-table :headers="headers" :items="bookStore.items" class="elevation-1" item-value="id" :items-per-page="-1"
       hide-default-footer>
-      <template #item.action="{ item }">
+      <template v-if="props.showActions" #item.action="{ item }">
         <div class="action-icons">
           <v-tooltip text="View" location="top">
             <template #activator="{ props }">
-              <div v-bind="props" @click="$emit('view-book', fullBookDetails[item.id])" style="cursor: pointer;">
+              <div v-bind="props" @click="$emit('view-book', bookStore.fullBookDetails[item.id])" style="cursor: pointer;">
                 <ViewIcon />
               </div>
             </template>
@@ -56,7 +78,7 @@ const headers = [
 
           <v-tooltip text="Edit" location="top">
             <template #activator="{ props }">
-              <div v-bind="props" @click="$emit('edit-book', fullBookDetails[item.id])" style="cursor: pointer;">
+              <div v-bind="props" @click="$emit('edit-book', bookStore.fullBookDetails[item.id])" style="cursor: pointer;">
                 <EditIcon />
               </div>
             </template>
@@ -74,7 +96,7 @@ const headers = [
 
       <!-- Hiển thị categories -->
       <template #item.categories="{ item }">
-        <span>{{ fullBookDetails[item.id]?.categories.join(', ') }}</span>
+        <span>{{ bookStore.fullBookDetails[item.id]?.categories.join(', ') }}</span>
       </template>
     </v-data-table>
 
