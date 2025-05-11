@@ -2,7 +2,7 @@
 import { defineStore } from 'pinia'
 import { ref, reactive, computed } from 'vue'
 
-export const useBookStore = defineStore('bookStore', () => {
+export const useBook = defineStore('book', () => {
   const items = ref([
   {
     id: '1',

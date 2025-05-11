@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from 'vue'
 import { computed } from 'vue'
-import { useBookStore } from '@/data/bookStore' 
+import { useBook } from '@/data/book' 
 
 import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import EditIcon from '@/assets/icons-vue/edit.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
 
-const bookStore = useBookStore()
+const book = useBook()
 
 const props = defineProps({
   showActions: {
@@ -64,13 +64,13 @@ const headers = computed(() => {
 
 <template>
   <v-container fluid>
-    <v-data-table :headers="headers" :items="bookStore.items" class="elevation-1" item-value="id" :items-per-page="-1"
+    <v-data-table :headers="headers" :items="book.items" class="elevation-1" item-value="id" :items-per-page="-1"
       hide-default-footer>
       <template v-if="props.showActions" #item.action="{ item }">
         <div class="action-icons">
           <v-tooltip text="View" location="top">
             <template #activator="{ props }">
-              <div v-bind="props" @click="$emit('view-book', bookStore.fullBookDetails[item.id])" style="cursor: pointer;">
+              <div v-bind="props" @click="$emit('view-book', book.fullBookDetails[item.id])" style="cursor: pointer;">
                 <ViewIcon />
               </div>
             </template>
@@ -78,7 +78,7 @@ const headers = computed(() => {
 
           <v-tooltip text="Edit" location="top">
             <template #activator="{ props }">
-              <div v-bind="props" @click="$emit('edit-book', bookStore.fullBookDetails[item.id])" style="cursor: pointer;">
+              <div v-bind="props" @click="$emit('edit-book', book.fullBookDetails[item.id])" style="cursor: pointer;">
                 <EditIcon />
               </div>
             </template>
@@ -96,7 +96,7 @@ const headers = computed(() => {
 
       <!-- Hiển thị categories -->
       <template #item.categories="{ item }">
-        <span>{{ bookStore.fullBookDetails[item.id]?.categories.join(', ') }}</span>
+        <span>{{ book.fullBookDetails[item.id]?.categories.join(', ') }}</span>
       </template>
     </v-data-table>
 

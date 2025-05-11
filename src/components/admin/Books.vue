@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useBookStore } from '@/data/bookStore' // Import store
+import { useBook } from '@/data/book' 
 
 import TitleText from './texts/TitleText.vue'
 import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
@@ -12,13 +12,12 @@ import AddBook from '@/components/admin/CRUDforms/AddBook.vue'
 import ButtonCRUD from './buttons/ButtonCRUD.vue'
 import ButtonText from './texts/ButtonText.vue'
 
-const bookStore = useBookStore()
+const book = useBook()
 
-// Lọc sách theo search query từ store
 const searchQuery = ref('')
 const filteredBooks = computed(() => {
   const q = searchQuery.value.toLowerCase()
-  return bookStore.items.filter(book =>
+  return book.items.filter(book =>
     book.id.toLowerCase().includes(q) ||
     book.name.toLowerCase().includes(q)
   )
@@ -37,7 +36,7 @@ const handleEditBook = (book) => {
   editingBook.value = book
 }
 const updateBook = (updatedBook) => {
-  bookStore.updateBook(updatedBook)
+  book.updateBook(updatedBook)
 }
 
 const addingBook = ref(false)
@@ -48,12 +47,12 @@ const closeAddBook = () => {
   addingBook.value = false
 }
 const addBook = (newBook) => {
-  bookStore.addBook(newBook)
+  book.addBook(newBook)
   addingBook.value = false
 }
 
 const deleteBook = (book) => {
-  bookStore.deleteBook(book)
+  book.deleteBook(book)
 }
 
 const closeEdit = () => {
@@ -77,7 +76,7 @@ const closeEdit = () => {
         </div>
       </div>
 
-      <BookTable :items="filteredBooks" :fullBookDetails="bookStore.fullBookDetails" @view-book="handleViewBook"
+      <BookTable :items="filteredBooks" :fullBookDetails="book.fullBookDetails" @view-book="handleViewBook"
         @edit-book="handleEditBook" @delete-book="deleteBook" />
 
       <ButtonCRUD @click="handleAddBook">
