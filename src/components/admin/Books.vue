@@ -19,7 +19,7 @@ const filteredBooks = computed(() => {
   const q = searchQuery.value.toLowerCase()
   return book.items.filter(book =>
     book.id.toLowerCase().includes(q) ||
-    book.name.toLowerCase().includes(q)
+    book.title.toLowerCase().includes(q)
   )
 })
 

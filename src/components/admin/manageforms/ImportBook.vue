@@ -1,6 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useEntryFormStore } from '@/data/entryForms'
+
 import ButtonManage from '../buttons/ButtonManage.vue'
 import CRUDMainForm from '../CRUDForms/CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
@@ -10,22 +12,23 @@ import ButtonText from '../texts/ButtonText.vue'
 import EditEntryForm from '../CRUDforms/EditEntryForm.vue'
 
 const router = useRouter()
+const store = useEntryFormStore()
 
-const entryList = ref([
-  { id: 'E1', time: '09:00 AM', total: '$150.00' },
-  { id: 'E2', time: '10:15 AM', total: '$200.00' },
-  { id: 'E3', time: '11:30 AM', total: '$320.00' }
-])
+const entryList = computed(() => store.forms)
 
 const editingEntry = ref(null)
 
 function handleEdit(entry) {
-  editingEntry.value = entry
+  editingEntry.value = store.formDetails[entry.id]
+  editingEntry.value = fullEntry
 }
 
 function handleAddBook() {
-  // Placeholder cho chức năng thêm sách
-  console.log('Add Book Entry clicked')
+  // Tạm thời thêm entry mẫu
+  store.addEntryForm({
+    time: '01:00 PM',
+    total: '$100.00'
+  })
 }
 
 function closeEditForm() {
@@ -38,35 +41,40 @@ function goBack() {
 </script>
 
 <template>
-  <!-- Khi chưa edit: hiển thị danh sách -->
-  <div v-if="!editingEntry" class="detail-wrapper">
-    <CRUDMainForm @close="goBack">
-      <template #title>
-        <TitleText><template #text>Import Book</template></TitleText>
-      </template>
-      <template #content>
-        <EntryFormTable :entries="entryList" @edit-entry="handleEdit" />
-        <ButtonCRUD @click="handleAddBook">
-          <template #btn-text>
-            <ButtonText><template #text>ADD BOOK ENTRY</template></ButtonText>
-          </template>
-        </ButtonCRUD>
-      </template>
-    </CRUDMainForm>
-  </div>
+    <div v-if="!editingEntry" class="detail-wrapper">
+      <CRUDMainForm @close="goBack">
+        <template #title>
+          <TitleText><template #text>Import Book</template></TitleText>
+        </template>
+        <template #content>
+          <div class="scrollable-content">
+          <EntryFormTable :entries="entryList" @edit-entry="handleEdit" />
+          <ButtonCRUD @click="handleAddBook">
+            <template #btn-text>
+              <ButtonText><template #text>ADD BOOK ENTRY</template></ButtonText>
+            </template>
+          </ButtonCRUD>
+          </div>
+        </template>
+      </CRUDMainForm>
+    </div>
 
-  <!-- Khi đang edit: hiển thị form sửa -->
-  <div v-else class="detail-wrapper">
-    <EditEntryForm @close="closeEditForm">
-    </EditEntryForm>
-  </div>
+    <div v-else class="detail-wrapper">
+      <EditEntryForm :entry="editingEntry" @close="closeEditForm" />
+    </div>
 </template>
 
 <style scoped>
+
+.scrollable-content {
+  max-height: calc(100vh - 150px); 
+  overflow-y: auto;
+  padding-right: 12px;
+}
+
 .detail-wrapper {
   color: var(--vt-c-main-bg-color);
   width: 100%;
-  height: 100%;
   padding: 12px;
   font-family: Montserrat;
 }

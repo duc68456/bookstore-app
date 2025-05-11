@@ -6,7 +6,6 @@ import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import EditIcon from '@/assets/icons-vue/edit.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
 
-// Props & emits
 defineProps({
   entries: Array
 })

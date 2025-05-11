@@ -42,7 +42,7 @@ const confirmDelete = () => {
 
 const rawHeaders = [
   { title: 'ID', key: 'id' },
-  { title: 'Name', key: 'name' },
+  { title: 'Title', key: 'title' },
   { title: 'Author', key: 'author' },
   { title: 'Quantity', key: 'quantity' },
   { title: 'Published Year', key: 'published_year' },
@@ -60,11 +60,13 @@ const headers = computed(() => {
   })
 })
 
+
 </script>
 
 <template>
   <v-container fluid>
     <v-data-table :headers="headers" :items="book.items" class="elevation-1" item-value="id" :items-per-page="-1"
+    @click:row="onRowClick"
       hide-default-footer>
       <template v-if="props.showActions" #item.action="{ item }">
         <div class="action-icons">
@@ -105,7 +107,7 @@ const headers = computed(() => {
         <v-card-title class="text-h6">Confirm Deletion</v-card-title>
         <v-card-text>
           Are you sure you want to delete the book
-          <strong>{{ bookToDelete?.name }}</strong>?
+          <strong>{{ bookToDelete?.title }}</strong>?
         </v-card-text>
         <v-card-actions>
           <v-spacer />
