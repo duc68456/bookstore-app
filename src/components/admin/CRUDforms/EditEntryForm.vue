@@ -1,4 +1,6 @@
 <script setup>
+import { ref } from 'vue'
+
 import CRUDMainForm from './CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
 import BookTable from '../tables/BookTable.vue'
@@ -16,6 +18,25 @@ const props = defineProps({
   }
 })
 
+const selectedBook = ref(null)
+const quantity = ref('')
+const importPrice = ref('')
+
+const addBookToEntry = () => {
+  if (!selectedBook.value || !quantity.value || !importPrice.value) return
+
+  const newBook = {
+    ...selectedBook.value,
+    quantity: parseInt(quantity.value),
+    import_price: parseInt(importPrice.value)
+  }
+
+  props.entry.books.push(newBook)
+
+  selectedBook.value = null
+  quantity.value = ''
+  importPrice.value = ''
+}
 </script>
 <template>
     <CRUDMainForm>

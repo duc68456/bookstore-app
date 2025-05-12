@@ -24,7 +24,12 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['view-book', 'edit-book', 'delete-book'])
+const emit = defineEmits(['view-book', 'edit-book', 'delete-book', 'select-book'])
+
+const onRowClick = (bookRow) => {
+  const selected = book.fullBookDetails[bookRow.id]
+  emit('select-book', selected)
+}
 
 const dialog = ref(false)
 const bookToDelete = ref(null)
