@@ -5,15 +5,15 @@ import CRUDMainForm from './CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
 import BookTable from '../tables/BookTable.vue'
 import BookTableShort from '../tables/BookTableShort.vue'
-import NameFrame from '../frames/NameFrame.vue'
-import EntryFormFrame from '../frames/EntryFormFrame.vue'
-import ButtonEntry from '../buttons/ButtonEntry.vue'
+import TitleFrame from '../frames/TitleFrame.vue'
+import ReceiptFormFrame from '../frames/ReceiptFormFrame.vue'
+import ButtonReceipt from '../buttons/ButtonReceipt.vue'
 import ButtonText from '../texts/ButtonText.vue'
 
-import BookInEntryTable from '../tables/BookInEntryTable.vue'
+import BookInReceiptTable from '../tables/BookInReceiptTable.vue'
 
 const props = defineProps({
-  entry: {
+  importReceipt: {
     type: Object,
     required: true
   }
@@ -27,19 +27,17 @@ const handleSelectBook = (book) => {
 const quantity = ref('')
 const importPrice = ref('')
 
-const addBookToEntry = () => {
+const addBookToReceipt = () => {
   if (!selectedBook.value || !quantity.value || !importPrice.value) return;
 
   const newBook = {
-    ...selectedBook.value, // Lấy dữ liệu từ selectedBook
+    ...selectedBook.value,
     quantity: parseInt(quantity.value),
     import_price: parseInt(importPrice.value),
   };
 
-  // Thêm sách vào list của entry
-  props.entry.books.push(newBook);
+  props.importReceipt.books.push(newBook);
 
-  // Reset các trường sau khi thêm
   selectedBook.value = null;
   quantity.value = '';
   importPrice.value = '';
@@ -50,7 +48,7 @@ const addBookToEntry = () => {
   <CRUDMainForm>
     <template #title>
       <TitleText>
-        <template #text>Edit Entry Form</template>
+        <template #text>Edit Import Receipt</template>
       </TitleText>
     </template>
     <template #content>
@@ -58,18 +56,18 @@ const addBookToEntry = () => {
         <BookTableShort @select-book="handleSelectBook" />
 
         <div class="frame-wrapper">
-          <NameFrame readonly :modelValue="selectedBook?.title || ''" disabled placeholder="Title" />
-          <EntryFormFrame v-model="quantity" placeholder="Quantity" />
-          <EntryFormFrame v-model="importPrice" placeholder="Import Price" />
+          <TitleFrame readonly :modelValue="selectedBook?.title || ''" disabled placeholder="Title" />
+          <ReceiptFormFrame v-model="quantity" placeholder="Quantity" />
+          <ReceiptFormFrame v-model="importPrice" placeholder="Import Price" />
 
-          <ButtonEntry @click="addBookToEntry">
+          <ButtonReceipt @click="addBookToReceipt">
             <template #btn-text>
               <ButtonText><template #text>ADD</template></ButtonText>
             </template>
-          </ButtonEntry>
+          </ButtonReceipt>
         </div>
 
-        <BookInEntryTable :books="entry.books" />
+        <BookInReceiptTable :books="importReceipt.books" />
       </div>
     </template>
   </CRUDMainForm>

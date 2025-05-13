@@ -1,37 +1,36 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useEntryFormStore } from '@/data/entryForms'
+import { useImportReceiptFormStore } from '@/data/importReceipts'
 
 import ButtonManage from '../buttons/ButtonManage.vue'
 import CRUDMainForm from '../CRUDForms/CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
-import EntryFormTable from '../tables/EntryFormTable.vue'
+import ReceiptFormTable from '../tables/ReceiptFormTable.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import ButtonText from '../texts/ButtonText.vue'
-import EditEntryForm from '../CRUDforms/EditEntryForm.vue'
+import EditImportForm from '../CRUDforms/EditImportForm.vue'
 
 const router = useRouter()
-const store = useEntryFormStore()
+const store = useImportReceiptFormStore()
 
-const entryList = computed(() => store.forms)
+const importReceiptList = computed(() => store.forms)
 
-const editingEntry = ref(null)
+const editingReceipt = ref(null)
 
-function handleEdit(entry) {
-  editingEntry.value = store.formDetails[entry.id]
-  editingEntry.value = fullEntry
+function handleEdit(receipt) {
+  editingReceipt.value = store.formDetails[receipt.id]
 }
 
 function handleAddBook() {
-  store.addEntryForm({
+  store.addImportReceiptForm({
     time: '01:00 PM',
     total: '$100.00'
   })
 }
 
 function closeEditForm() {
-  editingEntry.value = null
+  editingReceipt.value = null
 }
 
 function goBack() {
@@ -40,17 +39,17 @@ function goBack() {
 </script>
 
 <template>
-    <div v-if="!editingEntry" class="detail-wrapper">
+    <div v-if="!editingReceipt" class="detail-wrapper">
       <CRUDMainForm @close="goBack">
         <template #title>
           <TitleText><template #text>Import Book</template></TitleText>
         </template>
         <template #content>
           <div class="scrollable-content">
-          <EntryFormTable :entries="entryList" @edit-entry="handleEdit" />
+          <ReceiptFormTable :receipts="importReceiptList" @edit-receipt="handleEdit" />
           <ButtonCRUD @click="handleAddBook">
             <template #btn-text>
-              <ButtonText><template #text>ADD BOOK ENTRY</template></ButtonText>
+              <ButtonText><template #text>ADD IMPORT RECEIPT</template></ButtonText>
             </template>
           </ButtonCRUD>
           </div>
@@ -59,7 +58,7 @@ function goBack() {
     </div>
 
     <div v-else class="detail-wrapper">
-      <EditEntryForm :entry="editingEntry" @close="closeEditForm" />
+      <EditImportForm :importReceipt="editingReceipt" @close="closeEditForm" />
     </div>
 </template>
 

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
 
-export const useEntryFormStore = defineStore('entryForm', () => {
+export const useImportReceiptFormStore = defineStore('importForm', () => {
   const forms = ref([
     { id: 'E1', time: '09:00 AM', total: '$150.00' },
     { id: 'E2', time: '10:15 AM', total: '$200.00' },
@@ -32,7 +32,7 @@ export const useEntryFormStore = defineStore('entryForm', () => {
     }
   })
 
-  const addEntryForm = (newForm) => {
+  const addImportReceiptForm = (newForm) => {
     const newId = `E${forms.value.length + 1}`
     const form = { ...newForm, id: newId }
     forms.value.push(form)
@@ -43,7 +43,7 @@ export const useEntryFormStore = defineStore('entryForm', () => {
     }
   }
 
-  const updateEntryForm = (updatedForm) => {
+  const updateImportReceiptForm = (updatedForm) => {
     const index = forms.value.findIndex(f => f.id === updatedForm.id)
     if (index !== -1) {
       forms.value[index] = { ...updatedForm }
@@ -57,7 +57,7 @@ export const useEntryFormStore = defineStore('entryForm', () => {
     }
   }
 
-  const deleteEntryForm = (form) => {
+  const deleteImportReceiptForm = (form) => {
     forms.value = forms.value.filter(f => f.id !== form.id)
     delete formDetails[form.id]
   }
@@ -65,8 +65,8 @@ export const useEntryFormStore = defineStore('entryForm', () => {
   return {
     forms,
     formDetails,
-    addEntryForm,
-    updateEntryForm,
-    deleteEntryForm
+    addImportReceiptForm,
+    updateImportReceiptForm,
+    deleteImportReceiptForm
   }
 })

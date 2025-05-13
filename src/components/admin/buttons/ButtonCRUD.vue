@@ -9,7 +9,7 @@
         display: flex;
         width: 259px;
         height: 54px;
-        padding: 16px 39px;
+        padding: 16px 10px;
         justify-content: center;
         align-items: center;
         flex-shrink: 0;

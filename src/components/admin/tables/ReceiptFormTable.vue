@@ -1,29 +1,28 @@
 <script setup>
 import { ref } from 'vue'
 
-// Icon components
 import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import EditIcon from '@/assets/icons-vue/edit.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
 
 defineProps({
-  entries: Array
+  receipts: Array
 })
 
-const emit = defineEmits(['view-entry', 'edit-entry', 'delete-entry'])
+const emit = defineEmits(['view-receipt', 'edit-receipt', 'delete-receipt'])
 
 const dialog = ref(false)
-const entryToDelete = ref(null)
+const receiptToDelete = ref(null)
 
-const openDeleteDialog = (entry) => {
-  entryToDelete.value = entry
+const openDeleteDialog = (receipt) => {
+  receiptToDelete.value = receipt
   dialog.value = true
 }
 
 const confirmDelete = () => {
-  emit('delete-entry', entryToDelete.value)
+  emit('delete-receipt', receiptToDelete.value)
   dialog.value = false
-  entryToDelete.value = null
+  receiptToDelete.value = null
 }
 
 const headers = [
@@ -38,7 +37,7 @@ const headers = [
   <v-container fluid>
     <v-data-table
       :headers="headers"
-      :items="entries"
+      :items="receipts"
       class="elevation-1"
       item-value="id"
       :items-per-page="-1"
@@ -49,7 +48,7 @@ const headers = [
 
           <v-tooltip text="Edit" location="top">
             <template #activator="{ props }">
-              <div v-bind="props" @click="$emit('edit-entry', item)" style="cursor: pointer;">
+              <div v-bind="props" @click="$emit('edit-receipt', item)" style="cursor: pointer;">
                 <EditIcon />
               </div>
             </template>
@@ -71,8 +70,8 @@ const headers = [
       <v-card>
         <v-card-title class="text-h6">Confirm Deletion</v-card-title>
         <v-card-text>
-          Are you sure you want to delete entry
-          <strong>{{ entryToDelete?.id }}</strong>?
+          Are you sure you want to delete receipt
+          <strong>{{ receiptToDelete?.id }}</strong>?
         </v-card-text>
         <v-card-actions>
           <v-spacer />
