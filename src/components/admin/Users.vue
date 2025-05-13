@@ -1,5 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import { useUser } from '@/data/user'
+
 import TitleText from './texts/TitleText.vue'
 import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
 import UserTable from '@/components/admin/tables/UserTable.vue'
@@ -10,35 +12,8 @@ import AddUser from '@/components/admin/CRUDforms/AddUser.vue'
 import ButtonCRUD from './buttons/ButtonCRUD.vue'
 import ButtonText from './texts/ButtonText.vue'
 
-const users = ref([
-  {
-    id: '1',
-    name: 'Prabath Jayasuriya',
-    email: 'prabathjaylk@gmail.com',
-    username: 'prabathjay',
-    dob: '01/01/2005',
-    phone: '0123456789'
-  },
-  {
-    id: '2',
-    name: 'John Doe',
-    email: 'john@example.com',
-    username: 'johndoe',
-    dob: '02/02/2000',
-    phone: '0987654321'
-  }
-])
-
+const userStore = useUser()
 const searchQuery = ref('')
-
-const filteredUsers = computed(() => {
-  const q = searchQuery.value.toLowerCase()
-  return users.value.filter(
-    u =>
-      u.id.toLowerCase().includes(q) ||
-      u.name.toLowerCase().includes(q)
-  )
-})
 
 const selectedUser = ref(null)
 const editingUser = ref(null)
@@ -47,38 +22,24 @@ const addingUser = ref(false)
 const handleViewUser = (user) => selectedUser.value = user
 const handleEditUser = (user) => editingUser.value = user
 const handleAddUser = () => addingUser.value = true
-
 const closeDetail = () => selectedUser.value = null
 const closeAddUser = () => addingUser.value = false
+const closeEdit = () => cancelEditDialog.value = true
 
-const handleDeleteUser = (user) => {
-  users.value = users.value.filter(u => u.id !== user.id)
-}
-
-const updateUser = (updatedUser) => {
-  const index = users.value.findIndex(u => u.id === updatedUser.id)
-  if (index !== -1) {
-    users.value[index] = { ...updatedUser }
-  }
-}
-
+const handleDeleteUser = (user) => userStore.deleteUser(user)
+const updateUser = (updatedUser) => userStore.updateUser(updatedUser)
 const addUser = (newUser) => {
-  const newId = String(users.value.length + 1)
-  users.value.push({ ...newUser, id: newId })
+  userStore.addUser(newUser)
   addingUser.value = false
 }
 
+// Dialog xác nhận hủy chỉnh sửa
 const cancelEditDialog = ref(false)
-const closeEdit = () => {
-  cancelEditDialog.value = true
-}
 const confirmCancelEdit = () => {
   editingUser.value = null
   cancelEditDialog.value = false
 }
-const cancelCancelEdit = () => {
-  cancelEditDialog.value = false
-}
+const cancelCancelEdit = () => cancelEditDialog.value = false
 </script>
 
 <template>
@@ -93,13 +54,16 @@ const cancelCancelEdit = () => {
           <TitleText><template #text>User Management</template></TitleText>
         </div>
         <div class="right">
-          <SearchFrame v-model="searchQuery" /> <!-- 👈 truyền v-model -->
+          <SearchFrame v-model="searchQuery" />
         </div>
       </div>
 
-      <!-- 👇 Dùng filteredUsers thay vì users -->
-      <UserTable :users="filteredUsers" @view-user="handleViewUser" @edit-user="handleEditUser"
-        @delete-user="handleDeleteUser" />
+      <UserTable
+        :search="searchQuery"
+        @view-user="handleViewUser"
+        @edit-user="handleEditUser"
+        @delete-user="handleDeleteUser"
+      />
 
       <ButtonCRUD @click="handleAddUser">
         <template #btn-text>
@@ -117,6 +81,7 @@ const cancelCancelEdit = () => {
     </div>
   </div>
 
+  <!-- Dialog xác nhận hủy chỉnh sửa -->
   <v-dialog v-model="cancelEditDialog" width="400" class="delete-dialog" persistent scroll-strategy="block">
     <v-card>
       <v-card-title class="text-h6">Confirm Cancel</v-card-title>
