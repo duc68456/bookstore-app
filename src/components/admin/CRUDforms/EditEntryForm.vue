@@ -55,16 +55,13 @@ const addBookToEntry = () => {
     </template>
     <template #content>
       <div class="scrollable-content">
-        <!-- Table để chọn sách -->
-        <BookTableShort :items="books" :fullBookDetails="bookDetails" @select-book="handleSelectBook" />
+        <BookTableShort @select-book="handleSelectBook" />
 
         <div class="frame-wrapper">
-          <!-- Hiển thị tên sách đã chọn -->
           <NameFrame readonly :modelValue="selectedBook?.title || ''" disabled placeholder="Title" />
           <EntryFormFrame v-model="quantity" placeholder="Quantity" />
           <EntryFormFrame v-model="importPrice" placeholder="Import Price" />
 
-          <!-- Button để thêm sách vào entry -->
           <ButtonEntry @click="addBookToEntry">
             <template #btn-text>
               <ButtonText><template #text>ADD</template></ButtonText>
