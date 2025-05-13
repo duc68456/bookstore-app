@@ -23,11 +23,29 @@ function handleEdit(receipt) {
 }
 
 function handleAddBook() {
+  const now = new Date()
+
+  const datePart = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(now)
+
+  const timePart = now.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  })
+
+  const fullTime = `${datePart} - ${timePart}`
+
   store.addImportReceiptForm({
-    time: '01:00 PM',
-    total: '$100.00'
+    time: fullTime,
+    total: '$0.00'
   })
 }
+
+
 
 function closeEditForm() {
   editingReceipt.value = null
@@ -46,7 +64,7 @@ function goBack() {
         </template>
         <template #content>
           <div class="scrollable-content">
-          <ReceiptFormTable :receipts="importReceiptList" @edit-receipt="handleEdit" />
+          <ReceiptFormTable :receipts="importReceiptList" @edit-receipt="handleEdit" @delete-receipt="deleteReceipt"/>
           <ButtonCRUD @click="handleAddBook">
             <template #btn-text>
               <ButtonText><template #text>ADD IMPORT RECEIPT</template></ButtonText>

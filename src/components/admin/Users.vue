@@ -29,10 +29,8 @@ const users = ref([
   }
 ])
 
-// 👇 Biến tìm kiếm
 const searchQuery = ref('')
 
-// 👇 Lọc user theo id hoặc name
 const filteredUsers = computed(() => {
   const q = searchQuery.value.toLowerCase()
   return users.value.filter(
@@ -70,7 +68,6 @@ const addUser = (newUser) => {
   addingUser.value = false
 }
 
-// Cancel Edit dialog
 const cancelEditDialog = ref(false)
 const closeEdit = () => {
   cancelEditDialog.value = true

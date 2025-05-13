@@ -33,7 +33,7 @@ export const useImportReceiptFormStore = defineStore('importForm', () => {
   })
 
   const addImportReceiptForm = (newForm) => {
-    const newId = `E${forms.value.length + 1}`
+    const newId = `E${forms.value.length + 1}` 
     const form = { ...newForm, id: newId }
     forms.value.push(form)
 
@@ -58,6 +58,7 @@ export const useImportReceiptFormStore = defineStore('importForm', () => {
   }
 
   const deleteImportReceiptForm = (form) => {
+    if (!form || !form.id) return
     forms.value = forms.value.filter(f => f.id !== form.id)
     delete formDetails[form.id]
   }
