@@ -53,7 +53,8 @@ const addBookToReceipt = () => {
     </template>
     <template #content>
       <div class="scrollable-content">
-        <BookTableShort @select-book="handleSelectBook" />
+        <BookTableShort @select-book="handleSelectBook" 
+  :excludedBookIds="importReceipt.books.map(book => book.id)"/>
 
         <div class="frame-wrapper">
           <TitleFrame readonly :modelValue="selectedBook?.title || ''" disabled placeholder="Title" />

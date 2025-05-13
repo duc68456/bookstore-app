@@ -7,6 +7,17 @@ import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import EditIcon from '@/assets/icons-vue/edit.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
 
+const props = defineProps({
+  excludedBookIds: {
+    type: Array,
+    default: () => []
+  }
+})
+
+const filteredItems = computed(() =>
+  book.items.filter(item => !props.excludedBookIds.includes(item.id))
+)
+
 const book = useBook()
 
 const emit = defineEmits(['select-book'])
@@ -32,7 +43,7 @@ const headers = [
   <v-container fluid>
 <v-data-table
   :headers="headers"
-  :items="book.items"
+  :items="filteredItems"
   class="elevation-1"
   item-value="id"
   :items-per-page="-1"

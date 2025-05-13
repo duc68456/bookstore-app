@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from 'vue'
+import { useUser } from '@/data/user'
 import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import EditIcon from '@/assets/icons-vue/edit.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
 
-const props = defineProps({
-  users: Array
-})
+const userStore = useUser()
+const { users } = userStore
 
 const emit = defineEmits(['view-user', 'edit-user', 'delete-user'])
 
@@ -20,7 +20,6 @@ const headers = [
   { title: 'Action', key: 'action', sortable: false },
 ]
 
-// Dialog xác nhận xóa
 const dialog = ref(false)
 const userToDelete = ref(null)
 
@@ -31,6 +30,7 @@ const openDeleteDialog = (user) => {
 
 const confirmDelete = () => {
   if (userToDelete.value) {
+    userStore.deleteUser(userToDelete.value)
     emit('delete-user', userToDelete.value)
     dialog.value = false
     userToDelete.value = null
@@ -40,8 +40,14 @@ const confirmDelete = () => {
 
 <template>
   <v-container fluid>
-    <v-data-table :headers="headers" :items="users" class="elevation-1" item-value="id" :items-per-page="-1"
-      hide-default-footer>
+    <v-data-table
+      :headers="headers"
+      :items="users"
+      class="elevation-1"
+      item-value="id"
+      :items-per-page="-1"
+      hide-default-footer
+    >
       <template #item.action="{ item }">
         <div class="action-icons">
           <v-tooltip text="View" location="top">
@@ -71,7 +77,7 @@ const confirmDelete = () => {
       </template>
     </v-data-table>
 
-    <!-- Dialog xác nhận xóa -->
+    <!-- Delete Confirmation Dialog -->
     <v-dialog v-model="dialog" width="400" class="delete-dialog" persistent scroll-strategy="block">
       <v-card>
         <v-card-title class="text-h6">Confirm Deletion</v-card-title>
