@@ -24,7 +24,6 @@ function handleEdit(entry) {
 }
 
 function handleAddBook() {
-  // Tạm thời thêm entry mẫu
   store.addEntryForm({
     time: '01:00 PM',
     total: '$100.00'

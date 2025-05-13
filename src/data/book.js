@@ -6,7 +6,7 @@ export const useBook = defineStore('book', () => {
   const items = ref([
   {
     id: '1',
-    title: 'Hibernate Core -11th',
+    title: 'Hibernate Core -11th1',
     type: 'Educational',
     import_price: '100000',
     author: 'Hibernate',
@@ -15,7 +15,7 @@ export const useBook = defineStore('book', () => {
   },
   {
     id: '2',
-    title: 'Hibernate Core -11th',
+    title: 'Hibernate Core -11th2',
     type: 'Educational',
     import_price: '1000000',
     author: 'Hibernate',
@@ -24,7 +24,7 @@ export const useBook = defineStore('book', () => {
   },
   {
     id: '3',
-    title: 'Hibernate Core -11th',
+    title: 'Hibernate Core -11th3',
     type: 'Educational',
     import_price: '10000000',
     author: 'Hibernate',
@@ -36,7 +36,7 @@ export const useBook = defineStore('book', () => {
   const fullBookDetails = reactive({
   '1': {
     id: '1',
-    title: 'Hibernate Core -11th',
+    title: 'Hibernate Core -11th1',
     type: 'Educational',
     import_price: '100000',
     author: 'Hibernate',
@@ -48,7 +48,7 @@ export const useBook = defineStore('book', () => {
   },
   '2': {
     id: '2',
-    title: 'Hibernate Core -11th',
+    title: 'Hibernate Core -11th2',
     type: 'Educational',
     import_price: '1000000',
     author: 'Hibernate',
@@ -60,7 +60,7 @@ export const useBook = defineStore('book', () => {
   },
   '3': {
     id: '3',
-    title: 'Hibernate Core -11th',
+    title: 'Hibernate Core -11th3',
     type: 'Educational',
     import_price: '10000000',
     author: 'Hibernate',

@@ -5,6 +5,10 @@ defineProps({
   type: {
     type: String,
     default: 'text'
+  },
+  readonly: {
+    type: Boolean,
+    default: false
   }
 })
 defineEmits(['update:modelValue'])
@@ -12,7 +16,7 @@ defineEmits(['update:modelValue'])
 
 <template>
   <div class="name-frame">
-    <input :type="type" :placeholder="placeholder" :value="modelValue"
+    <input :readonly="readonly" :type="type" :placeholder="placeholder" :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)" class="input-box" />
   </div>
 </template>
