@@ -18,11 +18,11 @@ defineProps(['book'])
       </template>
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU readonly :modelValue="book.name">
+          <FrameRU readonly :modelValue="book.title">
             <template #text-above>
               <FrameText>
                 <template #text>
-                  Name
+                  Title
                 </template>
               </FrameText>
             </template>

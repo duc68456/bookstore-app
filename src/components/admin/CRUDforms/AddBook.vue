@@ -37,9 +37,9 @@ const handleAdd = () => {
       </template>
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="newBook.name">
+          <FrameRU v-model="newBook.title">
             <template #text-above>
-              <FrameText><template #text>Name</template></FrameText>
+              <FrameText><template #text>Title</template></FrameText>
             </template>
           </FrameRU>
 

@@ -36,9 +36,9 @@ const handleEdit = () => {
 
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="editedBook.name">
+          <FrameRU v-model="editedBook.title">
             <template #text-above>
-              <FrameText><template #text>Name</template></FrameText>
+              <FrameText><template #text>Title</template></FrameText>
             </template>
           </FrameRU>
 
