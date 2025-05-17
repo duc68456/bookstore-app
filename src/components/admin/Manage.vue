@@ -6,10 +6,16 @@ import ButtonManage from './buttons/ButtonManage.vue'
 
 import ImportBook from './manageforms/ImportBook.vue'
 
+import ExportBook from './manageforms/ExportBook.vue'
+
 const router = useRouter()
 
 function goToImportBook() {
   router.push('/manage/import-book')
+}
+
+function goToExportBook() {
+  router.push('/manage/export-book')
 }
 
 </script>
@@ -26,7 +32,7 @@ function goToImportBook() {
     </div>
     <div class="button-wrapper">
       <ButtonManage @click="goToImportBook" />
-      <ButtonManage />
+      <ButtonManage @click="goToExportBook" />
       <ButtonManage />
     </div>
   </div>
@@ -56,5 +62,4 @@ function goToImportBook() {
   gap: 7%;
   padding: 0 10%;
 }
-
 </style>

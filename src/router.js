@@ -13,6 +13,7 @@ import Users from './components/admin/Users.vue'
 import Branches from './components/admin/Branches.vue'
 import Manage from './components/admin/Manage.vue'
 import ImportBook from './components/admin/manageforms/ImportBook.vue'
+import ExportBook from './components/admin/manageforms/ExportBook.vue'
 
 const routes = [
   { path: '/', component: SignIn },
@@ -31,7 +32,8 @@ const routes = [
       { path: 'users', component: Users },
       { path: 'branches', component: Branches },
       { path: 'manage', component: Manage },
-      { path: 'manage/import-book', component: () => import('./components/admin/manageforms/ImportBook.vue') }
+      { path: 'manage/import-book', component: () => import('./components/admin/manageforms/ImportBook.vue') },
+      { path: 'manage/export-book', component: () => import('./components/admin/manageforms/ExportBook.vue') }
     ]
   }
 ]
