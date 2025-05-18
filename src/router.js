@@ -33,7 +33,8 @@ const routes = [
       { path: 'branches', component: Branches },
       { path: 'manage', component: Manage },
       { path: 'manage/import-book', component: () => import('./components/admin/manageforms/ImportBook.vue') },
-      { path: 'manage/export-book', component: () => import('./components/admin/manageforms/ExportBook.vue') }
+      { path: 'manage/export-book', component: () => import('./components/admin/manageforms/ExportBook.vue') },
+      { path: 'manage/payment-receipt', component: () => import('./components/admin/manageforms/PaymentReceipt.vue') }
     ]
   }
 ]

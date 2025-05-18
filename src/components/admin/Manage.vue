@@ -8,6 +8,7 @@ import ImportBook from './manageforms/ImportBook.vue'
 
 import ExportBook from './manageforms/ExportBook.vue'
 
+import PaymentReceipt from './manageforms/PaymentReceipt.vue'
 const router = useRouter()
 
 function goToImportBook() {
@@ -16,6 +17,10 @@ function goToImportBook() {
 
 function goToExportBook() {
   router.push('/manage/export-book')
+}
+
+function goToPaymentReceipt() { 
+  router.push('/manage/payment-receipt')
 }
 
 </script>
@@ -33,7 +38,7 @@ function goToExportBook() {
     <div class="button-wrapper">
       <ButtonManage @click="goToImportBook" />
       <ButtonManage @click="goToExportBook" />
-      <ButtonManage />
+      <ButtonManage @click="goToPaymentReceipt" />
     </div>
   </div>
 </template>
