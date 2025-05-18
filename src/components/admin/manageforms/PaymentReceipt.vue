@@ -6,9 +6,14 @@ import { useUser } from '@/data/user'
 import CRUDMainForm from '../CRUDforms/CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
 import PaymentFormTable from '../tables/PaymentFormTable.vue'
+import ButtonCRUD from '../buttons/ButtonCRUD.vue'
+import ButtonText from '../texts/ButtonText.vue'
 
 const router = useRouter()
 const userStore = useUser()
+
+// Danh sách khách hàng được chọn
+const selectedCustomers = ref([])
 
 // Mock dữ liệu nợ của khách hàng
 const customerDebts = ref({
@@ -28,9 +33,16 @@ function goBack() {
   router.push('/manage')
 }
 
-function handlePayment(customer) {
-  // Xử lý thanh toán
-  alert(`Processing payment for ${customer.name}`)
+function handlePayment() {
+  // Kiểm tra xem có khách hàng nào được chọn không
+  if (selectedCustomers.value.length === 0) {
+    alert('Please select at least one customer to process payment')
+    return
+  }
+  
+  // Xử lý thanh toán cho tất cả khách hàng được chọn
+  const customerNames = selectedCustomers.value.map(customer => customer.name).join(', ')
+  alert(`Processing payment for: ${customerNames}`)
 }
 </script>
 
@@ -43,9 +55,16 @@ function handlePayment(customer) {
       <template #content>
         <div class="scrollable-content">
           <PaymentFormTable 
-            :customers="customersWithDebt" 
-            @process-payment="handlePayment"
+            v-model="selectedCustomers"
+            :customers="customersWithDebt"
           />
+          <div class="action-bar">
+            <ButtonCRUD @click="handlePayment">
+              <template #btn-text>
+                <ButtonText><template #text>PROCESS PAYMENT</template></ButtonText>
+              </template>
+            </ButtonCRUD>
+          </div>
         </div>
       </template>
     </CRUDMainForm>
@@ -54,29 +73,29 @@ function handlePayment(customer) {
 
 <style scoped>
 .scrollable-content {
-max-height: calc(100vh - 150px);
-overflow-y: auto;
-padding-right: 12px;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+  padding-right: 12px;
 }
 
 .detail-wrapper {
-color: var(--vt-c-main-bg-color);
-width: 100%;
-padding: 12px;
-font-family: Montserrat;
+  color: var(--vt-c-main-bg-color);
+  width: 100%;
+  padding: 12px;
+  font-family: Montserrat;
 }
 
 .action-bar {
-display: flex;
-align-items: center;
-gap: 10px;
-margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .customer-select {
-padding: 6px 10px;
-font-size: 14px;
-border-radius: 4px;
-border: 1px solid #ccc;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
 }
 </style>
