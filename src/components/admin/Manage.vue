@@ -1,15 +1,33 @@
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import TitleText from './texts/TitleText.vue'
 
-import ButtonManage from './buttons/ButtonManage.vue'
+// Import icons (bạn cần tạo hoặc import các icon này)
+import ImportIcon from '@/assets/icons-vue/import.vue'
+import ExportIcon from '@/assets/icons-vue/export.vue'
+import PaymentIcon from '@/assets/icons-vue/payment.vue'
 
-import ImportBook from './manageforms/ImportBook.vue'
-
-import ExportBook from './manageforms/ExportBook.vue'
-
-import PaymentReceipt from './manageforms/PaymentReceipt.vue'
 const router = useRouter()
+
+// Dữ liệu thống kê mẫu (trong thực tế nên lấy từ store)
+const stats = ref({
+  import: {
+    count: 12,
+    lastUpdate: 'May 17, 2025',
+    pending: 3
+  },
+  export: {
+    count: 8,
+    lastUpdate: 'May 18, 2025',
+    pending: 5
+  },
+  payment: {
+    total: '$560.50',
+    pending: '$285.70',
+    lastUpdate: 'May 16, 2025'
+  }
+})
 
 function goToImportBook() {
   router.push('/manage/import-book')
@@ -22,8 +40,8 @@ function goToExportBook() {
 function goToPaymentReceipt() { 
   router.push('/manage/payment-receipt')
 }
-
 </script>
+
 <template>
   <div class="content">
     <div class="top-bar">
@@ -35,13 +53,98 @@ function goToPaymentReceipt() {
         </TitleText>
       </div>
     </div>
-    <div class="button-wrapper">
-      <ButtonManage @click="goToImportBook" />
-      <ButtonManage @click="goToExportBook" />
-      <ButtonManage @click="goToPaymentReceipt" />
+
+    <div class="dashboard-cards">
+      <!-- Import Book Card -->
+      <div class="card" @click="goToImportBook">
+        <div class="card-header">
+          <div class="icon-container">
+            <ImportIcon />
+          </div>
+          <h3>Import Books</h3>
+        </div>
+        <div class="card-content">
+          <p>Manage book inventory by creating import receipts for new arrivals.</p>
+          <div class="stats">
+            <div class="stat-item">
+              <span class="stat-value">{{ stats.import.count }}</span>
+              <span class="stat-label">Recent Imports</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ stats.import.pending }}</span>
+              <span class="stat-label">Pending</span>
+            </div>
+          </div>
+          <div class="last-update">
+            Last updated: {{ stats.import.lastUpdate }}
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="action-button">Manage Imports</button>
+        </div>
+      </div>
+
+      <!-- Export Book Card -->
+      <div class="card" @click="goToExportBook">
+        <div class="card-header">
+          <div class="icon-container">
+            <ExportIcon />
+          </div>
+          <h3>Export Books</h3>
+        </div>
+        <div class="card-content">
+          <p>Create sales receipts and manage customer orders and exports.</p>
+          <div class="stats">
+            <div class="stat-item">
+              <span class="stat-value">{{ stats.export.count }}</span>
+              <span class="stat-label">Recent Exports</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ stats.export.pending }}</span>
+              <span class="stat-label">Pending Orders</span>
+            </div>
+          </div>
+          <div class="last-update">
+            Last updated: {{ stats.export.lastUpdate }}
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="action-button">Manage Exports</button>
+        </div>
+      </div>
+
+      <!-- Payment Receipt Card -->
+      <div class="card" @click="goToPaymentReceipt">
+        <div class="card-header">
+          <div class="icon-container">
+            <PaymentIcon />
+          </div>
+          <h3>Payment Receipts</h3>
+        </div>
+        <div class="card-content">
+          <p>Track customer payments and manage outstanding balances.</p>
+          <div class="stats">
+            <div class="stat-item">
+              <span class="stat-value">{{ stats.payment.total }}</span>
+              <span class="stat-label">Total Received</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">{{ stats.payment.pending }}</span>
+              <span class="stat-label">Outstanding</span>
+            </div>
+          </div>
+          <div class="last-update">
+            Last updated: {{ stats.payment.lastUpdate }}
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="action-button">Manage Payments</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
 <style scoped>
 .content {
   width: 100%;
@@ -61,10 +164,119 @@ function goToPaymentReceipt() {
   align-items: center;
 }
 
-.button-wrapper {
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  padding: 0 20px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
   display: flex;
-  flex-direction: row;
-  gap: 7%;
-  padding: 0 10%;
+  flex-direction: column;
+  cursor: pointer;
+  border-top: 4px solid var(--vt-c-second-bg-color);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  background-color: var(--vt-c-second-bg-color);
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.card-content {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-content p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #666;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 16px 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--vt-c-second-bg-color);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.last-update {
+  font-size: 12px;
+  color: #999;
+  margin-top: auto;
+  text-align: center;
+}
+
+.card-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #eee;
+}
+
+.action-button {
+  background-color: var(--vt-c-second-bg-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.action-button:hover {
+  background-color: #a01010;
 }
 </style>
