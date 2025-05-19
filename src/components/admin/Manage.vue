@@ -195,7 +195,7 @@ function goToPaymentReceipt() {
   padding: 16px 20px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 12px;  
 }
 
 .icon-container {
