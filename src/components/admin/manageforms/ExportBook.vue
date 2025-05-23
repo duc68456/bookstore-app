@@ -8,9 +8,11 @@ import CRUDMainForm from '../CRUDforms/CRUDMainForm.vue'
 import ButtonManage from '../buttons/ButtonManage.vue'
 import TitleText from '../texts/TitleText.vue'
 import ReceiptFormTable from '../tables/ReceiptFormTable.vue'
+import ExportReceiptTable from '../tables/ExportReceiptTable.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import ButtonText from '../texts/ButtonText.vue'
 import EditExportForm from '../CRUDforms/EditExportForm.vue'
+import SelectFrame from '../frames/SelectFrame.vue'
 
 const router = useRouter()
 const store = useExportReceiptFormStore()
@@ -37,6 +39,7 @@ function handleAddExport() {
     alert('Please select a customer before adding an export receipt.')
     return
   }
+  console.log('Customer', selectedCustomer.value.name)
 
   const now = new Date()
 
@@ -115,12 +118,15 @@ function goBack() {
       </template>
       <template #content>
         <div class="scrollable-content">
-          <ReceiptFormTable :receipts="exportReceiptList" @edit-receipt="handleEdit" @delete-receipt="deleteReceipt"/>
+          <ExportReceiptTable :receipts="exportReceiptList" @edit-receipt="handleEdit" @delete-receipt="deleteReceipt"/>
           <div class="action-bar">
-            <select v-model="selectedCustomer" class="customer-select">
-              <option :value="null" disabled>Select Customer</option>
-              <option v-for="user in userStore.users" :key="user.id" :value="user">{{ user.name }}</option>
-            </select>
+            <SelectFrame
+              v-model="selectedCustomer"
+              :options="userStore.users"
+              option-label-key="name"
+              option-value-key="id"
+              placeholder="Select Customer"
+            />
             <ButtonCRUD @click="handleAddExport">
               <template #btn-text>
                 <ButtonText><template #text>ADD EXPORT RECEIPT</template></ButtonText>
@@ -164,4 +170,5 @@ font-size: 14px;
 border-radius: 4px;
 border: 1px solid #ccc;
 }
+
 </style>

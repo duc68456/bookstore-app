@@ -17,8 +17,8 @@ const selectedCustomers = ref([])
 
 // Mock dữ liệu nợ của khách hàng
 const customerDebts = ref({
-  '1': { amount: '$120.00', lastPayment: 'May 10, 2025' },
-  '2': { amount: '$85.50', lastPayment: 'May 15, 2025' }
+  '1': { amount: '$120.00' },
+  '2': { amount: '$85.50' }
 })
 
 const customersWithDebt = computed(() => {

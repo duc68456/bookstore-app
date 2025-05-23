@@ -37,7 +37,8 @@ export const useExportReceiptFormStore = defineStore('exportForm', () => {
 
   const addExportReceiptForm = (newForm) => {
     const newId = `X${forms.value.length + 1}`
-    const form = { ...newForm, id: newId }
+    const form = { ...newForm, id: newId }  
+
     forms.value.push(form)
 
     formDetails[newId] = {

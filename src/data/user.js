@@ -18,6 +18,14 @@ export const useUser = defineStore('user', () => {
       username: 'bobsmith',
       dob: '1985-06-15',
       phone: '0987654321'
+    },
+    {
+      id: '3',
+      name: 'Trịnh Hòa',
+      email: 'trinhhoa.gl2005@gmail.com',
+      username: 'trinhhoa',
+      dob: '2005-04-12',
+      phone: '0935900023'
     }
   ])
 

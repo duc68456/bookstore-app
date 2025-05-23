@@ -21,7 +21,6 @@ const headers = [
   { title: 'Email', key: 'email' },
   { title: 'Phone', key: 'phone' },
   { title: 'Current Debt', key: 'debt' },
-  { title: 'Last Payment', key: 'lastPayment' }
 ]
 
 // Tạo computed để xử lý v-model
@@ -38,14 +37,12 @@ const selected = computed({
 <template>
   <v-container fluid>
     <v-data-table
-      v-model="selected"
       :headers="headers"
       :items="customers"
       class="elevation-1"
       item-value="id"
       :items-per-page="-1"
       hide-default-footer
-      show-select
     >
       <!-- Có thể thêm template tùy chỉnh cho các cột nếu cần -->
       <template #item.debt="{ item }">
