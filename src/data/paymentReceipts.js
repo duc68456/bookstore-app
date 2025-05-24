@@ -7,13 +7,13 @@ export const usePaymentReceipts = defineStore('paymentReceipts', () => {
             id: 1,
             time: '2025-4-2',
             customer: 'Alice Johnson',
-            amount: 99,
+            amount: '$99',
         },
         {
             id: 2,
             time: '2023-2-21',
             customer: 'Bob Smith',
-            amount: 36,
+            amount: '$36',
         },
     ])
 

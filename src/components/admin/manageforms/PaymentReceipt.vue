@@ -13,7 +13,19 @@ import PaymentFormTable from '../tables/PaymentFormTable.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import ButtonText from '../texts/ButtonText.vue'
 
+import AppDialog from '../AppDialog.vue'
+
 import PaymentReceiptTable from '../tables/PaymentReceiptTable.vue'
+
+const dialogVisible = ref(false)
+const dialogTitle = ref('')
+const dialogMessage = ref('')
+
+function showDialog(title, message) {
+  dialogTitle.value = title
+  dialogMessage.value = message
+  dialogVisible.value = true
+}
 
 const router = useRouter()
 const userStore = useUser()
@@ -37,7 +49,7 @@ function goBack() {
 
 function handlePayment() {
   if (!selectedCustomer.value || !selectedCustomer.value.name) {
-    alert('Please select a customer to process payment');
+    showDialog('Missing Info', 'Please select a customer to process payment')
     return;
   }
 
@@ -64,13 +76,13 @@ function handlePayment() {
 
   const newReceipt = {
     customer: selectedCustomer.value.name,
-    amount: paymentAmount.value,
+    amount: `$${paymentAmount.value}`,
     time: fullTime,
   }
 
   paymentReceiptsStore.addPaymentReceipt(newReceipt)
 
-  alert(`Processing payment for: ${selectedCustomer.value.name}`);
+  showDialog('Payment Success', `Processed payment for: ${selectedCustomer.value.name}`)
   
   selectedCustomer.value = {}
   paymentAmount.value = ''
@@ -117,6 +129,12 @@ const handleDeleteReceipt = (receipt) => {
       </template>
     </CRUDMainForm>
   </div>
+  <AppDialog
+  v-model="dialogVisible"
+  :title="dialogTitle"
+  :message="dialogMessage"
+/>
+
 </template>
 
 <style scoped>

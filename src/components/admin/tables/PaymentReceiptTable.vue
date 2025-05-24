@@ -46,15 +46,6 @@ const headers = [
     >
       <template #item.action="{ item }">
         <div class="action-icons">
-
-          <v-tooltip text="Edit" location="top">
-            <template #activator="{ props }">
-              <div v-bind="props" @click="$emit('edit-receipt', item)" style="cursor: pointer;">
-                <EditIcon />
-              </div>
-            </template>
-          </v-tooltip>
-
           <v-tooltip text="Delete" location="top">
             <template #activator="{ props }">
               <div v-bind="props" @click="openDeleteDialog(item)" style="cursor: pointer;">
