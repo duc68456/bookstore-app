@@ -46,10 +46,26 @@ function handlePayment() {
     return;
   }
 
+  const now = new Date()
+
+  const datePart = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(now)
+
+  const timePart = now.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  })
+
+  const fullTime = `${datePart} - ${timePart}`
+
   const newReceipt = {
     customer: selectedCustomer.value.name,
     amount: paymentAmount.value,
-    time: new Date().toLocaleString(),
+    time: fullTime,
   }
 
   paymentReceiptsStore.addPaymentReceipt(newReceipt)

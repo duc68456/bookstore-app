@@ -39,7 +39,6 @@ function handleAddExport() {
     alert('Please select a customer before adding an export receipt.')
     return
   }
-  console.log('Customer', selectedCustomer.value.name)
 
   const now = new Date()
 
