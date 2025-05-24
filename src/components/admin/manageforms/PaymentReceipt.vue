@@ -2,30 +2,32 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/data/user'
+import { useDebts } from '@/data/customerDebts'
+import { usePaymentReceipts } from '@/data/paymentReceipts'
 
 import CRUDMainForm from '../CRUDforms/CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
+import TitleFrame from '../frames/TitleFrame.vue'
+import ReceiptFormFrame from '../frames/ReceiptFormFrame.vue'
 import PaymentFormTable from '../tables/PaymentFormTable.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import ButtonText from '../texts/ButtonText.vue'
 
+import PaymentReceiptTable from '../tables/PaymentReceiptTable.vue'
+
 const router = useRouter()
 const userStore = useUser()
+const paymentReceiptsStore = usePaymentReceipts()
 
-// Danh sách khách hàng được chọn
-const selectedCustomers = ref([])
+const selectedCustomer = ref({})
+const paymentAmount = ref('')
 
-// Mock dữ liệu nợ của khách hàng
-const customerDebts = ref({
-  '1': { amount: '$120.00' },
-  '2': { amount: '$85.50' }
-})
+const customerDebts = useDebts()
 
 const customersWithDebt = computed(() => {
   return userStore.users.map(user => ({
     ...user,
-    debt: customerDebts.value[user.id]?.amount || '$0.00',
-    lastPayment: customerDebts.value[user.id]?.lastPayment || 'N/A'
+    debt: `$${customerDebts.debtsById[user.id]?.amount || 0.00}`,
   }))
 })
 
@@ -34,15 +36,36 @@ function goBack() {
 }
 
 function handlePayment() {
-  // Kiểm tra xem có khách hàng nào được chọn không
-  if (selectedCustomers.value.length === 0) {
-    alert('Please select at least one customer to process payment')
-    return
+  if (!selectedCustomer.value || !selectedCustomer.value.name) {
+    alert('Please select a customer to process payment');
+    return;
   }
+
+  if (!paymentAmount.value || paymentAmount.value <= 0) {
+    alert('Please enter a valid payment amount');
+    return;
+  }
+
+  const newReceipt = {
+    customer: selectedCustomer.value.name,
+    amount: paymentAmount.value,
+    time: new Date().toLocaleString(),
+  }
+
+  paymentReceiptsStore.addPaymentReceipt(newReceipt)
+
+  alert(`Processing payment for: ${selectedCustomer.value.name}`);
   
-  // Xử lý thanh toán cho tất cả khách hàng được chọn
-  const customerNames = selectedCustomers.value.map(customer => customer.name).join(', ')
-  alert(`Processing payment for: ${customerNames}`)
+  selectedCustomer.value = {}
+  paymentAmount.value = ''
+}
+
+const handleSelectPayment = (customer) => {
+  selectedCustomer.value = customer;
+};
+
+const handleDeleteReceipt = (receipt) => {
+  paymentReceiptsStore.deletePaymentReceipt(receipt.id)
 }
 </script>
 
@@ -55,16 +78,25 @@ function handlePayment() {
       <template #content>
         <div class="scrollable-content">
           <PaymentFormTable 
-            v-model="selectedCustomers"
+            @select-payment="handleSelectPayment"
+            v-model="selectedCustomer"
             :customers="customersWithDebt"
           />
           <div class="action-bar">
-            <ButtonCRUD @click="handlePayment">
-              <template #btn-text>
-                <ButtonText><template #text>PROCESS PAYMENT</template></ButtonText>
-              </template>
-            </ButtonCRUD>
+            <div class="frame-wrapper">
+              <TitleFrame readonly placeholder="Name" :modelValue="selectedCustomer?.name || ''" />
+              <ReceiptFormFrame placeholder="Amount" v-model="paymentAmount" />
+              <ButtonCRUD @click="handlePayment">
+                <template #btn-text>
+                  <ButtonText><template #text>PROCESS PAYMENT</template></ButtonText>
+                </template>
+              </ButtonCRUD>
+            </div>
           </div>
+          <PaymentReceiptTable
+            :receipts="paymentReceiptsStore.paymentReceipts"
+            @delete-receipt="handleDeleteReceipt"
+          />
         </div>
       </template>
     </CRUDMainForm>
@@ -72,6 +104,12 @@ function handlePayment() {
 </template>
 
 <style scoped>
+.frame-wrapper {
+  display: flex;
+  flex-direction: row;
+  padding-left: 12px;
+  gap: 10px;
+}
 .scrollable-content {
   max-height: calc(100vh - 150px);
   overflow-y: auto;

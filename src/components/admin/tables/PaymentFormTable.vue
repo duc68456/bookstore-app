@@ -1,5 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useUser } from '@/data/user' 
+
+const user = useUser()
 
 const props = defineProps({
   customers: {
@@ -7,14 +10,13 @@ const props = defineProps({
     required: true
   },
   modelValue: {
-    type: Array,
-    default: () => []
+    type: Object,
+    default: () => ({})
   }
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'select-payment'])
 
-// Loại bỏ cột Action và dialog không cần thiết
 const headers = [
   { title: 'ID', key: 'id' },
   { title: 'Name', key: 'name' },
@@ -22,6 +24,10 @@ const headers = [
   { title: 'Phone', key: 'phone' },
   { title: 'Current Debt', key: 'debt' },
 ]
+
+const onRowClick = (paymentRow) => {
+  emit('select-payment', paymentRow);
+}
 
 // Tạo computed để xử lý v-model
 const selected = computed({
@@ -44,11 +50,14 @@ const selected = computed({
       :items-per-page="-1"
       hide-default-footer
     >
-      <!-- Có thể thêm template tùy chỉnh cho các cột nếu cần -->
-      <template #item.debt="{ item }">
-        <span :class="{'debt-highlight': parseFloat(item.debt.replace('$', '')) > 100}">
-          {{ item.debt }}
-        </span>
+      <template #item="{ item }">
+        <tr @click="onRowClick(item)">
+          <td>{{ item.id }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.email }}</td>
+          <td>{{ item.phone }}</td>
+          <td>{{ item.debt }}</td>
+        </tr>
       </template>
     </v-data-table>
   </v-container>
