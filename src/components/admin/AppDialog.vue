@@ -5,7 +5,7 @@
       <v-card-text>{{ message }}</v-card-text>
       <v-card-actions>
         <v-spacer />
-        <v-btn text color="grey" @click="cancel">Cancel</v-btn>
+        <v-btn v-if="showCancel" text color="grey" @click="cancel">Cancel</v-btn>
         <v-btn text color="primary" @click="confirm">OK</v-btn>
       </v-card-actions>
     </v-card>
@@ -18,7 +18,11 @@ import { ref, watch } from 'vue'
 const props = defineProps({
   modelValue: Boolean,
   title: String,
-  message: String
+  message: String,
+  showCancel: {
+    type: Boolean,
+    default: true
+  }
 })
 const emit = defineEmits(['update:modelValue', 'confirm', 'cancel'])
 

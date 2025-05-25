@@ -20,11 +20,13 @@ import PaymentReceiptTable from '../tables/PaymentReceiptTable.vue'
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
 const dialogMessage = ref('')
+const dialogButtonCancel = ref(true)
 
-function showDialog(title, message) {
+function showDialog(title, message, options) {
   dialogTitle.value = title
   dialogMessage.value = message
   dialogVisible.value = true
+  dialogButtonCancel.value = options
 }
 
 const router = useRouter()
@@ -49,7 +51,7 @@ function goBack() {
 
 function handlePayment() {
   if (!selectedCustomer.value || !selectedCustomer.value.name) {
-    showDialog('Missing Info', 'Please select a customer to process payment')
+    showDialog('Missing Info', 'Please select a customer', false)
     return;
   }
 
@@ -132,12 +134,14 @@ const handleDeleteReceipt = (receipt) => {
   <AppDialog
   v-model="dialogVisible"
   :title="dialogTitle"
+  :showCancel="dialogButtonCancel"  
   :message="dialogMessage"
 />
 
 </template>
 
 <style scoped>
+
 .frame-wrapper {
   display: flex;
   flex-direction: row;
