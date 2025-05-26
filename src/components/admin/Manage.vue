@@ -266,6 +266,14 @@ function goToPaymentReceipt() {
 
 .action-button {
   background-color: var(--vt-c-second-bg-color);
+  background-size: 300% 100%;
+  background-image: linear-gradient(to right,
+    var(--vt-c-second-bg-color),
+    var(--vt-c-gradient-bg-color),
+    var(--vt-c-gradient-bg-color),
+    var(--vt-c-second-bg-color));
+  background-position: 0% 50%;
+  transition: background-position 0.4s ease-in-out; 
   color: white;
   border: none;
   border-radius: 6px;
@@ -273,10 +281,11 @@ function goToPaymentReceipt() {
   font-weight: 600;
   width: 100%;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
 
 .action-button:hover {
-  background-color: #a01010;
+  background-position: 100% 50%; 
 }
+
+
 </style>
