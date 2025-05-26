@@ -3,6 +3,7 @@ import { reactive } from 'vue'
 import CRUDMainForm from './CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
 import FrameRU from '../frames/FrameRU.vue'
+import DatePickerFrame from '../frames/DatePickerFrame.vue'
 import FrameText from '../texts/FrameText.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import ButtonText from '../texts/ButtonText.vue'
@@ -31,31 +32,11 @@ const handleAdd = () => {
 
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="newUser.name">
-            <template #text-above>
-              <FrameText><template #text>Name</template></FrameText>
-            </template>
-          </FrameRU>
-          <FrameRU v-model="newUser.email">
-            <template #text-above>
-              <FrameText><template #text>Email</template></FrameText>
-            </template>
-          </FrameRU>
-          <FrameRU v-model="newUser.username">
-            <template #text-above>
-              <FrameText><template #text>Username</template></FrameText>
-            </template>
-          </FrameRU>
-          <FrameRU v-model="newUser.dob">
-            <template #text-above>
-              <FrameText><template #text>Day Of Birth</template></FrameText>
-            </template>
-          </FrameRU>
-          <FrameRU v-model="newUser.phone">
-            <template #text-above>
-              <FrameText><template #text>Phone</template></FrameText>
-            </template>
-          </FrameRU>
+          <FrameRU v-model="newUser.name" placeholder="Name" />
+          <FrameRU v-model="newUser.email" placeholder="Email" />
+          <FrameRU v-model="newUser.username" placeholder="Username" />
+          <DatePickerFrame v-model="newUser.dob" placeholder="DOB" />
+          <FrameRU v-model="newUser.phone" placeholder="Phone" />
 
           <ButtonCRUD @click="handleAdd">
             <template #btn-text>

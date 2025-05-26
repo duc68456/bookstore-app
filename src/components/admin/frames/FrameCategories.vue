@@ -61,7 +61,6 @@ const handleAddAndClose = () => {
       </v-icon>
     </div>
 
-    <!-- Dialog popup nhỏ -->
     <v-dialog v-model="dialog" width="400" persistent>
       <v-card class="dialog-card">
         <v-card-title class="dialog-title">

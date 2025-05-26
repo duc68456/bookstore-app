@@ -37,38 +37,13 @@ const handleAdd = () => {
       </template>
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="newBook.title">
-            <template #text-above>
-              <FrameText><template #text>Title</template></FrameText>
-            </template>
-          </FrameRU>
+          <FrameRU v-model="newBook.title" placeholder="Title"/>
+          <FrameRU v-model="newBook.author" placeholder="Author" />
+          <FrameRU v-model="newBook.import_price" placeholder="Import Price" />
+          <FrameRU v-model="newBook.quantity" placeholder="Quantity" />
+          <FrameRU v-model="newBook.published_year" placeholder="Published Year" />
 
-          <FrameRU v-model="newBook.author">
-            <template #text-above>
-              <FrameText><template #text>Author</template></FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU v-model="newBook.import_price">
-            <template #text-above>
-              <FrameText><template #text>Import Price</template></FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU v-model="newBook.quantity">
-            <template #text-above>
-              <FrameText><template #text>Quantity</template></FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU v-model="newBook.published_year">
-            <template #text-above>
-              <FrameText><template #text>Published Year</template></FrameText>
-            </template>
-          </FrameRU>
-
-          <!-- Categories Section -->
-          <FrameCategories v-model="newBook.categories">
+          <FrameCategories v-model="newBook.categories" placeholder="Categories">
             <template #text-above>
               <FrameText><template #text>Categories</template></FrameText>
             </template>

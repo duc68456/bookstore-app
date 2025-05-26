@@ -32,35 +32,11 @@ const handleEdit = () => {
 
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="editedUser.name">
-            <template #text-above>
-              <FrameText><template #text>Name</template></FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU v-model="editedUser.email">
-            <template #text-above>
-              <FrameText><template #text>Email</template></FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU v-model="editedUser.username">
-            <template #text-above>
-              <FrameText><template #text>Username</template></FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU v-model="editedUser.dob">
-            <template #text-above>
-              <FrameText><template #text>Day Of Birth</template></FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU v-model="editedUser.phone">
-            <template #text-above>
-              <FrameText><template #text>Phone</template></FrameText>
-            </template>
-          </FrameRU>
+          <FrameRU v-model="editedUser.name" placeholder="Name" />
+          <FrameRU v-model="editedUser.email" placeholder="Email" />
+          <FrameRU v-model="editedUser.username" placeholder="Username" />
+          <FrameRU v-model="editedUser.dob" placeholder="DOB" />
+          <FrameRU v-model="editedUser.phone" placeholder="Phone" />
 
           <ButtonCRUD @click="handleEdit">
             <template #btn-text>

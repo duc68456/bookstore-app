@@ -18,51 +18,11 @@ defineProps(['book'])
       </template>
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU readonly :modelValue="book.title">
-            <template #text-above>
-              <FrameText>
-                <template #text>
-                  Title
-                </template>
-              </FrameText>
-            </template>
-          </FrameRU>        
-          <FrameRU readonly :modelValue="book.author">
-            <template #text-above>
-              <FrameText>
-                <template #text>
-                  Author
-                </template>
-              </FrameText>
-            </template>
-          </FrameRU>        
-          <FrameRU readonly :modelValue="book.import_price">
-            <template #text-above>
-              <FrameText>
-                <template #text>
-                  Import Price
-                </template>
-              </FrameText>
-            </template>
-          </FrameRU>            
-          <FrameRU readonly :modelValue="book.quantity">
-            <template #text-above>
-              <FrameText>
-                <template #text>
-                  Quantity
-                </template>
-              </FrameText>
-            </template>
-          </FrameRU>        
-          <FrameRU readonly :modelValue="book.published_year">
-            <template #text-above>
-              <FrameText>
-                <template #text>
-                  Published Year
-                </template>
-              </FrameText>
-            </template>
-          </FrameRU>        
+          <FrameRU v-model="book.title" placeholder="Title"/>
+          <FrameRU v-model="book.author" placeholder="Author" />
+          <FrameRU v-model="book.import_price" placeholder="Import Price" />
+          <FrameRU v-model="book.quantity" placeholder="Quantity" />
+          <FrameRU v-model="book.published_year" placeholder="Published Year" />
           <FrameRU readonly :modelValue="book.categories">
             <template #text-above>
               <FrameText>

@@ -20,45 +20,11 @@ defineProps(['user'])
 
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU readonly :modelValue="user.name">
-            <template #text-above>
-              <FrameText>
-                <template #text>Name</template>
-              </FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU readonly :modelValue="user.email">
-            <template #text-above>
-              <FrameText>
-                <template #text>Email</template>
-              </FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU readonly :modelValue="user.username">
-            <template #text-above>
-              <FrameText>
-                <template #text>Username</template>
-              </FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU readonly :modelValue="user.dob">
-            <template #text-above>
-              <FrameText>
-                <template #text>Day Of Birth</template>
-              </FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU readonly :modelValue="user.phone">
-            <template #text-above>
-              <FrameText>
-                <template #text>Phone</template>
-              </FrameText>
-            </template>
-          </FrameRU>
+          <FrameRU readonly v-model="user.name" placeholder="Name" />
+          <FrameRU readonly v-model="user.email" placeholder="Email" />
+          <FrameRU readonly v-model="user.username" placeholder="Username" />
+          <FrameRU readonly v-model="user.dob" placeholder="DOB" />
+          <FrameRU readonly v-model="user.phone" placeholder="Phone" />
         </div>
       </template>
     </CRUDMainForm>

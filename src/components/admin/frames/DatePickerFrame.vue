@@ -9,12 +9,18 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
+const menu = ref(false)
 const isFocused = ref(false)
 
 // Kiểm tra xem có nên hiển thị label thu nhỏ không
 const shouldShowFloatingLabel = computed(() => {
   return isFocused.value || (props.modelValue && props.modelValue.length > 0)
 })
+
+const updateValue = (val) => {
+  emit('update:modelValue', val)
+  menu.value = false
+}
 
 const handleFocus = () => {
   isFocused.value = true
@@ -23,6 +29,12 @@ const handleFocus = () => {
 const handleBlur = () => {
   isFocused.value = false
 }
+
+// Format hiển thị ngày
+const formattedDate = computed(() => {
+  if (!props.modelValue) return ''
+  return new Date(props.modelValue).toLocaleDateString('vi-VN')
+})
 </script>
 
 <template>
@@ -36,16 +48,41 @@ const handleBlur = () => {
         {{ placeholder }}
       </label>
       
-      <input 
-        class="input" 
-        type="text" 
-        :readonly="readonly" 
-        :placeholder="shouldShowFloatingLabel ? '' : placeholder"
-        :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
+      <v-menu
+        v-model="menu"
+        :close-on-content-click="false"
+        transition="scale-transition"
+        offset-y
+        min-width="290px"
+      >
+        <template #activator="{ props: menuProps }">
+          <input 
+            v-bind="menuProps"
+            class="input" 
+            type="text" 
+            :readonly="true"
+            :placeholder="shouldShowFloatingLabel ? '' : placeholder"
+            :value="formattedDate"
+            @focus="handleFocus"
+            @blur="handleBlur"
+            style="cursor: pointer;"
+          />
+        </template>
+        
+        <v-date-picker
+          :model-value="modelValue"
+          @update:model-value="updateValue"
+          show-adjacent-months
+        />
+      </v-menu>
+      
+      <!-- Calendar icon -->
+      <v-icon 
+        class="calendar-icon"
+        @click="menu = !menu"
+      >
+        mdi-calendar
+      </v-icon>
     </div>
   </div>
 </template>
@@ -76,7 +113,8 @@ const handleBlur = () => {
   font-family: Montserrat, sans-serif;
   color: #333;
   background: transparent;
-  padding-top: 8px; /* Tạo space cho floating label */
+  padding-top: 8px;
+  cursor: pointer;
 }
 
 .floating-label {
@@ -99,6 +137,11 @@ const handleBlur = () => {
   font-size: 12px;
   color: var(--vt-c-second-bg-color); 
   font-weight: 500;
+}
+
+.calendar-icon {
+  color: #666;
+  cursor: pointer;
 }
 
 .wrapper {
