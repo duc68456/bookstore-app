@@ -1,8 +1,13 @@
 <template>
-  <router-link class="title" to="/forgot-password">
+  <div class="title" @click="$emit('click')">
     <slot name="fg"/>
-  </router-link>
+  </div>
 </template>
+
+<script setup>
+defineEmits(['click'])
+</script>
+
 <style scoped>
 .title {
     color: var(--vt-c-second-bg-color);
@@ -13,5 +18,4 @@
     line-height: 140%; /* 18.2px */
     cursor: pointer;
 }
-
 </style>
