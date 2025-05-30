@@ -25,6 +25,7 @@ defineProps(['user'])
           <FrameRU readonly v-model="user.username" placeholder="Username" />
           <FrameRU readonly v-model="user.dob" placeholder="DOB" />
           <FrameRU readonly v-model="user.phone" placeholder="Phone" />
+          <FrameRU readonly v-model="user.role" placeholder="Role" />
         </div>
       </template>
     </CRUDMainForm>

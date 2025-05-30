@@ -172,7 +172,7 @@ function goToPaymentReceipt() {
 }
 
 .card {
-  background-color: white;
+  background-color: var(--vt-c-main-bg-color);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -191,7 +191,7 @@ function goToPaymentReceipt() {
 
 .card-header {
   background-color: var(--vt-c-second-bg-color);
-  color: white;
+  color: var(--vt-c-main-bg-color);
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -266,7 +266,7 @@ function goToPaymentReceipt() {
 
 .action-button {
   background-color: var(--vt-c-second-bg-color);
-  background-size: 300% 100%;
+  background-size: 500% 100%;
   background-image: linear-gradient(to right,
     var(--vt-c-second-bg-color),
     var(--vt-c-gradient-bg-color),
@@ -274,7 +274,7 @@ function goToPaymentReceipt() {
     var(--vt-c-second-bg-color));
   background-position: 0% 50%;
   transition: background-position 0.4s ease-in-out; 
-  color: white;
+  color: var(--vt-c-main-bg-color);
   border: none;
   border-radius: 6px;
   padding: 10px 16px;
