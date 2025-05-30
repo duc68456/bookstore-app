@@ -1,11 +1,11 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import SignInForm from './forms/SignInForm.vue'
-import SignUpForm from './forms/SignUpForm.vue'
-import ForgotPasswordForm from './forms/ForgotPasswordForm.vue'
-import OTPForm from './forms/OTPForm.vue'
-import ResetPasswordForm from './forms/ResetPasswordForm.vue'
+import ForgotPasswordForm from './Forms/ForgotPasswordForm.vue'
+import OTPForm from './Forms/OTPForm.vue'
+import ResetPasswordForm from './Forms/ResetPasswordForm.vue'
+import SignInForm from './Forms/SignInForm.vue'
+import SignUpForm from './Forms/SignUpForm.vue'
 import FlexibleLeftOverlay from './overlays/FlexibleLeftOverlay.vue'
 import FlexibleRightOverlay from './overlays/FlexibleRightOverlay.vue'
 
