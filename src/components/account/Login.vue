@@ -116,7 +116,7 @@ const handleSignIn = async (data) => {
       error.value = 'Lỗi kết nối mạng. Vui lòng kiểm tra kết nối và thử lại.'
       alert('Lỗi kết nối mạng. Vui lòng kiểm tra kết nối và thử lại.')
     } else {
-      // Lỗi khác
+      // other
       console.error('Request setup error:', e.message)
       error.value = 'Đã xảy ra lỗi. Vui lòng thử lại.'
       alert('Đã xảy ra lỗi. Vui lòng thử lại.')
@@ -126,8 +126,149 @@ const handleSignIn = async (data) => {
   }
 }
 
-const handleSignUp = (data) => {
-  console.log('Sign Up:', data)
+const handleSignUp = async (data) => {
+  console.log('Starting registration with data:', data) // Debug log
+  
+  try {
+    loading.value = true
+    error.value = null
+    
+    // Validate required fields
+    if (!data.firstName || !data.lastName || !data.username || !data.password || !data.email) {
+      error.value = 'Vui lòng điền đầy đủ thông tin bắt buộc'
+      alert('Vui lòng điền đầy đủ thông tin bắt buộc')
+      return
+    }
+    
+    // Validate username length (min 4 characters)
+    if (data.username.length < 4) {
+      error.value = 'Tên đăng nhập phải có ít nhất 4 ký tự'
+      alert('Tên đăng nhập phải có ít nhất 4 ký tự')
+      return
+    }
+    
+    // Validate password length (min 8 characters)
+    if (data.password.length < 8) {
+      error.value = 'Mật khẩu phải có ít nhất 8 ký tự'
+      alert('Mật khẩu phải có ít nhất 8 ký tự')
+      return
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(data.email)) {
+      error.value = 'Email không hợp lệ'
+      alert('Email không hợp lệ')
+      return
+    }
+    
+    console.log('Sending registration request to:', 'http://localhost:8080/bookstore/users') // Debug log
+    
+    const response = await axios.post('http://localhost:8080/bookstore/users', {
+      username: data.username,
+      password: data.password,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phone: data.contact || null, // contact field maps to phone
+      dob: null // You can add date of birth field later if needed
+    })
+    
+    console.log('Registration response received:', response.data) // Debug log
+    
+    if (response.data.code === 1000 && response.data.result) {
+      console.log('Registration successful:', response.data.result) // Debug log
+      
+      // Clear form data
+      signUpData.value = { 
+        firstName: '', lastName: '', username: '', 
+        password: '', contact: '', email: '' 
+      }
+      
+      // Show success message and switch to sign in
+      alert('Đăng ký thành công! Vui lòng đăng nhập.')
+      switchToSignIn()
+      
+    } else {
+      console.log('Registration failed:', response.data) // Debug log
+      error.value = 'Đăng ký thất bại. Vui lòng thử lại.'
+      alert('Đăng ký thất bại. Vui lòng thử lại.')
+    }
+    
+  } catch (e) {
+    console.error('Registration error:', e) // Debug log
+    console.error('Error response:', e.response) // Debug log để xem full response
+    console.error('Error status:', e.response?.status) // Debug status code
+    
+    // Kiểm tra nếu có response từ server (lỗi 4xx, 5xx)
+    if (e.response) {
+      console.log('Server responded with error:', e.response.data) // Debug log
+      
+      // Xử lý theo error code từ backend
+      if (e.response.data?.code) {
+        switch (e.response.data.code) {
+          case 1002: // USER_EXISTED
+            error.value = 'Tên đăng nhập đã tồn tại'
+            alert('Tên đăng nhập đã tồn tại')
+            break
+          case 1003: // USERNAME_INVALID
+            error.value = 'Tên đăng nhập không hợp lệ (tối thiểu 4 ký tự)'
+            alert('Tên đăng nhập không hợp lệ (tối thiểu 4 ký tự)')
+            break
+          case 1004: // INVALID_PASSWORD
+            error.value = 'Mật khẩu không hợp lệ (tối thiểu 8 ký tự)'
+            alert('Mật khẩu không hợp lệ (tối thiểu 8 ký tự)')
+            break
+          default:
+            error.value = 'Đăng ký thất bại. Vui lòng thử lại.'
+            alert('Đăng ký thất bại. Vui lòng thử lại.')
+        }
+      } else if (e.response.data?.errorCode) {
+        // Xử lý theo errorCode
+        switch (e.response.data.errorCode) {
+          case 'USER_EXISTED':
+            error.value = 'Tên đăng nhập đã tồn tại'
+            alert('Tên đăng nhập đã tồn tại')
+            break
+          case 'USERNAME_INVALID':
+            error.value = 'Tên đăng nhập không hợp lệ (tối thiểu 4 ký tự)'
+            alert('Tên đăng nhập không hợp lệ (tối thiểu 4 ký tự)')
+            break
+          case 'INVALID_PASSWORD':
+            error.value = 'Mật khẩu không hợp lệ (tối thiểu 8 ký tự)'
+            alert('Mật khẩu không hợp lệ (tối thiểu 8 ký tự)')
+            break
+          default:
+            error.value = 'Đăng ký thất bại. Vui lòng thử lại.'
+            alert('Đăng ký thất bại. Vui lòng thử lại.')
+        }
+      } else if (e.response.status === 400) {
+        // Bad Request - có thể là validation error
+        error.value = 'Thông tin đăng ký không hợp lệ. Vui lòng kiểm tra lại.'
+        alert('Thông tin đăng ký không hợp lệ. Vui lòng kiểm tra lại.')
+      } else if (e.response.status === 409) {
+        // Conflict - user already exists
+        error.value = 'Tên đăng nhập đã tồn tại'
+        alert('Tên đăng nhập đã tồn tại')
+      } else {
+        // Fallback cho các lỗi 4xx, 5xx khác
+        error.value = 'Đăng ký thất bại. Vui lòng thử lại.'
+        alert('Đăng ký thất bại. Vui lòng thử lại.')
+      }
+    } else if (e.request) {
+      // Request được gửi nhưng không có response (lỗi network)
+      console.error('No response received:', e.request)
+      error.value = 'Lỗi kết nối mạng. Vui lòng kiểm tra kết nối và thử lại.'
+      alert('Lỗi kết nối mạng. Vui lòng kiểm tra kết nối và thử lại.')
+    } else {
+      // Lỗi khác
+      console.error('Request setup error:', e.message)
+      error.value = 'Đã xảy ra lỗi. Vui lòng thử lại.'
+      alert('Đã xảy ra lỗi. Vui lòng thử lại.')
+    }
+  } finally {
+    loading.value = false
+  }
 }
 
 const handleForgotPassword = (data) => {
