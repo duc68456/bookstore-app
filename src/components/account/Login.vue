@@ -1,4 +1,5 @@
 <script setup>
+import axios from 'axios'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ForgotPasswordForm from './Forms/ForgotPasswordForm.vue'
@@ -24,6 +25,8 @@ const resetData = ref({
   newPassword: '', 
   confirmPassword: '' 
 })
+const error = ref(null)
+const loading = ref(false)
 
 // Toggle functions
 const switchToSignUp = () => currentMode.value = 'signup'
@@ -33,9 +36,94 @@ const switchToOTP = () => currentMode.value = 'otp'
 const switchToResetPassword = () => currentMode.value = 'reset'
 
 // Form handlers
-const handleSignIn = (data) => {
-  console.log('Sign In:', data)
-  router.push('/dashboard')
+const handleSignIn = async (data) => {
+  console.log('Starting login with data:', data) // Debug log
+  
+  try {
+    loading.value = true
+    error.value = null
+    
+    console.log('Sending request to:', 'http://localhost:8080/bookstore/auth/token') // Debug log
+    
+    const response = await axios.post('http://localhost:8080/bookstore/auth/token', {
+      username: data.username,
+      password: data.password
+    })
+    
+    console.log('Response received:', response.data) // Debug log
+    
+    if (response.data.code === 1000 && response.data.result.authenticated) {
+      // Lưu token vào localStorage
+      localStorage.setItem('token', response.data.result.token)
+      console.log('Token saved, redirecting to dashboard') // Debug log
+      
+      // Chuyển hướng đến dashboard
+      router.push('/dashboard')
+      
+    } else {
+      console.log('Authentication failed:', response.data) // Debug log
+      error.value = 'Sai tên đăng nhập hoặc mật khẩu'
+      alert('Sai tên đăng nhập hoặc mật khẩu')
+    }
+    
+  } catch (e) {
+    console.error('Login error:', e) // Debug log
+    console.error('Error response:', e.response) // Debug log để xem full response
+    console.error('Error status:', e.response?.status) // Debug status code
+    
+    // Kiểm tra nếu có response từ server (lỗi 4xx, 5xx)
+    if (e.response) {
+      console.log('Server responded with error:', e.response.data) // Debug log
+      
+      // Xử lý theo error code từ backend
+      if (e.response.data?.code) {
+        switch (e.response.data.code) {
+          case 1001: // hoặc code tương ứng với USER_NOT_EXISTED
+            error.value = 'Tên đăng nhập không tồn tại'
+            alert('Tên đăng nhập không tồn tại')
+            break
+          case 1002: // hoặc code tương ứng với UNAUTHENTICATED  
+            error.value = 'Sai tên đăng nhập hoặc mật khẩu'
+            alert('Sai tên đăng nhập hoặc mật khẩu')
+            break
+          default:
+            error.value = 'Sai tên đăng nhập hoặc mật khẩu'
+            alert('Sai tên đăng nhập hoặc mật khẩu')
+        }
+      } else if (e.response.data?.errorCode) {
+        // Xử lý theo errorCode
+        switch (e.response.data.errorCode) {
+          case 'USER_NOT_EXISTED':
+            error.value = 'Tên đăng nhập không tồn tại'
+            alert('Tên đăng nhập không tồn tại')
+            break
+          case 'UNAUTHENTICATED':
+            error.value = 'Sai tên đăng nhập hoặc mật khẩu'
+            alert('Sai tên đăng nhập hoặc mật khẩu')
+            break
+          default:
+            error.value = 'Sai tên đăng nhập hoặc mật khẩu'
+            alert('Sai tên đăng nhập hoặc mật khẩu')
+        }
+      } else {
+        // Fallback cho các lỗi 4xx khác
+        error.value = 'Sai tên đăng nhập hoặc mật khẩu'
+        alert('Sai tên đăng nhập hoặc mật khẩu')
+      }
+    } else if (e.request) {
+      // Request được gửi nhưng không có response (lỗi network thật)
+      console.error('No response received:', e.request)
+      error.value = 'Lỗi kết nối mạng. Vui lòng kiểm tra kết nối và thử lại.'
+      alert('Lỗi kết nối mạng. Vui lòng kiểm tra kết nối và thử lại.')
+    } else {
+      // Lỗi khác
+      console.error('Request setup error:', e.message)
+      error.value = 'Đã xảy ra lỗi. Vui lòng thử lại.'
+      alert('Đã xảy ra lỗi. Vui lòng thử lại.')
+    }
+  } finally {
+    loading.value = false
+  }
 }
 
 const handleSignUp = (data) => {
