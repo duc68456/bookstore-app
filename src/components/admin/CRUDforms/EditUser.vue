@@ -37,6 +37,7 @@ const handleEdit = () => {
           <FrameRU v-model="editedUser.username" placeholder="Username" />
           <FrameRU v-model="editedUser.dob" placeholder="DOB" />
           <FrameRU v-model="editedUser.phone" placeholder="Phone" />
+          <FrameRU v-model="editedUser.role" placeholder="Role" />
 
           <ButtonCRUD @click="handleEdit">
             <template #btn-text>

@@ -37,6 +37,7 @@ const handleAdd = () => {
           <FrameRU v-model="newUser.username" placeholder="Username" />
           <DatePickerFrame v-model="newUser.dob" placeholder="DOB" />
           <FrameRU v-model="newUser.phone" placeholder="Phone" />
+          <FrameRU v-model="newUser.role" placeholder="Role" />
 
           <ButtonCRUD @click="handleAdd">
             <template #btn-text>

@@ -15,8 +15,7 @@ const headers = [
   { title: 'Name', key: 'name' },
   { title: 'Email', key: 'email' },
   { title: 'Username', key: 'username' },
-  { title: 'Day Of Birth', key: 'dob' },
-  { title: 'Phone', key: 'phone', sortable: false },
+  { title: 'Role', key: 'role' },
   { title: 'Action', key: 'action', sortable: false },
 ]
 

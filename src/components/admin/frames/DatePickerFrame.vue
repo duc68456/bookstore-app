@@ -12,7 +12,6 @@ const emit = defineEmits(['update:modelValue'])
 const menu = ref(false)
 const isFocused = ref(false)
 
-// Kiểm tra xem có nên hiển thị label thu nhỏ không
 const shouldShowFloatingLabel = computed(() => {
   return isFocused.value || (props.modelValue && props.modelValue.length > 0)
 })
