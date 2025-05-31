@@ -22,11 +22,14 @@ const dialogTitle = ref('')
 const dialogMessage = ref('')
 const dialogButtonCancel = ref(true)
 
-function showDialog(title, message, options) {
+const onConfirm = ref(() => {})
+
+function showDialog(title, message, options = true, confirmCallback = () => {}) {
   dialogTitle.value = title
   dialogMessage.value = message
   dialogVisible.value = true
   dialogButtonCancel.value = options
+  onConfirm.value = confirmCallback
 }
 
 const router = useRouter()
@@ -60,6 +63,19 @@ function handlePayment() {
     return;
   }
 
+  const customerName = selectedCustomer.value.name
+
+  showDialog(
+    'Confirm Payment',
+    `Are you sure you want to process payment for: ${customerName}?`,
+    true,
+    () => {
+      processPayment()
+    }
+  )
+}
+
+function processPayment() {
   const now = new Date()
 
   const datePart = new Intl.DateTimeFormat('en-US', {
@@ -84,11 +100,17 @@ function handlePayment() {
 
   paymentReceiptsStore.addPaymentReceipt(newReceipt)
 
-  showDialog('Payment Success', `Processed payment for: ${selectedCustomer.value.name}`)
-  
+  showDialog('Payment Success', `Processed payment for: ${selectedCustomer.value.name}`, false, () => {})
+
   selectedCustomer.value = {}
   paymentAmount.value = ''
+
+  dialogVisible.value = false
+  dialogTitle.value = ''
+  dialogMessage.value = ''
+  dialogButtonCancel.value = true
 }
+
 
 const handleSelectPayment = (customer) => {
   selectedCustomer.value = customer;
@@ -136,6 +158,7 @@ const handleDeleteReceipt = (receipt) => {
   :title="dialogTitle"
   :showCancel="dialogButtonCancel"  
   :message="dialogMessage"
+  @confirm="onConfirm()"
 />
 
 </template>
