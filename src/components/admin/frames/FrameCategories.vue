@@ -3,7 +3,8 @@ import { computed, ref } from 'vue'
 import { categoriesList } from '@/data/categories.js'
 
 const props = defineProps({
-  modelValue: Array
+  modelValue: Array,
+  placeholder: String
 })
 const emit = defineEmits(['update:modelValue'])
 
@@ -12,7 +13,6 @@ const selectedCategories = computed({
   set: (val) => emit('update:modelValue', val)
 })
 
-// Thêm category
 const newCategory = ref('')
 const dialog = ref(false)
 
@@ -33,16 +33,36 @@ const handleAddAndClose = () => {
   }
   closeDialog()
 }
+
+const isFocused = ref(false)
+
+const shouldShowFloatingLabel = computed(() => {
+  return isFocused.value || (props.modelValue && props.modelValue.length > 0)
+})
+
+const handleFocus = () => {
+  isFocused.value = true
+}
+
+const handleBlur = () => {
+  isFocused.value = false
+}
 </script>
 
 <template>
   <div class="wrapper">
     <slot name="text-above"></slot>
-    <div class="frame">
+    <div class="frame" :class="{ 'focused': shouldShowFloatingLabel }">
+      <label 
+        class="floating-label" 
+        :class="{ 'active': shouldShowFloatingLabel }"
+      >
+        {{ placeholder }}
+      </label>
       <v-select
         v-model="selectedCategories"
         :items="categoriesList"
-        label="Select Categories"
+        :placeholder="shouldShowFloatingLabel ? '' : placeholder"
         multiple
         chips
         variant="plain"
@@ -50,6 +70,8 @@ const handleAddAndClose = () => {
         density="comfortable"
         menu-icon="mdi-chevron-down"
         class="category-select"
+        @focus="handleFocus"
+        @blur="handleBlur"
       />
       <v-icon
         @click="openAddCategoriesDialog"
@@ -90,6 +112,10 @@ const handleAddAndClose = () => {
   align-items: flex-start;
 }
 
+.frame.focused {
+  border-color: var(--vt-c-second-bg-color); 
+}
+
 .frame {
   display: flex;
   width: 441px;
@@ -100,6 +126,29 @@ const handleAddAndClose = () => {
   background-color: var(--vt-c-main-bg-color);
   font-family: Montserrat, sans-serif;
   position: relative;
+}
+
+.floating-label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  font-family: Montserrat, sans-serif;
+  color: #999;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  background-color: var(--vt-c-main-bg-color);
+  padding: 0 4px;
+  z-index: 1;
+}
+
+.floating-label.active {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: var(--vt-c-second-bg-color);
+  font-weight: 500;
 }
 
 .add-icon {
@@ -160,5 +209,14 @@ const handleAddAndClose = () => {
   color: white;
   background-color: var(--vt-c-second-bg-color);
   font-weight: bold;
+}
+
+::v-deep(.v-field__label) {
+  display: none !important;
+}
+
+/* ✅ Tạo space cho floating label */
+::v-deep(.category-select) {
+  padding-top: 8px;
 }
 </style>

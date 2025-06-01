@@ -29,7 +29,7 @@ const Branches = () => router.push('/branches')
 const Manage = () => router.push('/manage')
 
 const isActive = (path) => {
-  return route.path === path
+  return route.path === path || route.path.startsWith(path + '/')
 }
 
 import { useRoute } from 'vue-router'

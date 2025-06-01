@@ -11,7 +11,6 @@ const emit = defineEmits(['update:modelValue'])
 
 const isFocused = ref(false)
 
-// Kiểm tra xem có nên hiển thị label thu nhỏ không
 const shouldShowFloatingLabel = computed(() => {
   return isFocused.value || (props.modelValue && props.modelValue.length > 0)
 })
@@ -28,7 +27,6 @@ const handleBlur = () => {
 <template>
   <div class="wrapper">
     <div class="frame" :class="{ 'focused': shouldShowFloatingLabel }">
-      <!-- Floating label -->
       <label 
         class="floating-label" 
         :class="{ 'active': shouldShowFloatingLabel }"

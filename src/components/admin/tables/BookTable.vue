@@ -48,10 +48,8 @@ const confirmDelete = () => {
 const rawHeaders = [
   { title: 'ID', key: 'id' },
   { title: 'Title', key: 'title' },
-  { title: 'Author', key: 'author' },
-  { title: 'Quantity', key: 'quantity' },
-  { title: 'Published Year', key: 'published_year' },
   { title: 'Categories', key: 'categories' },
+  { title: 'Quantity', key: 'quantity' },
   { title: 'Import Price', key: 'import_price' },
   { title: 'Action', key: 'action', sortable: false },
 ]
