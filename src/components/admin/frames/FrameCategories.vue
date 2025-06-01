@@ -51,7 +51,6 @@ const handleBlur = () => {
 
 <template>
   <div class="wrapper">
-    <slot name="text-above"></slot>
     <div class="frame" :class="{ 'focused': shouldShowFloatingLabel }">
       <label 
         class="floating-label" 

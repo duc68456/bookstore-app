@@ -18,11 +18,11 @@ defineProps(['book'])
       </template>
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="book.title" placeholder="Title"/>
-          <FrameRU v-model="book.author" placeholder="Author" />
-          <FrameRU v-model="book.import_price" placeholder="Import Price" />
-          <FrameRU v-model="book.quantity" placeholder="Quantity" />
-          <FrameRU v-model="book.published_year" placeholder="Published Year" />
+          <FrameRU readonly v-model="book.title" placeholder="Title"/>
+          <FrameRU readonly v-model="book.author" placeholder="Author" />
+          <FrameRU readonly v-model="book.import_price" placeholder="Import Price" />
+          <FrameRU readonly v-model="book.quantity" placeholder="Quantity" />
+          <FrameRU readonly v-model="book.published_year" placeholder="Published Year" />
           <FrameRU readonly :modelValue="book.categories" placeholder="Categories">
             <template #text-above>
               <FrameText>

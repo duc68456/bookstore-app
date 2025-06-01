@@ -36,35 +36,11 @@ const handleEdit = () => {
 
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="editedBook.title">
-            <template #text-above>
-              <FrameText><template #text>Title</template></FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU v-model="editedBook.author">
-            <template #text-above>
-              <FrameText><template #text>Author</template></FrameText>
-            </template>
-          </FrameRU>
-          
-          <FrameRU v-model="editedBook.quantity">
-            <template #text-above>
-              <FrameText><template #text>Quantity</template></FrameText>
-            </template>
-          </FrameRU>
-          
-          <FrameRU v-model="editedBook.import_price">
-            <template #text-above>
-              <FrameText><template #text>Import Price</template></FrameText>
-            </template>
-          </FrameRU>
-
-          <FrameRU v-model="editedBook.published_year">
-            <template #text-above>
-              <FrameText><template #text>Published Year</template></FrameText>
-            </template>
-          </FrameRU>
+          <FrameRU v-model="editedBook.title" placeholder="Title"/>
+          <FrameRU v-model="editedBook.author" placeholder="Author" />
+          <FrameRU v-model="editedBook.import_price" placeholder="Import Price" />
+          <FrameRU v-model="editedBook.quantity" placeholder="Quantity" />
+          <FrameRU v-model="editedBook.published_year" placeholder="Published Year" />
 
           <!-- Categories Section -->
           <FrameCategories v-model="editedBook.categories">

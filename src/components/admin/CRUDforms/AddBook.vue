@@ -13,8 +13,8 @@ const emit = defineEmits(['close', 'add-book'])
 const newBook = reactive({
   name: '',
   author: '',
-  selling_price: '',
-  quantity: '',
+  import_price: '0',
+  quantity: '0',
   published_year: '',
   categories: [] 
 })
