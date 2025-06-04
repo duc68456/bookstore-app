@@ -4,7 +4,7 @@ import { ref, computed } from 'vue'
 const props = defineProps({
   readonly: Boolean,
   placeholder: String,
-  modelValue: String
+  modelValue: [String, Date]
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -13,13 +13,25 @@ const menu = ref(false)
 const isFocused = ref(false)
 
 const shouldShowFloatingLabel = computed(() => {
-  return isFocused.value || (props.modelValue && props.modelValue.length > 0)
+  if (isFocused.value) return true
+  if (!props.modelValue) return false
+  if (typeof props.modelValue === 'string') return props.modelValue.length > 0
+  if (props.modelValue instanceof Date) return true
+  return false
 })
 
 const updateValue = (val) => {
-  emit('update:modelValue', val)
+  let value = val
+  if (val instanceof Date) {
+    const day = String(val.getDate()).padStart(2, '0')
+    const month = String(val.getMonth() + 1).padStart(2, '0')
+    const year = val.getFullYear()
+    value = `${day}/${month}/${year}`
+  }
+  emit('update:modelValue', value)
   menu.value = false
 }
+
 
 const handleFocus = () => {
   isFocused.value = true
@@ -59,7 +71,7 @@ const formattedDate = computed(() => {
             v-bind="menuProps"
             class="input" 
             type="text" 
-            :readonly="true"
+            :readonly="false"
             :placeholder="shouldShowFloatingLabel ? '' : placeholder"
             :value="formattedDate"
             @focus="handleFocus"

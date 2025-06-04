@@ -40,7 +40,7 @@ const handleEdit = () => {
           <FrameRU v-model="editedBook.author" placeholder="Author" />
           <FrameRU v-model="editedBook.import_price" placeholder="Import Price" />
           <FrameRU v-model="editedBook.quantity" placeholder="Quantity" />
-          <FrameRU v-model="editedBook.published_year" placeholder="Published Year" />
+          <FrameRU v-model="editedBook.published_year" placeholder="Published Year" />  
 
           <!-- Categories Section -->
           <FrameCategories v-model="editedBook.categories">

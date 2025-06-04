@@ -12,7 +12,11 @@ const emit = defineEmits(['update:modelValue'])
 const isFocused = ref(false)
 
 const shouldShowFloatingLabel = computed(() => {
-  return isFocused.value || (props.modelValue && props.modelValue.length > 0)
+  if (isFocused.value) return true
+  if (!props.modelValue) return false
+  if (typeof props.modelValue === 'string') return props.modelValue.length > 0
+  if (props.modelValue instanceof Date) return true
+  return false
 })
 
 const handleFocus = () => {
