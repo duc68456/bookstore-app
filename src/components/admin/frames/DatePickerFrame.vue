@@ -21,14 +21,7 @@ const shouldShowFloatingLabel = computed(() => {
 })
 
 const updateValue = (val) => {
-  let value = val
-  if (val instanceof Date) {
-    const day = String(val.getDate()).padStart(2, '0')
-    const month = String(val.getMonth() + 1).padStart(2, '0')
-    const year = val.getFullYear()
-    value = `${day}/${month}/${year}`
-  }
-  emit('update:modelValue', value)
+  emit('update:modelValue', val)
   menu.value = false
 }
 
@@ -41,7 +34,6 @@ const handleBlur = () => {
   isFocused.value = false
 }
 
-// Format hiển thị ngày
 const formattedDate = computed(() => {
   if (!props.modelValue) return ''
   return new Date(props.modelValue).toLocaleDateString('vi-VN')

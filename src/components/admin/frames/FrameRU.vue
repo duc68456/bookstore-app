@@ -16,7 +16,7 @@ const shouldShowFloatingLabel = computed(() => {
   if (!props.modelValue) return false
   if (typeof props.modelValue === 'string') return props.modelValue.length > 0
   if (props.modelValue instanceof Date) return true
-  return false
+  return (props.modelValue && props.modelValue.length > 0) || isFocused.value
 })
 
 const handleFocus = () => {

@@ -86,7 +86,7 @@ export const useBook = defineStore('book', () => {
     const newBookWithId = { ...newBook, id: newId }
     newBookWithId.categories = Array.isArray(newBook.categories)
       ? newBook.categories
-      : newBook.categories.split(',').map(c => c.trim())
+      : newBook.categories.split(', ').map(c => c.trim())
 
     items.value.push(newBookWithId)
     fullBookDetails[newId] = {

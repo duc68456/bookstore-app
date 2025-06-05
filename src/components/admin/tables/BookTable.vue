@@ -99,7 +99,6 @@ const headers = computed(() => {
         </div>
       </template>
 
-      <!-- Hiển thị categories -->
       <template #item.categories="{ item }">
         <span>{{ book.fullBookDetails[item.id]?.categories.join(', ') }}</span>
       </template>

@@ -3,6 +3,7 @@ import { reactive } from 'vue'
 import CRUDMainForm from './CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
 import FrameRU from '../frames/FrameRU.vue'
+import DatePickerFrame from '../frames/DatePickerFrame.vue'
 import FrameText from '../texts/FrameText.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import ButtonText from '../texts/ButtonText.vue'
@@ -35,7 +36,7 @@ const handleEdit = () => {
           <FrameRU v-model="editedUser.name" placeholder="Name" />
           <FrameRU v-model="editedUser.email" placeholder="Email" />
           <FrameRU v-model="editedUser.username" placeholder="Username" />
-          <FrameRU v-model="editedUser.dob" placeholder="DOB" />
+          <DatePickerFrame v-model="editedUser.dob" placeholder="DOB" />
           <FrameRU v-model="editedUser.phone" placeholder="Phone" />
           <FrameRU v-model="editedUser.role" placeholder="Role" />
 

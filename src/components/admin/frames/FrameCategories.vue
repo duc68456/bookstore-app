@@ -40,6 +40,7 @@ const shouldShowFloatingLabel = computed(() => {
   return isFocused.value || (props.modelValue && props.modelValue.length > 0)
 })
 
+
 const handleFocus = () => {
   isFocused.value = true
 }
