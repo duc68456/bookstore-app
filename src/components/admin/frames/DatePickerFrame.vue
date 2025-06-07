@@ -4,7 +4,7 @@ import { ref, computed } from 'vue'
 const props = defineProps({
   readonly: Boolean,
   placeholder: String,
-  modelValue: [String, Date]
+  modelValue: Date
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -21,9 +21,17 @@ const shouldShowFloatingLabel = computed(() => {
 })
 
 const updateValue = (val) => {
-  emit('update:modelValue', val)
+  // Nếu val là string, convert sang Date
+  let date = val
+  if (typeof val === 'string') {
+    // Nếu là "dd/MM/yyyy"
+    const [day, month, year] = val.split('/')
+    date = new Date(`${year}-${month}-${day}`)
+  }
+  emit('update:modelValue', date)
   menu.value = false
 }
+
 
 
 const handleFocus = () => {

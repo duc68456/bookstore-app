@@ -3,6 +3,7 @@ import CRUDMainForm from './CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
 import FrameRU from '../frames/FrameRU.vue'
 import FrameText from '../texts/FrameText.vue'
+import DateFrame from '../frames/DateFrame.vue'
 
 defineProps(['user'])
 </script>
@@ -23,7 +24,7 @@ defineProps(['user'])
           <FrameRU readonly v-model="user.name" placeholder="Name" />
           <FrameRU readonly v-model="user.email" placeholder="Email" />
           <FrameRU readonly v-model="user.username" placeholder="Username" />
-          <FrameRU readonly v-model="user.dob" placeholder="DOB" />
+          <DateFrame readonly v-model="user.dob" placeholder="DOB" />
           <FrameRU readonly v-model="user.phone" placeholder="Phone" />
           <FrameRU readonly v-model="user.role" placeholder="Role" />
         </div>
