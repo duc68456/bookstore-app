@@ -27,6 +27,7 @@ const Books = () => router.push('/books')
 const Users = () => router.push('/users')
 const Branches = () => router.push('/branches')
 const Manage = () => router.push('/manage')
+const Report = () => router.push('/report')
 
 const isActive = (path) => {
   return route.path === path || route.path.startsWith(path + '/')
@@ -96,6 +97,17 @@ const route = useRoute()
         </template>
         <template #btn-text>
           <ButtonText><template #text>Manage</template></ButtonText>
+        </template>
+      </ButtonSideBar>
+    </router-link>
+
+    <router-link to="/report" class="no-underline">
+      <ButtonSideBar :class="{ 'active': isActive('/report') }">
+        <template #btn-icon="{ hover }">
+          <component :is="isActive('/report') || hover ? ManageIcon : ManageIconWhite" />
+        </template>
+        <template #btn-text>
+          <ButtonText><template #text>Report</template></ButtonText>
         </template>
       </ButtonSideBar>
     </router-link>
