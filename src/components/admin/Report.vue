@@ -20,29 +20,31 @@ const userMonth = ref(new Date())
       </div>
     </div>
     <div class="table-wrappers">
-      <!-- Block Book Report -->
       <div class="table-block">
         <div class="month-picker-wrapper">
           <VueDatePicker
+            class="month-picker"
             v-model="bookMonth"
             month-picker
             :format="'MM/yyyy'"
+            :clearable="false"
           />
         </div>
         <BookReportTable :month="bookMonth" />
       </div>
 
-      <!-- Block User Report -->
       <div class="table-block">
         <div class="month-picker-wrapper">
           <VueDatePicker
+            class="month-picker"
             v-model="userMonth"
             month-picker
             :format="'MM/yyyy'"
+            :clearable="false"
           />
         </div>
         <UserReportTable :month="userMonth" />
-      </div>
+      </div> 
     </div>
   </div>
 </template>
@@ -69,16 +71,15 @@ const userMonth = ref(new Date())
 .table-wrappers {
   display: flex;
   flex-direction: row;
-  gap: 24px; /* Khoảng cách giữa 2 bảng */
 }
 
 .table-block {
   display: flex;
   flex-direction: column;
+  align-items: center;
   flex: 1;
   gap: 12px;
   border-radius: 8px;
-  padding: 16px;
 }
 
 .month-picker-wrapper {
@@ -86,4 +87,18 @@ const userMonth = ref(new Date())
   justify-content: center;
   margin-bottom: 8px;
 }
+
+.month-picker {
+}
+
+:deep(.month-picker .dp__input) {
+  background-color: var(--vt-c-main-bg-color);
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  width: 130px;
+  text-align: center;
+  color: var(--vt-c-second-bg-color);
+}
+
 </style>
