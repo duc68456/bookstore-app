@@ -15,6 +15,8 @@ import BranchesIcon from '@/assets/icons-vue/buildings.vue'
 import BranchesIconWhite from '@/assets/icons-vue-white/buildings.vue'
 import ManageIcon from '@/assets/icons-vue/manage.vue'
 import ManageIconWhite from '@/assets/icons-vue-white/manage.vue'
+import ReportIcon from '@/assets/icons-vue/report.vue'
+import ReportIconWhite from '@/assets/icons-vue-white/report.vue'
 import LogOutIcon from '@/assets/icons-vue/logout.vue'
 import LogOutIconWhite from '@/assets/icons-vue-white/logout.vue'
 
@@ -45,28 +47,6 @@ const route = useRoute()
     </div>
 
     <div class="menu">
-
-    <router-link to="/dashboard" class="no-underline">
-      <ButtonSideBar :class="{ 'active': isActive('/dashboard') }">
-        <template #btn-icon="{ hover }">
-          <component :is="isActive('/dashboard') || hover ? ElementIcon : ElementIconWhite" />
-        </template>
-        <template #btn-text>
-          <ButtonText><template #text>Dashboard</template></ButtonText>
-        </template>
-      </ButtonSideBar>
-    </router-link>
-
-    <router-link to="/catalog" class="no-underline">
-      <ButtonSideBar :class="{ 'active': isActive('/catalog') }">
-        <template #btn-icon="{ hover }">
-          <component :is="isActive('/catalog') || hover ? DiscoverIcon : DiscoverIconWhite" />
-        </template>
-        <template #btn-text>
-          <ButtonText><template #text>Catalog</template></ButtonText>
-        </template>
-      </ButtonSideBar>
-    </router-link>
 
     <router-link to="/books" class="no-underline">
       <ButtonSideBar :class="{ 'active': isActive('/books') }">
@@ -104,7 +84,7 @@ const route = useRoute()
     <router-link to="/report" class="no-underline">
       <ButtonSideBar :class="{ 'active': isActive('/report') }">
         <template #btn-icon="{ hover }">
-          <component :is="isActive('/report') || hover ? ManageIcon : ManageIconWhite" />
+          <component :is="isActive('/report') || hover ? ReportIcon : ReportIconWhite" />
         </template>
         <template #btn-text>
           <ButtonText><template #text>Report</template></ButtonText>

@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainFormAdmin from './components/admin/MainFormAdmin.vue'
-import Dashboard from './components/admin/Dashboard.vue'
-import Catalog from './components/admin/Catalog.vue'
 import Books from './components/admin/Books.vue'
 import Users from './components/admin/Users.vue'
 import Branches from './components/admin/Branches.vue'
@@ -17,8 +15,6 @@ const routes = [
     path: '/',
     component: MainFormAdmin,
     children: [
-      { path: 'dashboard', component: Dashboard },
-      { path: 'catalog', component: Catalog },
       { path: 'books', component: Books },
       { path: 'users', component: Users },
       { path: 'branches', component: Branches },
