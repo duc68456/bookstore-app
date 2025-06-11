@@ -58,7 +58,7 @@ const handleSignIn = async (data) => {
       console.log('Token saved, redirecting to dashboard') // Debug log
       
       // Chuyển hướng đến dashboard
-      router.push('/dashboard')
+      router.push('/books')
       
     } else {
       console.log('Authentication failed:', response.data) // Debug log

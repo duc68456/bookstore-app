@@ -1,9 +1,9 @@
 <script setup>
-import { ref } from 'vue'
-import { useUser } from '@/data/user'
-import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import EditIcon from '@/assets/icons-vue/edit.vue'
+import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
+import { useUser } from '@/data/user'
+import { ref } from 'vue'
 
 const userStore = useUser()
 const { users } = userStore

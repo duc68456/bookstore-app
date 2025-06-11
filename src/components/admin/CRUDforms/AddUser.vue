@@ -1,12 +1,11 @@
 <script setup>
 import { reactive } from 'vue'
-import CRUDMainForm from './CRUDMainForm.vue'
-import TitleText from '../texts/TitleText.vue'
-import FrameRU from '../frames/FrameRU.vue'
-import DatePickerFrame from '../frames/DatePickerFrame.vue'
-import FrameText from '../texts/FrameText.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
+import DatePickerFrame from '../frames/DatePickerFrame.vue'
+import FrameRU from '../frames/FrameRU.vue'
 import ButtonText from '../texts/ButtonText.vue'
+import TitleText from '../texts/TitleText.vue'
+import CRUDMainForm from './CRUDMainForm.vue'
 
 const emit = defineEmits(['close', 'add-user'])
 
@@ -19,6 +18,7 @@ const newUser = reactive({
 })
 
 const handleAdd = () => {
+
   emit('add-user', newUser)
 }
 </script>

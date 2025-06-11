@@ -1,124 +1,63 @@
 // stores/bookStore.js
+import { api } from '@/plugins/axios'
 import { defineStore } from 'pinia'
-import { ref, reactive, computed } from 'vue'
+import { reactive, ref } from 'vue'
 
+// Pinia store để quản lý sách: list hiển thị và fullBookDetails để lookup detail
 export const useBook = defineStore('book', () => {
-  const items = ref([
-  {
-    id: '1',
-    title: 'Hibernate Core -11th1',
-    type: 'Educational',
-    import_price: '100000',
-    author: 'Hibernate',
-    quantity: '100',
-    published_year: '2025',
-  },
-  {
-    id: '2',
-    title: 'Hibernate Core -11th2',
-    type: 'Educational',
-    import_price: '1000000',
-    author: 'Hibernate',
-    quantity: '100',
-    published_year: '2025',
-  },
-  {
-    id: '3',
-    title: 'Hibernate Core -11th3',
-    type: 'Educational',
-    import_price: '10000000',
-    author: 'Hibernate',
-    quantity: '100',
-    published_year: '2025',
-  },
-  ])
+  const items = ref([])
+  const fullBookDetails = reactive({})
+  const loading = ref(false)
+  const error = ref(null)
 
-  const fullBookDetails = reactive({
-  '1': {
-    id: '1',
-    title: 'Hibernate Core -11th1',
-    type: 'Educational',
-    import_price: '100000',
-    author: 'Hibernate',
-    quantity: '100',
-    published_year: '2025',
-    categories: ['Java'],
-    description: 'A comprehensive guide to Hibernate for 11th edition',
-    publisher: 'TechPress'
-  },
-  '2': {
-    id: '2',
-    title: 'Hibernate Core -11th2',
-    type: 'Educational',
-    import_price: '1000000',
-    author: 'Hibernate',
-    quantity: '100',
-    published_year: '2025',
-    categories: ['Java', 'ORM'],
-    description: 'A comprehensive guide to Hibernate for 11th edition',
-    publisher: 'TechPress'
-  },
-  '3': {
-    id: '3',
-    title: 'Hibernate Core -11th3',
-    type: 'Educational',
-    import_price: '10000000',
-    author: 'Hibernate',
-    quantity: '100',
-    published_year: '2025',
-    categories: ['Java', 'ORM', 'Backend'],
-    description: 'A comprehensive guide to Hibernate for 11th edition',
-    publisher: 'TechPress'
-  },
-  })
+  /**
+   * fetchBooks: Gọi API GET /bookstore/books và populate items, fullBookDetails
+   */
+  async function fetchBooks() {
+    loading.value = true
+    error.value = null
+    try {
+      const resp = await api.get('/books')
+      const list = Array.isArray(resp.data)
+        ? resp.data
+        : Array.isArray(resp.data.result)
+          ? resp.data.result
+          : []
 
-  const searchQuery = ref('')
-  const filteredBooks = computed(() => {
-    const q = searchQuery.value.toLowerCase()
-    return items.value.filter(book =>
-      book.id.toLowerCase().includes(q) ||
-      book.title.toLowerCase().includes(q)
-    )
-  })
+      // Tạo mảng mapped chứa đúng dữ liệu mà table cần
+      const mapped = list.map(b => ({
+        id: String(b.bookId),
+        title: b.name,
+        categories: b.categories || [],
+        quantity: b.quantity,
+        import_price: b.importPrice,
+        // giữ nguyên object gốc nếu cần detail
+        _raw: b
+      }))
 
-  const addBook = (newBook) => {
-    const newId = String(items.value.length + 1)
-    const newBookWithId = { ...newBook, id: newId }
-    newBookWithId.categories = Array.isArray(newBook.categories)
-      ? newBook.categories
-      : newBook.categories.split(', ').map(c => c.trim())
+      // Gán vào items
+      items.value = mapped
 
-    items.value.push(newBookWithId)
-    fullBookDetails[newId] = {
-      ...newBookWithId,
-      description: 'No description provided',
-      publisher: 'Unknown'
+      // Ghi chi tiết theo id từ mapped
+      mapped.forEach(book => {
+        fullBookDetails[book.id] = book
+      })
+    } catch (e) {
+      console.error('[BookStore] fetchBooks failed:',
+        e.response?.status,
+        e.response?.data || e.message
+      )
+      error.value = e
+    } finally {
+      loading.value = false
     }
-  }
-
-  const updateBook = (updatedBook) => {
-    const index = items.value.findIndex(b => b.id === updatedBook.id)
-    if (index !== -1) {
-      items.value[index] = { ...updatedBook }
-    }
-    if (fullBookDetails[updatedBook.id]) {
-      fullBookDetails[updatedBook.id] = { ...updatedBook }
-    }
-  }
-
-  const deleteBook = (book) => {
-items.value = items.value.filter(b => b.id !== book.id)
-delete fullBookDetails[book.id]
-
   }
 
   return {
     items,
     fullBookDetails,
-    searchQuery,
-    filteredBooks,
-    addBook,
-    updateBook,
-    deleteBook
+    loading,
+    error,
+    fetchBooks
   }
 })
