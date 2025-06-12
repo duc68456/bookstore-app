@@ -4,8 +4,8 @@ import { useRouter } from 'vue-router'
 import TitleText from './texts/TitleText.vue'
 
 // Import icons (bạn cần tạo hoặc import các icon này)
-import ImportIcon from '@/assets/icons-vue/import.vue'
 import ExportIcon from '@/assets/icons-vue/export.vue'
+import ImportIcon from '@/assets/icons-vue/import.vue'
 import PaymentIcon from '@/assets/icons-vue/payment.vue'
 
 const router = useRouter()
@@ -90,18 +90,18 @@ function goToPaymentReceipt() {
           <div class="icon-container">
             <ExportIcon />
           </div>
-          <h3>Export Books</h3>
+          <h3>Invoices</h3>
         </div>
         <div class="card-content">
           <p>Create sales receipts and manage customer orders and exports.</p>
           <div class="stats">
             <div class="stat-item">
               <span class="stat-value">{{ stats.export.count }}</span>
-              <span class="stat-label">Recent Exports</span>
+              <span class="stat-label">Recent Invoices</span>
             </div>
             <div class="stat-item">
               <span class="stat-value">{{ stats.export.pending }}</span>
-              <span class="stat-label">Pending Orders</span>
+              <span class="stat-label">Pending</span>
             </div>
           </div>
           <div class="last-update">
@@ -109,7 +109,7 @@ function goToPaymentReceipt() {
           </div>
         </div>
         <div class="card-footer">
-          <button class="action-button">Manage Exports</button>
+          <button class="action-button">Manage Invoices</button>
         </div>
       </div>
 

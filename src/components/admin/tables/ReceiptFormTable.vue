@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue'
 
-import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import EditIcon from '@/assets/icons-vue/edit.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
 
@@ -26,7 +25,7 @@ const confirmDelete = () => {
 }
 
 const headers = [
-  { title: 'ID', key: 'id' },
+  { title: 'IDs', key: 'id' },
   { title: 'Time', key: 'time' },
   { title: 'Total Amount', key: 'total' },
   { title: 'Action', key: 'action', sortable: false }

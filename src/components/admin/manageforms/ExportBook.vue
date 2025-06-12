@@ -1,18 +1,16 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useExportReceiptFormStore } from '@/data/exportReceipts'
-import { useUser } from '@/data/user' // Import useUser store
+import { useExportReceiptFormStore } from '@/data/exportReceipts';
+import { useUser } from '@/data/user'; // Import useUser store
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-import CRUDMainForm from '../CRUDforms/CRUDMainForm.vue'
-import ButtonManage from '../buttons/ButtonManage.vue'
-import TitleText from '../texts/TitleText.vue'
-import ReceiptFormTable from '../tables/ReceiptFormTable.vue'
-import ExportReceiptTable from '../tables/ExportReceiptTable.vue'
-import ButtonCRUD from '../buttons/ButtonCRUD.vue'
-import ButtonText from '../texts/ButtonText.vue'
-import EditExportForm from '../CRUDforms/EditExportForm.vue'
-import SelectFrame from '../frames/SelectFrame.vue'
+import CRUDMainForm from '../CRUDforms/CRUDMainForm.vue';
+import EditExportForm from '../CRUDforms/EditExportForm.vue';
+import ButtonCRUD from '../buttons/ButtonCRUD.vue';
+import SelectFrame from '../frames/SelectFrame.vue';
+import ExportReceiptTable from '../tables/ExportReceiptTable.vue';
+import ButtonText from '../texts/ButtonText.vue';
+import TitleText from '../texts/TitleText.vue';
 
 const router = useRouter()
 const store = useExportReceiptFormStore()
@@ -113,7 +111,7 @@ function goBack() {
   <div v-if="!editingReceipt" class="detail-wrapper">
     <CRUDMainForm @close="goBack">
       <template #title>
-        <TitleText><template #text>Export Book</template></TitleText>
+        <TitleText><template #text>Invoices</template></TitleText>
       </template>
       <template #content>
         <div class="scrollable-content">
@@ -128,7 +126,7 @@ function goBack() {
             />
             <ButtonCRUD @click="handleAddExport">
               <template #btn-text>
-                <ButtonText><template #text>ADD EXPORT RECEIPT</template></ButtonText>
+                <ButtonText><template #text>ADD INVOICES</template></ButtonText>
               </template>
             </ButtonCRUD>
           </div>

@@ -8,41 +8,43 @@
       class="mb-4"
     />
 
-    <!-- Data table -->
-    <v-data-table
-      :headers="headers"
-      :items="filteredUsers"
-      class="elevation-1"
-      item-value="id"
-      :items-per-page="-1"
-      hide-default-footer
-    >
-      <template #item.action="{ item }">
-        <div class="action-icons">
-          <v-tooltip text="View" location="top">
-            <template #activator="{ props }">
-              <div v-bind="props" @click="emit('view-user', item)" style="cursor: pointer;">
-                <ViewIcon />
-              </div>
-            </template>
-          </v-tooltip>
-          <v-tooltip text="Edit" location="top">
-            <template #activator="{ props }">
-              <div v-bind="props" @click="emit('edit-user', item)" style="cursor: pointer;">
-                <EditIcon />
-              </div>
-            </template>
-          </v-tooltip>
-          <v-tooltip text="Delete" location="top">
-            <template #activator="{ props }">
-              <div v-bind="props" @click="openDeleteDialog(item)" style="cursor: pointer;">
-                <DeleteIcon />
-              </div>
-            </template>
-          </v-tooltip>
-        </div>
-      </template>
-    </v-data-table>
+    <!-- Table wrapper với scroll -->
+    <div class="table-wrapper">
+      <v-data-table
+        :headers="headers"
+        :items="filteredUsers"
+        class="elevation-1"
+        item-value="id"
+        :items-per-page="-1"
+        hide-default-footer
+      >
+        <template #item.action="{ item }">
+          <div class="action-icons">
+            <v-tooltip text="View" location="top">
+              <template #activator="{ props }">
+                <div v-bind="props" @click="emit('view-user', item)" style="cursor: pointer;">
+                  <ViewIcon />
+                </div>
+              </template>
+            </v-tooltip>
+            <v-tooltip text="Edit" location="top">
+              <template #activator="{ props }">
+                <div v-bind="props" @click="emit('edit-user', item)" style="cursor: pointer;">
+                  <EditIcon />
+                </div>
+              </template>
+            </v-tooltip>
+            <v-tooltip text="Delete" location="top">
+              <template #activator="{ props }">
+                <div v-bind="props" @click="openDeleteDialog(item)" style="cursor: pointer;">
+                  <DeleteIcon />
+                </div>
+              </template>
+            </v-tooltip>
+          </div>
+        </template>
+      </v-data-table>
+    </div>
 
     <!-- Delete Confirmation Dialog -->
     <v-dialog v-model="dialog" width="400" class="delete-dialog" persistent scroll-strategy="block">
@@ -73,7 +75,7 @@ import { ref } from 'vue'
 const userStore = useUser()
 const { filteredUsers, searchQuery, fetchUsers, deleteUser } = userStore
 
-// Gọi fetchUsers ngay lập tức khi setup để luôn có dữ liệu
+// Gọi fetchUsers ngay lập tức khi setup
 fetchUsers()
 
 // Emits
@@ -109,6 +111,12 @@ const headers = [
 </script>
 
 <style scoped>
+/* Wrapper cho scroll */
+.table-wrapper {
+  max-height: 60vh;        /* chiều cao tối đa */
+  overflow-y: auto;        /* bật scroll dọc */
+}
+
 .v-data-table {
   background-color: var(--vt-c-main-bg-color);
   border-radius: 12px;
