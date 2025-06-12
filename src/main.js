@@ -16,4 +16,5 @@ app.use(router)
 app.use(vuetify)
 app.use(pinia)
 
+
 app.mount('#app')

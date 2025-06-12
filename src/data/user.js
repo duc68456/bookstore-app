@@ -1,69 +1,88 @@
-  import { defineStore } from 'pinia'
-  import { ref, computed } from 'vue'
+// src/data/user.js
+import { api } from '@/plugins/axios'
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
 
-  export const useUser = defineStore('user', () => {
-    const users = ref([
-      {
-        id: '1',
-        name: 'Alice Johnson',
-        email: 'alice@example.com',
-        username: 'alicej',
-        dob: '1990-01-01',
-        phone: '1234567890',
-        role: 'manager'
-      },
-      {
-        id: '2',
-        name: 'Bob Smith',
-        email: 'bob@example.com',
-        username: 'bobsmith',
-        dob: '1985-06-15',
-        phone: '0987654321',
-        role: 'admin'
-      },
-      {
-        id: '3',
-        name: 'Trịnh Hòa',
-        email: 'trinhhoa.gl2005@gmail.com',
-        username: 'trinhhoa',
-        dob: '2005-04-12',
-        phone: '0935900023',
-        role: 'client'
-      }
-    ])
+// Pinia store để quản lý người dùng
+export const useUser = defineStore('user', () => {
+  const users = ref([])
+  const searchQuery = ref('')
+  const loading = ref(false)
+  const error = ref(null)
 
-    const searchQuery = ref('')
-    const filteredUsers = computed(() => {
-      const q = searchQuery.value.toLowerCase()
-      return users.value.filter(user =>
-        user.name.toLowerCase().includes(q) ||
-        user.email.toLowerCase().includes(q) ||
-        user.username.toLowerCase().includes(q)
+  // Computed list đã lọc theo searchQuery
+  const filteredUsers = computed(() => {
+    const q = searchQuery.value.toLowerCase()
+    return users.value.filter(u => {
+      const fullName = `${u.firstName ?? ''} ${u.lastName ?? ''}`.trim().toLowerCase()
+      return (
+        fullName.includes(q) ||
+        (u.email ?? '').toLowerCase().includes(q) ||
+        u.username.toLowerCase().includes(q)
       )
     })
-
-    const addUser = (user) => {
-      const newId = String(users.value.length + 1)
-      users.value.push({ ...user, id: newId })
-    }
-
-    const updateUser = (updatedUser) => {
-      const index = users.value.findIndex(u => u.id === updatedUser.id)
-      if (index !== -1) {
-        users.value[index] = { ...updatedUser }
-      }
-    }
-
-    const deleteUser = (user) => {
-      users.value = users.value.filter(u => u.id !== user.id)
-    }
-
-    return {
-      users,
-      searchQuery,
-      filteredUsers,
-      addUser,
-      updateUser,
-      deleteUser
-    }
   })
+
+  /**
+   * fetchUsers: Gọi API GET /users với token hợp lệ
+   */
+  async function fetchUsers() {
+    loading.value = true
+    error.value = null
+    try {
+      const resp = await api.get('/users')
+      const list = Array.isArray(resp.data)
+        ? resp.data
+        : Array.isArray(resp.data.result)
+          ? resp.data.result
+          : []
+
+      users.value = list.map(u => ({
+        id: u.id,
+        firstName: u.firstName,
+        lastName: u.lastName,
+        name: `${u.firstName ?? ''} ${u.lastName ?? ''}`.trim(),
+        email: u.email ?? '',
+        username: u.username,
+        dob: u.dob,
+        phone: u.phone,
+        role: u.roles?.[0]?.name ?? '',
+        _raw: u
+      }))
+    } catch (e) {
+      console.error('[UserStore] fetchUsers failed:',
+        e.response?.status,
+        e.response?.data || e.message
+      )
+      error.value = e
+    } finally {
+      loading.value = false
+    }
+  }
+
+  function addUser(user) {
+    const newId = String(users.value.length + 1)
+    users.value.push({ ...user, id: newId })
+  }
+
+  function updateUser(updated) {
+    const idx = users.value.findIndex(u => u.id === updated.id)
+    if (idx !== -1) users.value[idx] = { ...updated }
+  }
+
+  function deleteUser(user) {
+    users.value = users.value.filter(u => u.id !== user.id)
+  }
+
+  return {
+    users,
+    searchQuery,
+    filteredUsers,
+    loading,
+    error,
+    fetchUsers,
+    addUser,
+    updateUser,
+    deleteUser
+  }
+})

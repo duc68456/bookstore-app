@@ -6,7 +6,7 @@ import EditIcon from '@/assets/icons-vue/edit.vue'
 import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
 
-const book = useBook()
+const book = useBook()  
 
 const props = defineProps({
   showActions: { type: Boolean, default: true },
