@@ -4,20 +4,19 @@ import CRUDMainForm from './CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
 import FrameRU from '../frames/FrameRU.vue'
 import FrameCategories from '../frames/FrameCategories.vue'
-import FrameText from '../texts/FrameText.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import ButtonText from '../texts/ButtonText.vue'
-import { categoriesList } from '@/data/categories.js' // import danh sách thể loại
 
 const props = defineProps(['book'])
 const emit = defineEmits(['close', 'update-book'])
 
-// Đảm bảo categories là mảng
+// Copy book prop into reactive object and ensure categories array
 const editedBook = reactive({
   ...props.book,
   categories: Array.isArray(props.book.categories) ? props.book.categories : []
 })
 
+// Handle save
 const handleEdit = () => {
   console.log('Edited book:', editedBook)
   emit('update-book', { ...editedBook })
@@ -27,32 +26,24 @@ const handleEdit = () => {
 
 <template>
   <div class="detail-wrapper">
-    <CRUDMainForm title="Edit Book" :data="editedBook" @close="$emit('close')">
+    <CRUDMainForm title="Edit Book" :data="editedBook" @close="emit('close')">
       <template #title>
-        <TitleText>
-          <template #text>Edit Book</template>
-        </TitleText>
+        <TitleText>Edit Book</TitleText>
       </template>
 
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="editedBook.title" placeholder="Title"/>
+          <FrameRU v-model="editedBook.title" placeholder="Title" />
           <FrameRU v-model="editedBook.author" placeholder="Author" />
           <FrameRU v-model="editedBook.import_price" placeholder="Import Price" />
           <FrameRU v-model="editedBook.quantity" placeholder="Quantity" />
-          <FrameRU v-model="editedBook.published_year" placeholder="Published Year" />  
+          <FrameRU v-model="editedBook.published_year" placeholder="Published Year" />
 
           <!-- Categories Section -->
-          <FrameCategories v-model="editedBook.categories">
-            <template #text-above>
-              <FrameText><template #text>Categories</template></FrameText>
-            </template>
-          </FrameCategories>
+          <FrameCategories v-model="editedBook.categories" placeholder="Categories" />
 
           <ButtonCRUD @click="handleEdit">
-            <template #btn-text>
-              <ButtonText><template #text>EDIT</template></ButtonText>
-            </template>
+            <ButtonText>EDIT</ButtonText>
           </ButtonCRUD>
         </div>
       </template>

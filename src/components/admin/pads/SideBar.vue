@@ -17,16 +17,22 @@ import ReportIcon from '@/assets/icons-vue/report.vue'
 
 import { useUser } from '@/data/user'
 import { useRoute, useRouter } from 'vue-router'
+import { reactive, onMounted } from 'vue'
+import { useCategoryStore } from '@/data/categories'
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUser()
+const categoryStore = useCategoryStore()
 
 // Navigation actions
 const goDashboard = () => router.push('/dashboard')
-const goCatalog   = () => router.push('/catalog')
-const goBooks     = () => router.push('/books')
-const goUsers     = async () => {
+const goCatalog = () => router.push('/catalog')
+const goBooks = () => {
+  categoryStore.fetchCategories();
+  router.push('/books')
+}
+const goUsers = async () => {
   try {
     await userStore.fetchUsers()
     router.push('/users')
@@ -34,10 +40,10 @@ const goUsers     = async () => {
     console.error('Cannot fetch users:', e)
   }
 }
-const goBranches  = () => router.push('/branches')
-const goManage    = () => router.push('/manage')
-const goReport    = () => router.push('/report')
-const logOut      = () => router.push('/')
+const goBranches = () => router.push('/branches')
+const goManage = () => router.push('/manage')
+const goReport = () => router.push('/report')
+const logOut = () => router.push('/')
 
 // Active route checker
 const isActive = (path) => route.path === path || route.path.startsWith(path + '/')
@@ -55,7 +61,7 @@ const isActive = (path) => route.path === path || route.path.startsWith(path + '
           <component :is="isActive('/books') || hover ? BookIcon : BookIconWhite" />
         </template>
         <template #btn-text>
-           <ButtonText><template #text>Books</template></ButtonText>
+          <ButtonText><template #text>Books</template></ButtonText>
         </template>
       </ButtonSideBar>
 
@@ -64,7 +70,7 @@ const isActive = (path) => route.path === path || route.path.startsWith(path + '
           <component :is="isActive('/users') || hover ? PeopleIcon : PeopleIconWhite" />
         </template>
         <template #btn-text>
-           <ButtonText><template #text>Users</template></ButtonText>
+          <ButtonText><template #text>Users</template></ButtonText>
         </template>
       </ButtonSideBar>
 
@@ -82,7 +88,7 @@ const isActive = (path) => route.path === path || route.path.startsWith(path + '
           <component :is="isActive('/report') || hover ? ReportIcon : ReportIconWhite" />
         </template>
         <template #btn-text>
-           <ButtonText><template #text>Report</template></ButtonText>
+          <ButtonText><template #text>Report</template></ButtonText>
         </template>
       </ButtonSideBar>
     </div>
@@ -113,7 +119,10 @@ const isActive = (path) => route.path === path || route.path.startsWith(path + '
   overflow: hidden;
 }
 
-.logo { margin-bottom: 16px; }
+.logo {
+  margin-bottom: 16px;
+}
+
 .menu {
   display: flex;
   flex-direction: column;

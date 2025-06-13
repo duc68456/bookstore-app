@@ -1,54 +1,22 @@
-<script setup>
-import { reactive } from 'vue'
-import CRUDMainForm from './CRUDMainForm.vue'
-import TitleText from '../texts/TitleText.vue'
-import FrameRU from '../frames/FrameRU.vue'
-import FrameText from '../texts/FrameText.vue'
-import ButtonCRUD from '../buttons/ButtonCRUD.vue'
-import ButtonText from '../texts/ButtonText.vue'
-import FrameCategories from '../frames/FrameCategories.vue'  
-
-const emit = defineEmits(['close', 'add-book'])
-
-const newBook = reactive({
-  name: '',
-  author: '',
-  import_price: '0',
-  quantity: '0',
-  published_year: '',
-  categories: [] 
-})
-
-const handleAdd = () => {
-  emit('add-book', { ...newBook })  
-  emit('close')
-}
-</script>
-
 <template>
   <div class="detail-wrapper">
-    <CRUDMainForm title="Add Book" :data="newBook" @close="$emit('close')">
+    <CRUDMainForm title="Add Book" @close="$emit('close')">
       <template #title>
-        <TitleText>
-          <template #text>
-            Add Book
-          </template>
-        </TitleText>
+        <TitleText>Add Book</TitleText>
       </template>
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="newBook.title" placeholder="Title"/>
+          <FrameRU v-model="newBook.name" placeholder="Title" />
           <FrameRU v-model="newBook.author" placeholder="Author" />
           <FrameRU v-model="newBook.published_year" placeholder="Published Year" />
 
+          <!-- đây là FrameCategories -->
           <FrameCategories v-model="newBook.categories" placeholder="Categories" />
 
           <ButtonCRUD @click="handleAdd">
-            <template #btn-text>
-              <ButtonText>
-                <template #text>ADD</template>
-              </ButtonText>
-            </template>
+            <ButtonText>
+              <template #text>ADD</template>
+            </ButtonText>
           </ButtonCRUD>
         </div>
       </template>
@@ -56,11 +24,49 @@ const handleAdd = () => {
   </div>
 </template>
 
+<script setup>
+import { reactive, onMounted } from 'vue'
+import { useBook } from '@/data/book'
+import { useCategoryStore } from '@/data/categories'
+import CRUDMainForm from './CRUDMainForm.vue'
+import FrameRU from '../frames/FrameRU.vue'
+import FrameCategories from '../frames/FrameCategories.vue'
+import ButtonCRUD from '../buttons/ButtonCRUD.vue'
+import ButtonText from '../texts/ButtonText.vue'
+import TitleText from '../texts/TitleText.vue'
+
+const emit = defineEmits(['close', 'add-book'])
+const bookStore = useBook()
+const categoryStore = useCategoryStore()
+
+// Prefetch categories ngay khi AddBook.vue được khởi tạo
+onMounted(() => {
+  categoryStore.fetchCategories()
+})
+
+const newBook = reactive({
+  name: '',
+  author: '',
+  published_year: '',
+  categories: []
+})
+
+async function handleAdd() {
+  await bookStore.createBook({
+    name: newBook.name,
+    authors: [newBook.author],
+    categories: newBook.categories,
+    publishedYear: +newBook.published_year
+  })
+  emit('add-book')
+  emit('close')
+}
+</script>
+
+
 <style scoped>
 .detail-wrapper {
-  color: var(--vt-c-main-bg-color);
   width: 100%;
-  height: 100%;
   padding: 12px;
   font-family: Montserrat;
 }

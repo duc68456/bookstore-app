@@ -1,103 +1,29 @@
-<script setup>
-import { computed, ref } from 'vue'
-import { categoriesList } from '@/data/categories.js'
-
-const props = defineProps({
-  modelValue: Array,
-  placeholder: String
-})
-const emit = defineEmits(['update:modelValue'])
-
-const selectedCategories = computed({
-  get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
-})
-
-const newCategory = ref('')
-const dialog = ref(false)
-
-const openAddCategoriesDialog = () => {
-  dialog.value = true
-}
-
-const closeDialog = () => {
-  dialog.value = false
-  newCategory.value = ''
-}
-
-const handleAddAndClose = () => {
-  const name = newCategory.value.trim()
-  if (name && !categoriesList.includes(name)) {
-    categoriesList.push(name)
-    selectedCategories.value.push(name)
-  }
-  closeDialog()
-}
-
-const isFocused = ref(false)
-
-const shouldShowFloatingLabel = computed(() => {
-  return isFocused.value || (props.modelValue && props.modelValue.length > 0)
-})
-
-
-const handleFocus = () => {
-  isFocused.value = true
-}
-
-const handleBlur = () => {
-  isFocused.value = false
-}
-</script>
-
 <template>
   <div class="wrapper">
-    <div class="frame" :class="{ 'focused': shouldShowFloatingLabel }">
-      <label 
-        class="floating-label" 
-        :class="{ 'active': shouldShowFloatingLabel }"
-      >
+    <div class="frame" :class="{ focused: isFocused || selected.length }">
+      <label class="floating-label" :class="{ active: isFocused || selected.length }">
         {{ placeholder }}
       </label>
-      <v-select
-        v-model="selectedCategories"
-        :items="categoriesList"
-        :placeholder="shouldShowFloatingLabel ? '' : placeholder"
-        multiple
-        chips
-        variant="plain"
-        hide-details
-        density="comfortable"
-        menu-icon="mdi-chevron-down"
-        class="category-select"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
-      <v-icon
-        @click="openAddCategoriesDialog"
-        color="grey"
-        small
-        class="add-icon"
-      >
-        mdi-plus-circle
-      </v-icon>
+
+      <v-select v-model="selected" v-model:menu="menu" :items="categories" item-title="categoryName"
+        item-value="categoryName" :placeholder="(isFocused || selected.length) ? '' : placeholder" multiple chips
+        :loading="loading" class="category-select" @focus="handleFocus" @blur="handleBlur" />
+
+      <v-icon @click="openDialog" class="add-icon">mdi-plus-circle</v-icon>
     </div>
 
+    <!-- Add Category Dialog -->
     <v-dialog v-model="dialog" width="400" persistent>
-      <v-card class="dialog-card">
+      <v-card>
         <v-card-title class="dialog-title">
           <v-icon class="back-icon" @click="closeDialog">mdi-arrow-left</v-icon>
-          <span>Add New Category</span>
+          Add New Category
         </v-card-title>
         <v-card-text class="dialog-body">
-          <v-text-field
-            v-model="newCategory"
-            label="Category Name"
-            dense
-            hide-details
-          />
+          <v-text-field v-model="newCategory" label="Category Name" dense hide-details />
         </v-card-text>
-        <v-card-actions class="justify-end pb-4 pr-4">
+        <v-card-actions class="dialog-actions">
+          <v-spacer />
           <v-btn class="add-btn" @click="handleAddAndClose">ADD</v-btn>
         </v-card-actions>
       </v-card>
@@ -105,27 +31,92 @@ const handleBlur = () => {
   </div>
 </template>
 
+<script setup>
+import { ref, computed, watch } from 'vue'
+import { useCategoryStore } from '@/data/categories'
+
+const props = defineProps({
+  modelValue: Array,
+  placeholder: String
+})
+const emit = defineEmits(['update:modelValue'])
+
+// Category store
+const store = useCategoryStore()
+const { categories, fetchCategories, loading } = store
+
+// State
+const menu = ref(false)
+const dialog = ref(false)
+const newCategory = ref('')
+const isFocused = ref(false)
+
+// Selected binding
+const selected = computed({
+  get: () => props.modelValue || [],
+  set: v => emit('update:modelValue', v)
+})
+
+// Fetch on component init
+fetchCategories()
+
+// If user opens dropdown before fetch completes, fetch again
+watch(menu, open => {
+  if (open && !categories.length && !loading) {
+    fetchCategories()
+  }
+})
+
+// Focus handlers
+function handleFocus() {
+  isFocused.value = true
+  if (!categories.length && !loading) fetchCategories()
+}
+function handleBlur() {
+  isFocused.value = false
+}
+
+// Dialog handlers
+function openDialog() {
+  dialog.value = true
+}
+function closeDialog() {
+  dialog.value = false
+  newCategory.value = ''
+}
+
+function handleAddAndClose() {
+  const name = newCategory.value.trim()
+  if (!name) return
+  // Add optimistically
+  const newObj = { id: Date.now().toString(), categoryName: name }
+  categories.push(newObj)
+  selected.value = [...selected.value, name]
+  closeDialog()
+}
+</script>
+
 <style scoped>
 .wrapper {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-}
-
-.frame.focused {
-  border-color: var(--vt-c-second-bg-color); 
 }
 
 .frame {
+  position: relative;
   display: flex;
+  align-items: center;
+  max-width: 441px;
   width: 441px;
   padding: 12px 16px;
-  align-items: center;
-  border-radius: 12px;
   border: 1px solid #3D3E3E;
+  border-radius: 12px;
   background-color: var(--vt-c-main-bg-color);
-  font-family: Montserrat, sans-serif;
-  position: relative;
+  transition: border-color 0.3s;
+}
+
+.frame.focused {
+  border-color: var(--vt-c-second-bg-color);
 }
 
 .floating-label {
@@ -133,13 +124,11 @@ const handleBlur = () => {
   left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 15px;
-  font-family: Montserrat, sans-serif;
-  color: #999;
-  pointer-events: none;
-  transition: all 0.3s ease;
-  background-color: var(--vt-c-main-bg-color);
+  background: var(--vt-c-main-bg-color);
   padding: 0 4px;
+  color: #999;
+  transition: all 0.3s;
+  pointer-events: none;
   z-index: 1;
 }
 
@@ -151,72 +140,61 @@ const handleBlur = () => {
   font-weight: 500;
 }
 
+.category-select {
+  flex: 1;
+}
+
 .add-icon {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
+  margin-left: 8px;
   cursor: pointer;
-}
-
-::v-deep(.category-select .v-field__input) {
-  color: black !important;
-  font-size: 15px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-top: 4px;
-  margin-bottom: 0px;
-}
-
-::v-deep(.v-chip__content) {
-  color: black !important;
-  font-weight: 500;
-  display: flex;
-  align-items: center;  /* Căn chỉnh item ngang */
-  justify-content: center;  /* Căn chỉnh item dọc */
-  height: 32px;  /* Điều chỉnh chiều cao cho cân đối */
-}
-
-::v-deep(.v-select__selections) {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Pop-up dialog */
-.dialog-card {
-  border-radius: 16px;
-  font-family: Montserrat;
+  color: var(--vt-c-second-bg-color);
 }
 
 .dialog-title {
   display: flex;
   align-items: center;
+  gap: 8px;
   padding: 16px;
   font-weight: 600;
-  font-size: 18px;
 }
 
 .back-icon {
-  margin-right: 8px;
   cursor: pointer;
-  color: var(--vt-c-second-bg-color);
+}
+
+.dialog-body {
+  padding: 0 16px 16px;
+}
+
+.dialog-actions {
+  padding: 8px 16px;
 }
 
 .add-btn {
-  color: white;
   background-color: var(--vt-c-second-bg-color);
+  color: white;
   font-weight: bold;
+}
+
+/* Vuetify deep selectors */
+::v-deep(.category-select .v-field__input) {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 15px;
+}
+
+::v-deep(.v-select__selections) {
+  display: flex;
+  gap: 8px;
+}
+
+::v-deep(.v-chip__content) {
+  height: 32px;
+  align-items: center;
+  justify-content: center;
 }
 
 ::v-deep(.v-field__label) {
   display: none !important;
-}
-
-/* ✅ Tạo space cho floating label */
-::v-deep(.category-select) {
-  padding-top: 8px;
 }
 </style>
