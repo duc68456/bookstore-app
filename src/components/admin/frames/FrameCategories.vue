@@ -5,9 +5,20 @@
         {{ placeholder }}
       </label>
 
-      <v-select v-model="selected" v-model:menu="menu" :items="categories" item-title="categoryName"
-        item-value="categoryName" :placeholder="(isFocused || selected.length) ? '' : placeholder" multiple chips
-        :loading="loading" class="category-select" @focus="handleFocus" @blur="handleBlur" />
+      <v-select
+        v-model="selected"
+        v-model:menu="menu"
+        :items="categories"
+        item-title="categoryName"
+        item-value="categoryName"
+        :placeholder="(isFocused || selected.length) ? '' : placeholder"
+        multiple
+        chips
+        :loading="loading"
+        class="category-select"
+        @focus="handleFocus"
+        @blur="handleBlur"
+      />
 
       <v-icon @click="openDialog" class="add-icon">mdi-plus-circle</v-icon>
     </div>
@@ -32,42 +43,30 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
 import { useCategoryStore } from '@/data/categories'
+import { computed, ref, watch } from 'vue'
 
-const props = defineProps({
-  modelValue: Array,
-  placeholder: String
-})
+const props = defineProps({ modelValue: Array, placeholder: String })
 const emit = defineEmits(['update:modelValue'])
 
-// Category store
 const store = useCategoryStore()
 const { categories, fetchCategories, loading } = store
 
-// State
 const menu = ref(false)
 const dialog = ref(false)
 const newCategory = ref('')
 const isFocused = ref(false)
 
-// Selected binding
 const selected = computed({
   get: () => props.modelValue || [],
   set: v => emit('update:modelValue', v)
 })
 
-// Fetch on component init
 fetchCategories()
-
-// If user opens dropdown before fetch completes, fetch again
 watch(menu, open => {
-  if (open && !categories.length && !loading) {
-    fetchCategories()
-  }
+  if (open && !categories.length && !loading) fetchCategories()
 })
 
-// Focus handlers
 function handleFocus() {
   isFocused.value = true
   if (!categories.length && !loading) fetchCategories()
@@ -76,7 +75,6 @@ function handleBlur() {
   isFocused.value = false
 }
 
-// Dialog handlers
 function openDialog() {
   dialog.value = true
 }
@@ -88,7 +86,6 @@ function closeDialog() {
 function handleAddAndClose() {
   const name = newCategory.value.trim()
   if (!name) return
-  // Add optimistically
   const newObj = { id: Date.now().toString(), categoryName: name }
   categories.push(newObj)
   selected.value = [...selected.value, name]
@@ -106,7 +103,6 @@ function handleAddAndClose() {
   position: relative;
   display: flex;
   align-items: center;
-  max-width: 441px;
   width: 441px;
   padding: 12px 16px;
   border: 1px solid #3D3E3E;
@@ -114,7 +110,6 @@ function handleAddAndClose() {
   background-color: var(--vt-c-main-bg-color);
   transition: border-color 0.3s;
 }
-
 .frame.focused {
   border-color: var(--vt-c-second-bg-color);
 }
@@ -126,12 +121,11 @@ function handleAddAndClose() {
   transform: translateY(-50%);
   background: var(--vt-c-main-bg-color);
   padding: 0 4px;
-  color: #999;
+  color: #000 !important; /* placeholder màu đen */
   transition: all 0.3s;
   pointer-events: none;
   z-index: 1;
 }
-
 .floating-label.active {
   top: 0;
   transform: translateY(-50%);
@@ -157,44 +151,23 @@ function handleAddAndClose() {
   padding: 16px;
   font-weight: 600;
 }
-
-.back-icon {
-  cursor: pointer;
-}
-
-.dialog-body {
-  padding: 0 16px 16px;
-}
-
-.dialog-actions {
-  padding: 8px 16px;
-}
-
+.back-icon { cursor: pointer; }
+.dialog-body { padding: 0 16px 16px; }
+.dialog-actions { padding: 8px 16px; }
 .add-btn {
   background-color: var(--vt-c-second-bg-color);
   color: white;
   font-weight: bold;
 }
 
-/* Vuetify deep selectors */
+/* Deep selectors để override màu chữ bên trong v-select */
 ::v-deep(.category-select .v-field__input) {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  font-size: 15px;
+  color: #000 !important;
 }
-
-::v-deep(.v-select__selections) {
-  display: flex;
-  gap: 8px;
+::v-deep(.category-select .v-chip__content) {
+  color: #000 !important;
 }
-
-::v-deep(.v-chip__content) {
-  height: 32px;
-  align-items: center;
-  justify-content: center;
-}
-
-::v-deep(.v-field__label) {
-  display: none !important;
+::v-deep(.category-select .v-list-item__title) {
+  color: #000 !important;
 }
 </style>

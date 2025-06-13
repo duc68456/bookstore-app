@@ -134,7 +134,7 @@ function handleAddAndClose() {
   transform: translateY(-50%);
   background: var(--vt-c-main-bg-color);
   padding: 0 4px;
-  color: #999;
+  color: #000;
   transition: all 0.3s;
   pointer-events: none;
   z-index: 1;
@@ -185,16 +185,18 @@ function handleAddAndClose() {
   padding-bottom: 6px;
   font-size: 15px;
 }
-::v-deep(.v-select__selections) {
-  display: flex;
-  gap: 8px;
+::v-deep(.author-select .v-field__input) {
+  color: #000 !important;
 }
-::v-deep(.v-chip__content) {
-  height: 32px;
-  align-items: center;
-  justify-content: center;
+
+::v-deep(.author-select .v-chip__content) {
+  color: #000 !important;
 }
 ::v-deep(.v-field__label) {
   display: none !important;
+}
+
+::v-deep(.author-select .v-list-item__title) {
+  color: #000 !important;
 }
 </style>
