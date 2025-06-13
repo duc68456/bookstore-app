@@ -7,7 +7,7 @@
       <template #content>
         <div class="frame-wrapper">
           <FrameRU v-model="newBook.name" placeholder="Title" />
-          <FrameRU v-model="newBook.author" placeholder="Author" />
+          <FrameAuthors v-model="newBook.author" placeholder="Authors" />
           <FrameRU v-model="newBook.published_year" placeholder="Published Year" />
 
           <!-- đây là FrameCategories -->
@@ -25,15 +25,16 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
 import { useBook } from '@/data/book'
 import { useCategoryStore } from '@/data/categories'
-import CRUDMainForm from './CRUDMainForm.vue'
-import FrameRU from '../frames/FrameRU.vue'
-import FrameCategories from '../frames/FrameCategories.vue'
+import { onMounted, reactive } from 'vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
+import FrameAuthors from '../frames/FrameAuthors.vue'
+import FrameCategories from '../frames/FrameCategories.vue'
+import FrameRU from '../frames/FrameRU.vue'
 import ButtonText from '../texts/ButtonText.vue'
 import TitleText from '../texts/TitleText.vue'
+import CRUDMainForm from './CRUDMainForm.vue'
 
 const emit = defineEmits(['close', 'add-book'])
 const bookStore = useBook()
@@ -46,7 +47,7 @@ onMounted(() => {
 
 const newBook = reactive({
   name: '',
-  author: '',
+  author: [],
   published_year: '',
   categories: []
 })
