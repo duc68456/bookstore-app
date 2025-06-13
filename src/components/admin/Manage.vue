@@ -8,7 +8,12 @@ import ExportIcon from '@/assets/icons-vue/export.vue'
 import ImportIcon from '@/assets/icons-vue/import.vue'
 import PaymentIcon from '@/assets/icons-vue/payment.vue'
 
+import RegulationText from './texts/RegulationText.vue'
+import InputFrame from './frames/InputFrame.vue'
+
 const router = useRouter()
+
+const regulationApply = ref(false) 
 
 // Dữ liệu thống kê mẫu (trong thực tế nên lấy từ store)
 const stats = ref({
@@ -40,6 +45,12 @@ function goToExportBook() {
 function goToPaymentReceipt() { 
   router.push('/manage/payment-receipt')
 }
+
+const minImportQuantity = ref(0)
+const minStockBeforeImport = ref(0)
+const maxDebt = ref(0)
+const minStockAfterExport = ref(0)
+
 </script>
 
 <template>
@@ -142,10 +153,72 @@ function goToPaymentReceipt() {
         </div>
       </div>
     </div>
+    <div class="group-text">
+      <div class="row-regulation">
+        <RegulationText>
+          <template #text>
+            Minimum import quantity
+          </template>
+        </RegulationText>
+        <InputFrame v-model="minImportQuantity"/>
+      </div>
+      <div class="row-regulation">
+        <RegulationText>
+          <template #text>
+            Minimum stock before import
+          </template>
+        </RegulationText>
+        <InputFrame v-model="minStockBeforeImport"/>
+      </div>
+      <div class="row-regulation">
+        <RegulationText>
+          <template #text>
+            Maximum Debt
+          </template>
+        </RegulationText>
+        <InputFrame v-model="maxDebt"/>
+      </div>
+      <div class="row-regulation">
+        <RegulationText>
+          <template #text>
+            Minimum stock after export
+          </template>
+        </RegulationText>
+        <InputFrame v-model="minStockAfterExport"/>
+      </div>
+      <div class="row-regulation">
+        <RegulationText>
+          <template #text>
+            The amount collected does not exceed the amount owed
+          </template>
+        </RegulationText>
+        <div>
+          <v-switch
+            style="transform: translateY(8px);"
+            v-model="regulationApply"
+            :true-value="true"
+            :false-value="false"
+            color="var(--vt-c-second-bg-color)"
+            inset
+  density="compact"
+  class="ma-0 pa-0"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
+
+.row-regulation {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 50px;
+  gap: 10px;
+}
+
 .content {
   width: 100%;
   height: 100%;
@@ -287,5 +360,8 @@ function goToPaymentReceipt() {
   background-position: 100% 50%; 
 }
 
+.group-text {
+  padding-top: 30px;
+}
 
 </style>
