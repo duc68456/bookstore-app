@@ -1,12 +1,12 @@
 <template>
   <div class="wrapper">
-    <div class="frame" :class="{ focused: isFocused || selected.length }">
-      <label class="floating-label" :class="{ active: isFocused || selected.length }">
+    <div class="frame" :class="{ 'focused': shouldShowFloatingLabel }">
+      <label class="floating-label" :class="{ 'active': shouldShowFloatingLabel }">
         {{ placeholder }}
       </label>
 
       <v-select v-model="selected" v-model:menu="menu" :items="categories" item-title="categoryName"
-        item-value="categoryName" :placeholder="(isFocused || selected.length) ? '' : placeholder" multiple chips
+        item-value="categoryName" :placeholder="shouldShowFloatingLabel ? '' : placeholder" multiple chips
         :loading="loading" class="category-select" @focus="handleFocus" @blur="handleBlur" />
 
       <v-icon @click="openDialog" class="add-icon">mdi-plus-circle</v-icon>
@@ -55,6 +55,10 @@ const isFocused = ref(false)
 const selected = computed({
   get: () => props.modelValue || [],
   set: v => emit('update:modelValue', v)
+})
+
+const shouldShowFloatingLabel = computed(() => {
+  return isFocused.value || (props.modelValue && props.modelValue.length > 0)
 })
 
 // Fetch on component init
