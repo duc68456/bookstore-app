@@ -1,13 +1,13 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { useBook } from '@/data/book' 
+import { useBook } from '@/data/book'
+import { computed, ref } from 'vue'
 
-import TitleText from './texts/TitleText.vue'
-import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
-import BookTable from '@/components/admin/tables/BookTable.vue'
+import AddBook from '@/components/admin/CRUDforms/AddBook.vue'
 import BookDetail from '@/components/admin/CRUDforms/BookDetail.vue'
 import EditBook from '@/components/admin/CRUDforms/EditBook.vue'
-import AddBook from '@/components/admin/CRUDforms/AddBook.vue'
+import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
+import BookTable from '@/components/admin/tables/BookTable.vue'
+import TitleText from './texts/TitleText.vue'
 
 import ButtonCRUD from './buttons/ButtonCRUD.vue'
 import ButtonText from './texts/ButtonText.vue'
@@ -46,9 +46,20 @@ const handleAddBook = () => {
 const closeAddBook = () => {
   addingBook.value = false
 }
-const addBook = (newBook) => {
-  book.addBook(newBook)
-  addingBook.value = false
+const addBook = async (newBook) => {
+  try {
+    await book.createBook({
+      name: newBook.name,
+      publishedYear: +newBook.published_year,
+      authors: newBook.author,
+      categories: newBook.categories
+    })
+  } catch (e) {
+    console.error('Tạo sách thất bại', e)
+    // TODO: show toast/snackbar báo lỗi
+  } finally {
+    addingBook.value = false
+  }
 }
 
 const deleteBook = (book) => {

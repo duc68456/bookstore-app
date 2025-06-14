@@ -42,27 +42,30 @@ const emit = defineEmits(['close', 'add-book'])
 const bookStore = useBook()
 const categoryStore = useCategoryStore()
 
-// Prefetch categories ngay khi AddBook.vue được khởi tạo
 onMounted(() => {
   categoryStore.fetchCategories()
 })
 
 const newBook = reactive({
   name: '',
-  author: [],
+  author: [],            // mảng tên tác giả
   published_year: '',
-  categories: []
+  categories: []         // mảng tên category
 })
 
 async function handleAdd() {
-  await bookStore.createBook({
-    name: newBook.name,
-    authors: [newBook.author],
-    categories: newBook.categories,
-    publishedYear: +newBook.published_year
-  })
-  emit('add-book')
-  emit('close')
+  try {
+    await bookStore.createBook({
+      name: newBook.name,
+      publishedYear: +newBook.published_year,
+      authors: newBook.author,
+      categories: newBook.categories
+    })
+    emit('add-book')    // sẽ được Books.vue nhận
+    emit('close')
+  } catch (e) {
+    console.error('Tạo sách thất bại', e)
+  }
 }
 </script>
 

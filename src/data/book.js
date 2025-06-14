@@ -3,16 +3,12 @@ import { api } from '@/plugins/axios'
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
 
-// Pinia store để quản lý sách: list hiển thị và fullBookDetails để lookup detail
 export const useBook = defineStore('book', () => {
   const items = ref([])
   const fullBookDetails = reactive({})
   const loading = ref(false)
   const error = ref(null)
 
-  /**
-   * fetchBooks: Gọi API GET /bookstore/books và populate items, fullBookDetails
-   */
   async function fetchBooks() {
     loading.value = true
     error.value = null
@@ -24,30 +20,41 @@ export const useBook = defineStore('book', () => {
           ? resp.data.result
           : []
 
-      // Tạo mảng mapped chứa đúng dữ liệu mà table cần
       const mapped = list.map(b => ({
         id: String(b.bookId),
         title: b.name,
         categories: b.categories || [],
         quantity: b.quantity,
         import_price: b.importPrice,
-        // giữ nguyên object gốc nếu cần detail
         _raw: b
       }))
 
-      // Gán vào items
       items.value = mapped
-
-      // Ghi chi tiết theo id từ mapped
       mapped.forEach(book => {
         fullBookDetails[book.id] = book
       })
     } catch (e) {
-      console.error('[BookStore] fetchBooks failed:',
-        e.response?.status,
-        e.response?.data || e.message
-      )
+      console.error('[BookStore] fetchBooks failed:', e.response?.status, e.response?.data || e.message)
       error.value = e
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function createBook(payload) {
+    loading.value = true
+    error.value = null
+    try {
+      // Gọi POST /books
+      const { data } = await api.post('/books', payload)
+      const created = data.result ?? data
+      // Sau khi tạo xong, bạn có thể re-fetch hoặc append trực tiếp
+      await fetchBooks()
+      return created
+    } catch (e) {
+      console.error('[BookStore] createBook failed:', e)
+      error.value = e
+      throw e
     } finally {
       loading.value = false
     }
@@ -58,6 +65,7 @@ export const useBook = defineStore('book', () => {
     fullBookDetails,
     loading,
     error,
-    fetchBooks
+    fetchBooks,
+    createBook    // ← expose hàm này
   }
 })
