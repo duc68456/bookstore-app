@@ -1,6 +1,7 @@
 <script setup>
 import { reactive } from 'vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
+import FrameAuthors from '../frames/FrameAuthors.vue'
 import FrameCategories from '../frames/FrameCategories.vue'
 import FrameRU from '../frames/FrameRU.vue'
 import ButtonText from '../texts/ButtonText.vue'
@@ -37,9 +38,8 @@ function handleEdit() {
       <template #content>
         <div class="frame-wrapper">
           <FrameRU v-model="editedBook.name" placeholder="Title" />
-          <FrameRU v-model="editedBook.authors" placeholder="Authors" />
+          <FrameAuthors v-model="editedBook.authors" placeholder="Authors" />
           <FrameRU v-model="editedBook.importPrice" placeholder="Import Price" />
-          <FrameRU v-model="editedBook.quantity" placeholder="Quantity" />
           <FrameRU v-model="editedBook.publishedYear" placeholder="Published Year" />
           <FrameCategories v-model="editedBook.categories" placeholder="Categories" />
           <ButtonCRUD @click="handleEdit">

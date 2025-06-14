@@ -67,7 +67,7 @@ const headers = computed(() => rawHeaders.filter(h => {
               <div v-bind="props" @click="$emit('edit-book', item.id)"><EditIcon/></div>
             </template></v-tooltip>
             <v-tooltip text="Delete"><template #activator="{ props }">
-              <div v-bind="props" @click="openDelete(item)"><DeleteIcon/></div>
+              <div v-bind="props" @click="openDelete(item)" style="cursor: pointer"><DeleteIcon/></div>
             </template></v-tooltip>
           </div>
         </template>

@@ -94,6 +94,22 @@ export const useBook = defineStore('book', () => {
     }
   }
 
+  async function deleteBook(bookId) {
+  loading.value = true
+  error.value   = null
+  try {
+    await api.delete(`/books/${bookId}`)
+    // sau khi xóa xong thì tải lại danh sách
+    await fetchBooks()
+  } catch (e) {
+    console.error('[BookStore] deleteBook failed:', e)
+    error.value = e
+    throw e
+  } finally {
+    loading.value = false
+  }
+}
+
   return {
     items,
     fullBookDetails,
