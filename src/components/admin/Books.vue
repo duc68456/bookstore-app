@@ -1,94 +1,127 @@
 <script setup>
 import { useBook } from '@/data/book'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import AddBook from '@/components/admin/CRUDforms/AddBook.vue'
 import BookDetail from '@/components/admin/CRUDforms/BookDetail.vue'
 import EditBook from '@/components/admin/CRUDforms/EditBook.vue'
 import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
 import BookTable from '@/components/admin/tables/BookTable.vue'
-import TitleText from './texts/TitleText.vue'
-
 import ButtonCRUD from './buttons/ButtonCRUD.vue'
 import ButtonText from './texts/ButtonText.vue'
+import TitleText from './texts/TitleText.vue'
 
-const book = useBook()
+const bookStore = useBook()
 
-const searchQuery = ref('')
+// --- State chung ---
+const searchQuery  = ref('')
 const filteredBooks = computed(() => {
   const q = searchQuery.value.toLowerCase()
-  return book.items.filter(book =>
-    book.id.toLowerCase().includes(q) ||
-    book.title.toLowerCase().includes(q)
+  return bookStore.items.filter(item =>
+    item.id.toLowerCase().includes(q) ||
+    item.title.toLowerCase().includes(q)
   )
 })
 
-const selectedBook = ref(null)
-const handleViewBook = (book) => {
-  selectedBook.value = book
-}
-const closeDetail = () => {
-  selectedBook.value = null
-}
+const addingBook   = ref(false)
+const selectedBook = ref(null)   // sẽ là object book mapping
+const editingBook  = ref(null)   // sẽ là object book mapping
 
-const editingBook = ref(null)
-const handleEditBook = (book) => {
-  editingBook.value = book
-}
-const updateBook = (updatedBook) => {
-  book.updateBook(updatedBook)
-}
+// --- Khởi động: fetch toàn bộ sách ---
+onMounted(() => {
+  bookStore.fetchBooks()
+})
 
-const addingBook = ref(false)
-const handleAddBook = () => {
+// --- Handlers ---
+function handleAddBook() {
   addingBook.value = true
 }
-const closeAddBook = () => {
+function closeAddBook() {
   addingBook.value = false
 }
-const addBook = async (newBook) => {
+// newBook là object đúng shape của API BookCreationRequest
+async function addBook(newBook) {
   try {
-    await book.createBook({
-      name: newBook.name,
-      publishedYear: +newBook.published_year,
-      authors: newBook.author,
-      categories: newBook.categories
-    })
+    await bookStore.createBook(newBook)
+    await bookStore.fetchBooks()
   } catch (e) {
     console.error('Tạo sách thất bại', e)
-    // TODO: show toast/snackbar báo lỗi
   } finally {
     addingBook.value = false
   }
 }
 
-const deleteBook = (book) => {
-  book.deleteBook(book)
+async function handleViewBook(bookId) {
+  try {
+
+    const detail = await bookStore.fetchBookById(bookId)
+    selectedBook.value = detail
+  } catch (e) {
+    console.error('Không tải được chi tiết sách', e)
+  }
+}
+function closeDetail() {
+  selectedBook.value = null
 }
 
-const closeEdit = () => {
+async function handleEditBook(bookId) {
+  try {
+    editingBook.value = await bookStore.fetchBookById(bookId)
+  } catch (e) {
+    console.error('Không tải được sách để edit', e)
+  }
+}
+async function updateBook(updated) {
+  try {
+    await bookStore.updateBook(updated)
+    await bookStore.fetchBooks()
+  } catch (e) {
+    console.error('Cập nhật sách thất bại', e)
+  } finally {
+    editingBook.value = null
+  }
+}
+
+async function deleteBook(bookId) {
+  try {
+    await bookStore.deleteBook(bookId)
+    await bookStore.fetchBooks()
+  } catch (e) {
+    console.error('Xoá sách thất bại', e)
+  }
+}
+
+function closeEdit() {
   editingBook.value = null
 }
 </script>
 
 <template>
-  <div style="overflow-y: auto;">
-    <div v-if="addingBook" class="book-detail-full">
-      <AddBook @close="closeAddBook" @add-book="addBook" />
-    </div>
+  <div style="height:100%; overflow-y:auto;">
+    <!-- ADD FORM -->
+    <AddBook
+      v-if="addingBook"
+      @close="closeAddBook"
+      @add-book="addBook"
+      class="book-detail-full"
+    />
 
+    <!-- MAIN TABLE -->
     <div v-else-if="!selectedBook && !editingBook" class="content">
       <div class="top-bar">
-        <div class="left">
-          <TitleText><template #text>Book Management</template></TitleText>
-        </div>
-        <div class="right">
-          <SearchFrame v-model="searchQuery" />
-        </div>
+        <TitleText class="left">
+          <template #text>Book Management</template>
+        </TitleText>
+        <SearchFrame v-model="searchQuery" class="right" />
       </div>
 
-      <BookTable :items="filteredBooks" :fullBookDetails="book.fullBookDetails" @view-book="handleViewBook"
-        @edit-book="handleEditBook" @delete-book="deleteBook" />
+      <BookTable
+        :items="filteredBooks"
+        :fullBookDetails="bookStore.fullBookDetails"
+        @view-book="handleViewBook"
+        @edit-book="handleEditBook"
+        @delete-book="deleteBook"
+      />
 
       <ButtonCRUD @click="handleAddBook">
         <template #btn-text>
@@ -97,38 +130,40 @@ const closeEdit = () => {
       </ButtonCRUD>
     </div>
 
-    <div v-else-if="selectedBook && !editingBook" class="book-detail-full">
-      <BookDetail :book="selectedBook" @close="closeDetail" />
-    </div>
+    <!-- DETAIL VIEW -->
+    <BookDetail
+      v-else-if="selectedBook && !editingBook"
+      :book="selectedBook"
+      @close="closeDetail"
+      class="book-detail-full"
+    />
 
-    <div v-else-if="editingBook" class="book-detail-full">
-      <EditBook :book="editingBook" @close="closeEdit" @update-book="updateBook" />
-    </div>
+    <!-- EDIT FORM -->
+    <EditBook
+      v-else-if="editingBook"
+      :book="editingBook"
+      @close="closeEdit"
+      @update-book="updateBook"
+      class="book-detail-full"
+    />
   </div>
 </template>
-
 
 <style scoped>
 .content {
   width: 100%;
-  height: 100%;
   padding: 20px;
 }
-
 .top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
 }
-
-.left {
-  display: flex;
-  align-items: center;
-}
-
-.right {
-  flex-shrink: 0;
-  align-items: center;
+.left { flex: 1 }
+.right { flex-shrink: 0 }
+.book-detail-full {
+  width: 100%;
+  height: 100%;
 }
 </style>

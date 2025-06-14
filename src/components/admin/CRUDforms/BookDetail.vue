@@ -1,8 +1,8 @@
 <script setup>
-import CRUDMainForm from './CRUDMainForm.vue'
-import TitleText from '../texts/TitleText.vue'
 import FrameRU from '../frames/FrameRU.vue'
 import FrameText from '../texts/FrameText.vue'
+import TitleText from '../texts/TitleText.vue'
+import CRUDMainForm from './CRUDMainForm.vue'
 defineProps(['book'])
 </script>
 
@@ -18,11 +18,11 @@ defineProps(['book'])
       </template>
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU readonly v-model="book.title" placeholder="Title"/>
-          <FrameRU readonly v-model="book.author" placeholder="Author" />
-          <FrameRU readonly v-model="book.import_price" placeholder="Import Price" />
+          <FrameRU readonly v-model="book.name" placeholder="Title"/>
+          <FrameRU readonly v-model="book.authors" placeholder="Author" />
+          <FrameRU readonly v-model="book.importPrice" placeholder="Import Price" />
           <FrameRU readonly v-model="book.quantity" placeholder="Quantity" />
-          <FrameRU readonly v-model="book.published_year" placeholder="Published Year" />
+          <FrameRU readonly v-model="book.publishedYear" placeholder="Published Year" />
           <FrameRU readonly :modelValue="book.categories" placeholder="Categories">
             <template #text-above>
               <FrameText>

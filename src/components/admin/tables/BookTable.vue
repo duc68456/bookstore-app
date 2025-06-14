@@ -64,7 +64,7 @@ const headers = computed(() => rawHeaders.filter(h => {
           <div class="action-icons">
             <v-tooltip text="View" location="top">
               <template #activator="{ props }">
-                <div v-bind="props" @click="$emit('view-book', book.fullBookDetails[item.id])" style="cursor: pointer;">
+                <div v-bind="props" @click="$emit('view-book', item.id)" style="cursor: pointer;">
                   <ViewIcon />
                 </div>
               </template>

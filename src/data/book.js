@@ -59,6 +59,26 @@ export const useBook = defineStore('book', () => {
       loading.value = false
     }
   }
+  async function fetchBookById(id) {
+  loading.value = true
+  try {
+    const { data } = await api.get(`/books/${id}`)
+    const b = data.result
+
+    // map authors và categories về chuỗi
+    b.authors = Array.isArray(b.authors)
+      ? b.authors.map(a => a.authorName)
+      : []
+    b.categories = Array.isArray(b.categories)
+      ? b.categories.map(c => c.categoryName)
+      : []
+
+    fullBookDetails[String(b.bookId)] = b
+    return b
+  } finally {
+    loading.value = false
+  }
+}
 
   return {
     items,
@@ -66,6 +86,7 @@ export const useBook = defineStore('book', () => {
     loading,
     error,
     fetchBooks,
-    createBook    // ← expose hàm này
+    createBook,
+    fetchBookById   // ← expose hàm này
   }
 })
