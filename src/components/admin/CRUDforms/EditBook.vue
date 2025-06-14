@@ -1,11 +1,11 @@
 <script setup>
 import { reactive } from 'vue'
-import CRUDMainForm from './CRUDMainForm.vue'
-import TitleText from '../texts/TitleText.vue'
-import FrameRU from '../frames/FrameRU.vue'
-import FrameCategories from '../frames/FrameCategories.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
+import FrameCategories from '../frames/FrameCategories.vue'
+import FrameRU from '../frames/FrameRU.vue'
 import ButtonText from '../texts/ButtonText.vue'
+import TitleText from '../texts/TitleText.vue'
+import CRUDMainForm from './CRUDMainForm.vue'
 
 const props = defineProps(['book'])
 const emit = defineEmits(['close', 'update-book'])
@@ -28,22 +28,23 @@ const handleEdit = () => {
   <div class="detail-wrapper">
     <CRUDMainForm title="Edit Book" :data="editedBook" @close="emit('close')">
       <template #title>
-        <TitleText>Edit Book</TitleText>
+        <TitleText> <template #text>Edit Book</template></TitleText>
       </template>
 
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="editedBook.title" placeholder="Title" />
-          <FrameRU v-model="editedBook.author" placeholder="Author" />
-          <FrameRU v-model="editedBook.import_price" placeholder="Import Price" />
-          <FrameRU v-model="editedBook.quantity" placeholder="Quantity" />
-          <FrameRU v-model="editedBook.published_year" placeholder="Published Year" />
+          <FrameRU v-model="editedBook.name" placeholder="Title" />
+          <FrameRU v-model="editedBook.authors" placeholder="Author" />
+          <FrameRU v-model="editedBook.importPrice" placeholder="Import Price" />
+          <FrameRU v-model="editedBook.publishedYear" placeholder="Published Year" />
 
           <!-- Categories Section -->
           <FrameCategories v-model="editedBook.categories" placeholder="Categories" />
 
           <ButtonCRUD @click="handleEdit">
-            <ButtonText>EDIT</ButtonText>
+            <template #btn-text>
+              <ButtonText><template #text>EDIT</template></ButtonText>
+            </template>
           </ButtonCRUD>
         </div>
       </template>

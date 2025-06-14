@@ -14,16 +14,17 @@ export const useBook = defineStore('book', () => {
     error.value = null
     try {
       const resp = await api.get('/books')
-      const list = Array.isArray(resp.data)
-        ? resp.data
-        : Array.isArray(resp.data.result)
-          ? resp.data.result
-          : []
+      const list = Array.isArray(resp.data.result)
+        ? resp.data.result
+        : []
 
       const mapped = list.map(b => ({
         id: String(b.bookId),
         title: b.name,
-        categories: b.categories || [],
+        // map categories về array of string
+        categories: Array.isArray(b.categories)
+          ? b.categories.map(c => c.categoryName)
+          : [],
         quantity: b.quantity,
         import_price: b.importPrice,
         _raw: b
@@ -34,7 +35,7 @@ export const useBook = defineStore('book', () => {
         fullBookDetails[book.id] = book
       })
     } catch (e) {
-      console.error('[BookStore] fetchBooks failed:', e.response?.status, e.response?.data || e.message)
+      console.error('[BookStore] fetchBooks failed:', e)
       error.value = e
     } finally {
       loading.value = false
@@ -45,12 +46,9 @@ export const useBook = defineStore('book', () => {
     loading.value = true
     error.value = null
     try {
-      // Gọi POST /books
       const { data } = await api.post('/books', payload)
-      const created = data.result ?? data
-      // Sau khi tạo xong, bạn có thể re-fetch hoặc append trực tiếp
       await fetchBooks()
-      return created
+      return data.result ?? data
     } catch (e) {
       console.error('[BookStore] createBook failed:', e)
       error.value = e
@@ -59,26 +57,27 @@ export const useBook = defineStore('book', () => {
       loading.value = false
     }
   }
+
   async function fetchBookById(id) {
-  loading.value = true
-  try {
-    const { data } = await api.get(`/books/${id}`)
-    const b = data.result
+    loading.value = true
+    try {
+      const { data } = await api.get(`/books/${id}`)
+      const b = data.result
 
-    // map authors và categories về chuỗi
-    b.authors = Array.isArray(b.authors)
-      ? b.authors.map(a => a.authorName)
-      : []
-    b.categories = Array.isArray(b.categories)
-      ? b.categories.map(c => c.categoryName)
-      : []
+      // map về chuỗi
+      b.authors = Array.isArray(b.authors)
+        ? b.authors.map(a => a.authorName)
+        : []
+      b.categories = Array.isArray(b.categories)
+        ? b.categories.map(c => c.categoryName)
+        : []
 
-    fullBookDetails[String(b.bookId)] = b
-    return b
-  } finally {
-    loading.value = false
+      fullBookDetails[String(b.bookId)] = b
+      return b
+    } finally {
+      loading.value = false
+    }
   }
-}
 
   return {
     items,
@@ -87,6 +86,6 @@ export const useBook = defineStore('book', () => {
     error,
     fetchBooks,
     createBook,
-    fetchBookById   // ← expose hàm này
+    fetchBookById
   }
 })
