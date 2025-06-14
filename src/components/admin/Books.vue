@@ -2,19 +2,25 @@
 import { useBook } from '@/data/book'
 import { computed, onMounted, ref } from 'vue'
 
+import ButtonCRUD from '@/components/admin/buttons/ButtonCRUD.vue'
 import AddBook from '@/components/admin/CRUDforms/AddBook.vue'
 import BookDetail from '@/components/admin/CRUDforms/BookDetail.vue'
 import EditBook from '@/components/admin/CRUDforms/EditBook.vue'
 import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
 import BookTable from '@/components/admin/tables/BookTable.vue'
-import ButtonCRUD from './buttons/ButtonCRUD.vue'
-import ButtonText from './texts/ButtonText.vue'
-import TitleText from './texts/TitleText.vue'
+import ButtonText from '@/components/admin/texts/ButtonText.vue'
+import TitleText from '@/components/admin/texts/TitleText.vue'
 
-const bookStore = useBook()
-
-// --- State chung ---
+const bookStore    = useBook()
 const searchQuery  = ref('')
+const addingBook   = ref(false)
+const selectedBook = ref(null)
+const editingBook  = ref(null)
+
+onMounted(() => {
+  bookStore.fetchBooks()
+})
+
 const filteredBooks = computed(() => {
   const q = searchQuery.value.toLowerCase()
   return bookStore.items.filter(item =>
@@ -23,23 +29,12 @@ const filteredBooks = computed(() => {
   )
 })
 
-const addingBook   = ref(false)
-const selectedBook = ref(null)   // sẽ là object book mapping
-const editingBook  = ref(null)   // sẽ là object book mapping
-
-// --- Khởi động: fetch toàn bộ sách ---
-onMounted(() => {
-  bookStore.fetchBooks()
-})
-
-// --- Handlers ---
 function handleAddBook() {
   addingBook.value = true
 }
 function closeAddBook() {
   addingBook.value = false
 }
-// newBook là object đúng shape của API BookCreationRequest
 async function addBook(newBook) {
   try {
     await bookStore.createBook(newBook)
@@ -53,9 +48,7 @@ async function addBook(newBook) {
 
 async function handleViewBook(bookId) {
   try {
-
-    const detail = await bookStore.fetchBookById(bookId)
-    selectedBook.value = detail
+    selectedBook.value = await bookStore.fetchBookById(bookId)
   } catch (e) {
     console.error('Không tải được chi tiết sách', e)
   }
@@ -71,9 +64,16 @@ async function handleEditBook(bookId) {
     console.error('Không tải được sách để edit', e)
   }
 }
-async function updateBook(updated) {
+async function updateBook(bookData) {
   try {
-    await bookStore.updateBook(updated)
+    await bookStore.editBook( bookData.bookId, {
+      name:          bookData.name,
+      publishedYear: bookData.publishedYear,
+      importPrice:   bookData.importPrice,
+      quantity:      bookData.quantity,
+      authors:       bookData.authors,
+      categories:    bookData.categories
+    })
     await bookStore.fetchBooks()
   } catch (e) {
     console.error('Cập nhật sách thất bại', e)
@@ -90,7 +90,6 @@ async function deleteBook(bookId) {
     console.error('Xoá sách thất bại', e)
   }
 }
-
 function closeEdit() {
   editingBook.value = null
 }
@@ -98,7 +97,7 @@ function closeEdit() {
 
 <template>
   <div style="height:100%; overflow-y:auto;">
-    <!-- ADD FORM -->
+    <!-- ADD -->
     <AddBook
       v-if="addingBook"
       @close="closeAddBook"
@@ -106,7 +105,7 @@ function closeEdit() {
       class="book-detail-full"
     />
 
-    <!-- MAIN TABLE -->
+    <!-- TABLE -->
     <div v-else-if="!selectedBook && !editingBook" class="content">
       <div class="top-bar">
         <TitleText class="left">
@@ -130,7 +129,7 @@ function closeEdit() {
       </ButtonCRUD>
     </div>
 
-    <!-- DETAIL VIEW -->
+    <!-- DETAIL -->
     <BookDetail
       v-else-if="selectedBook && !editingBook"
       :book="selectedBook"
@@ -138,7 +137,7 @@ function closeEdit() {
       class="book-detail-full"
     />
 
-    <!-- EDIT FORM -->
+    <!-- EDIT -->
     <EditBook
       v-else-if="editingBook"
       :book="editingBook"

@@ -7,19 +7,23 @@ import ButtonText from '../texts/ButtonText.vue'
 import TitleText from '../texts/TitleText.vue'
 import CRUDMainForm from './CRUDMainForm.vue'
 
-const props = defineProps(['book'])
-const emit = defineEmits(['close', 'update-book'])
+const props = defineProps({
+  book: Object
+})
+const emit = defineEmits(['close','update-book'])
 
-// Copy book prop into reactive object and ensure categories array
 const editedBook = reactive({
-  ...props.book,
-  categories: Array.isArray(props.book.categories) ? props.book.categories : []
+  bookId: props.book.bookId,
+  name: props.book.name,
+  publishedYear: props.book.publishedYear,
+  importPrice: props.book.importPrice,
+  quantity: props.book.quantity,
+  authors: Array.isArray(props.book.authors) ? [...props.book.authors] : [],
+  categories: Array.isArray(props.book.categories) ? [...props.book.categories] : []
 })
 
-// Handle save
-const handleEdit = () => {
-  console.log('Edited book:', editedBook)
-  emit('update-book', { ...editedBook })
+function handleEdit() {
+  emit('update-book', editedBook)
   emit('close')
 }
 </script>
@@ -28,19 +32,16 @@ const handleEdit = () => {
   <div class="detail-wrapper">
     <CRUDMainForm title="Edit Book" :data="editedBook" @close="emit('close')">
       <template #title>
-        <TitleText> <template #text>Edit Book</template></TitleText>
+        <TitleText>Edit Book</TitleText>
       </template>
-
       <template #content>
         <div class="frame-wrapper">
           <FrameRU v-model="editedBook.name" placeholder="Title" />
-          <FrameRU v-model="editedBook.authors" placeholder="Author" />
+          <FrameRU v-model="editedBook.authors" placeholder="Authors" />
           <FrameRU v-model="editedBook.importPrice" placeholder="Import Price" />
+          <FrameRU v-model="editedBook.quantity" placeholder="Quantity" />
           <FrameRU v-model="editedBook.publishedYear" placeholder="Published Year" />
-
-          <!-- Categories Section -->
           <FrameCategories v-model="editedBook.categories" placeholder="Categories" />
-
           <ButtonCRUD @click="handleEdit">
             <template #btn-text>
               <ButtonText><template #text>EDIT</template></ButtonText>

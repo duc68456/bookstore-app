@@ -1,132 +1,86 @@
 <script setup>
-import { useBook } from '@/data/book'
-import { computed, onMounted, ref } from 'vue'
-
 import EditIcon from '@/assets/icons-vue/edit.vue'
 import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
+import { useBook } from '@/data/book'
+import { computed, ref } from 'vue'
 
 const book = useBook()
-
 const props = defineProps({
+  items: Array,
+  fullBookDetails: Object,
   showActions: { type: Boolean, default: true },
   showQuantity: { type: Boolean, default: true },
   showPrice:    { type: Boolean, default: true },
 })
-const emit = defineEmits(['view-book','edit-book','delete-book','select-book'])
-
-onMounted(() => {
-  book.fetchBooks()
-  console.log(book.items)
-})
-
-const onRowClick = (bookRow) => {
-  const selected = book.fullBookDetails[bookRow.id]
-  emit('select-book', selected)
-}
+const emit = defineEmits(['view-book','edit-book','delete-book'])
 
 const dialog = ref(false)
-const bookToDelete = ref(null)
-const openDeleteDialog = (item) => {
-  bookToDelete.value = item
-  dialog.value = true
+const toDelete = ref(null)
+function openDelete(item) {
+  toDelete.value = item; dialog.value = true
 }
-const confirmDelete = () => {
-  emit('delete-book', bookToDelete.value)
+function confirmDelete() {
+  emit('delete-book', toDelete.value.id)
   dialog.value = false
-  bookToDelete.value = null
 }
 
 const rawHeaders = [
-  { title: 'ID',           key: 'id' },
-  { title: 'Title',        key: 'title' },
-  { title: 'Categories',   key: 'categories' },
-  { title: 'Quantity',     key: 'quantity' },
-  { title: 'Import Price', key: 'import_price' },
-  { title: 'Action',       key: 'action', sortable: false },
+  { title: 'ID',         key: 'id' },
+  { title: 'Title',      key: 'title' },
+  { title: 'Authors',    key: 'authors' },
+  { title: 'Categories', key: 'categories' },
+  { title: 'Quantity',   key: 'quantity' },
+  { title: 'Price',      key: 'import_price' },
+  { title: 'Action',     key: 'action', sortable: false },
 ]
 const headers = computed(() => rawHeaders.filter(h => {
-  if (h.key === 'action' && !props.showActions) return false
-  if (h.key === 'quantity' && !props.showQuantity) return false
-  if (h.key === 'import_price' && !props.showPrice) return false
+  if (h.key==='action' && !props.showActions) return false
+  if (h.key==='quantity' && !props.showQuantity) return false
+  if (h.key==='import_price' && !props.showPrice) return false
   return true
 }))
 </script>
 
 <template>
   <v-container fluid>
-    <!-- chỉ 1 thanh cuộn -->
-    <div style="max-height: 70vh; overflow-y: auto;">
+    <div style="max-height:70vh; overflow-y:auto;">
       <v-data-table
         :headers="headers"
-        :items="book.items"
-        class="elevation-1"
+        :items="items"
         item-value="id"
         :items-per-page="-1"
         hide-default-footer
       >
-        <!-- Action icons -->
-        <template #item.action="{ item }">
-          <div class="action-icons">
-            <v-tooltip text="View" location="top">
-              <template #activator="{ props }">
-                <div
-                  v-bind="props"
-                  style="cursor: pointer;"
-                  @click="$emit('view-book', item.id)"
-                >
-                  <ViewIcon />
-                </div>
-              </template>
-            </v-tooltip>
-
-            <v-tooltip text="Edit" location="top">
-              <template #activator="{ props }">
-                <div
-                  v-bind="props"
-                  style="cursor: pointer;"
-                  @click="$emit('edit-book', item.id)"
-                >
-                  <EditIcon />
-                </div>
-              </template>
-            </v-tooltip>
-
-            <v-tooltip text="Delete" location="top">
-              <template #activator="{ props }">
-                <div
-                  v-bind="props"
-                  style="cursor: pointer;"
-                  @click="openDeleteDialog(item)"
-                >
-                  <DeleteIcon />
-                </div>
-              </template>
-            </v-tooltip>
-          </div>
+        <template #item.authors="{ item }">
+          <span>{{ item.authors.join(', ') }}</span>
         </template>
-
-        <!-- Categories hiển thị trực tiếp -->
         <template #item.categories="{ item }">
           <span>{{ item.categories.join(', ') }}</span>
+        </template>
+        <template #item.action="{ item }">
+          <div class="action-icons">
+            <v-tooltip text="View"><template #activator="{ props }">
+              <div v-bind="props" @click="$emit('view-book', item.id)"><ViewIcon/></div>
+            </template></v-tooltip>
+            <v-tooltip text="Edit"><template #activator="{ props }">
+              <div v-bind="props" @click="$emit('edit-book', item.id)"><EditIcon/></div>
+            </template></v-tooltip>
+            <v-tooltip text="Delete"><template #activator="{ props }">
+              <div v-bind="props" @click="openDelete(item)"><DeleteIcon/></div>
+            </template></v-tooltip>
+          </div>
         </template>
       </v-data-table>
     </div>
 
-    <!-- Delete confirm dialog -->
-    <v-dialog v-model="dialog" width="400" class="delete-dialog" persistent>
+    <v-dialog v-model="dialog" width="400" persistent>
       <v-card>
-        <v-card-title class="text-h6">Confirm Deletion</v-card-title>
-        <v-card-text>
-          Are you sure you want to delete the book
-          <strong>{{ bookToDelete?.title }}</strong>?
-        </v-card-text>
+        <v-card-title>Confirm Deletion</v-card-title>
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="grey" variant="text" @click="dialog = false">Cancel</v-btn>
-          <v-btn color="var(--vt-c-second-bg-color)" variant="tonal" @click="confirmDelete">
-            Delete
-          </v-btn>
+          <v-btn text @click="dialog=false">Cancel</v-btn>
+          <v-btn @click="confirmDelete">Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
