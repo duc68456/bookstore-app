@@ -9,8 +9,6 @@
         v-model="selected"
         v-model:menu="menu"
         :items="authors"
-        item-title="name"
-        item-value="name"
         :placeholder="(isFocused || selected.length) ? '' : placeholder"
         multiple
         chips
@@ -23,24 +21,24 @@
       <v-icon @click="openDialog" class="add-icon">mdi-plus-circle</v-icon>
     </div>
 
-    <!-- Add Author Dialog -->
+    <!-- Dialog thêm tác giả mới -->
     <v-dialog v-model="dialog" width="400" persistent>
       <v-card>
         <v-card-title class="dialog-title">
           <v-icon class="back-icon" @click="closeDialog">mdi-arrow-left</v-icon>
-          Add New Author
+          Thêm tác giả mới
         </v-card-title>
         <v-card-text class="dialog-body">
           <v-text-field
             v-model="newAuthor"
-            label="Author Name"
+            label="Tên tác giả"
             dense
             hide-details
           />
         </v-card-text>
         <v-card-actions class="dialog-actions">
           <v-spacer />
-          <v-btn class="add-btn" @click="handleAddAndClose">ADD</v-btn>
+          <v-btn class="add-btn" @click="handleAddAndClose">THÊM</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -51,29 +49,37 @@
 import { useAuthorStore } from '@/data/authors'
 import { computed, onMounted, ref, watch } from 'vue'
 
-const props = defineProps({ modelValue: Array, placeholder: String })
-const emit  = defineEmits(['update:modelValue'])
+const props = defineProps({
+  modelValue: Array,
+  placeholder: String
+})
+const emit = defineEmits(['update:modelValue'])
 
-// Author store returns objects { id, name, _raw }
+// Lấy instance store
 const store = useAuthorStore()
-const { authors, fetchAuthors, loading } = store
+console.log('[FrameAuthors] store keys:', Object.keys(store))
+console.log('[FrameAuthors] createAuthor fn:', store.createAuthor)
 
-// initial fetch
+
+// Destructure ra để chắc chắn tồn tại
+const { authors, loading, fetchAuthors, createAuthor } = store
+
+// Fetch ban đầu
 onMounted(fetchAuthors)
 
-// component state
+// Local state
 const menu      = ref(false)
 const dialog    = ref(false)
 const newAuthor = ref('')
 const isFocused = ref(false)
 
-// v-model binding
+// Two-way v-model cho selected
 const selected = computed({
   get:  () => props.modelValue || [],
   set: v   => emit('update:modelValue', v)
 })
 
-// re-fetch if opened without data
+// Nếu mở dropdown mà chưa có data thì fetch
 watch(menu, open => {
   if (open && !authors.length && !loading) fetchAuthors()
 })
@@ -85,7 +91,6 @@ function handleFocus() {
 function handleBlur() {
   isFocused.value = false
 }
-
 function openDialog() {
   dialog.value = true
 }
@@ -94,17 +99,22 @@ function closeDialog() {
   newAuthor.value = ''
 }
 
-function handleAddAndClose() {
+// Gọi thẳng createAuthor đã destructure
+async function handleAddAndClose() {
   const name = newAuthor.value.trim()
   if (!name) return
-  // optimistic add
-  const newObj = { id: Date.now().toString(), name, _raw: {} }
-  authors.push(newObj)
-  selected.value = [...selected.value, name]
-  closeDialog()
+
+  try {
+    const created = await createAuthor(name)
+    // append vào selected
+    selected.value = [...selected.value, created.authorName]
+    closeDialog()
+  } catch (e) {
+    console.error('Tạo tác giả thất bại', e)
+    // TODO: show snackbar/alert
+  }
 }
 </script>
-
 <style scoped>
 .wrapper {
   display: flex;
@@ -179,7 +189,7 @@ function handleAddAndClose() {
   font-weight: bold;
 }
 
-/* Deep selectors for Vuetify internals */
+/* Deep selectors cho Vuetify */
 ::v-deep(.author-select .v-field__input) {
   padding-top: 6px;
   padding-bottom: 6px;
@@ -188,14 +198,12 @@ function handleAddAndClose() {
 ::v-deep(.author-select .v-field__input) {
   color: #000 !important;
 }
-
 ::v-deep(.author-select .v-chip__content) {
   color: #000 !important;
 }
 ::v-deep(.v-field__label) {
   display: none !important;
 }
-
 ::v-deep(.author-select .v-list-item__title) {
   color: #000 !important;
 }

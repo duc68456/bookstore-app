@@ -1,3 +1,4 @@
+// src/data/categories.js
 import { api } from '@/plugins/axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -7,17 +8,13 @@ export const useCategoryStore = defineStore('category', () => {
   const loading    = ref(false)
   const error      = ref(null)
 
-  /** Fetch từ GET /categories, format { code, result: [ { id, categoryName } ] } */
+  /** GET /categories */
   async function fetchCategories() {
     loading.value = true
     error.value   = null
     try {
       const { data } = await api.get('/categories')
-      const list = Array.isArray(data)
-        ? data
-        : Array.isArray(data.result)
-          ? data.result
-          : []
+      const list = Array.isArray(data.result) ? data.result : []
       categories.value = list
     } catch (e) {
       console.error('[CategoryStore] fetch failed', e)
@@ -27,5 +24,31 @@ export const useCategoryStore = defineStore('category', () => {
     }
   }
 
-  return { categories, loading, error, fetchCategories }
+  /** POST /categories */
+  async function createCategory(categoryName) {
+    loading.value = true
+    error.value   = null
+    try {
+      const { data } = await api.post('/categories', { categoryName })
+      // data.result là CategoryResponse { id, categoryName, … }
+      const created = data.result
+      // cập nhật danh sách để dropdown lên ngay
+      categories.value.push(created)
+      return created
+    } catch (e) {
+      console.error('[CategoryStore] create failed', e)
+      error.value = e
+      throw e
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return {
+    categories,
+    loading,
+    error,
+    fetchCategories,
+    createCategory    // expose hàm tạo mới
+  }
 })

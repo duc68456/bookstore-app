@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
-    <div class="frame" :class="{ 'focused': shouldShowFloatingLabel }">
-      <label class="floating-label" :class="{ 'active': shouldShowFloatingLabel }">
+    <div class="frame" :class="{ focused: shouldShowFloatingLabel }">
+      <label class="floating-label" :class="{ active: shouldShowFloatingLabel }">
         {{ placeholder }}
       </label>
 
@@ -23,19 +23,24 @@
       <v-icon @click="openDialog" class="add-icon">mdi-plus-circle</v-icon>
     </div>
 
-    <!-- Add Category Dialog -->
+    <!-- Dialog thêm Category mới -->
     <v-dialog v-model="dialog" width="400" persistent>
       <v-card>
         <v-card-title class="dialog-title">
           <v-icon class="back-icon" @click="closeDialog">mdi-arrow-left</v-icon>
-          Add New Category
+          Thêm Category mới
         </v-card-title>
         <v-card-text class="dialog-body">
-          <v-text-field v-model="newCategory" label="Category Name" dense hide-details />
+          <v-text-field
+            v-model="newCategory"
+            label="Tên Category"
+            dense
+            hide-details
+          />
         </v-card-text>
         <v-card-actions class="dialog-actions">
           <v-spacer />
-          <v-btn class="add-btn" @click="handleAddAndClose">ADD</v-btn>
+          <v-btn class="add-btn" @click="handleAddAndClose">THÊM</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -46,30 +51,42 @@
 import { useCategoryStore } from '@/data/categories'
 import { computed, ref, watch } from 'vue'
 
-const props = defineProps({ modelValue: Array, placeholder: String })
+const props = defineProps({
+  modelValue: Array,
+  placeholder: String
+})
 const emit = defineEmits(['update:modelValue'])
 
-const store = useCategoryStore()
-const { categories, fetchCategories, loading } = store
+const store      = useCategoryStore()
+const categories = computed(() => store.categories)
+const loading    = computed(() => store.loading)
 
-const menu = ref(false)
-const dialog = ref(false)
+const menu        = ref(false)
+const dialog      = ref(false)
 const newCategory = ref('')
-const isFocused = ref(false)
+const isFocused   = ref(false)
 
+// bind v-model cho selected
 const selected = computed({
   get: () => props.modelValue || [],
   set: v => emit('update:modelValue', v)
 })
 
-fetchCategories()
+// fetch lần đầu
+store.fetchCategories()
+
+// khi dropdown mở mà chưa load thì fetch
 watch(menu, open => {
-  if (open && !categories.length && !loading) fetchCategories()
+  if (open && !store.categories.length && !store.loading) {
+    store.fetchCategories()
+  }
 })
 
 function handleFocus() {
   isFocused.value = true
-  if (!categories.length && !loading) fetchCategories()
+  if (!store.categories.length && !store.loading) {
+    store.fetchCategories()
+  }
 }
 function handleBlur() {
   isFocused.value = false
@@ -83,14 +100,26 @@ function closeDialog() {
   newCategory.value = ''
 }
 
-function handleAddAndClose() {
+async function handleAddAndClose() {
   const name = newCategory.value.trim()
   if (!name) return
-  const newObj = { id: Date.now().toString(), categoryName: name }
-  categories.push(newObj)
-  selected.value = [...selected.value, name]
-  closeDialog()
+
+  try {
+    // gọi API tạo category mới
+    const created = await store.createCategory(name)
+    // thêm vào selection
+    selected.value = [...selected.value, created.categoryName]
+    closeDialog()
+  } catch (e) {
+    console.error('Tạo category thất bại', e)
+    // TODO: hiển thị snackbar hoặc toast báo lỗi
+  }
 }
+
+// helper tính floating label
+const shouldShowFloatingLabel = computed(() =>
+  isFocused.value || selected.value.length
+)
 </script>
 
 <style scoped>
@@ -121,7 +150,7 @@ function handleAddAndClose() {
   transform: translateY(-50%);
   background: var(--vt-c-main-bg-color);
   padding: 0 4px;
-  color: #000 !important; /* placeholder màu đen */
+  color: #000;
   transition: all 0.3s;
   pointer-events: none;
   z-index: 1;
@@ -151,16 +180,22 @@ function handleAddAndClose() {
   padding: 16px;
   font-weight: 600;
 }
-.back-icon { cursor: pointer; }
-.dialog-body { padding: 0 16px 16px; }
-.dialog-actions { padding: 8px 16px; }
+.back-icon {
+  cursor: pointer;
+}
+.dialog-body {
+  padding: 0 16px 16px;
+}
+.dialog-actions {
+  padding: 8px 16px;
+}
 .add-btn {
   background-color: var(--vt-c-second-bg-color);
   color: white;
   font-weight: bold;
 }
 
-/* Deep selectors để override màu chữ bên trong v-select */
+/* override màu chữ trong v-select */
 ::v-deep(.category-select .v-field__input) {
   color: #000 !important;
 }
