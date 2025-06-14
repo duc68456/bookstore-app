@@ -14,10 +14,13 @@
           <FrameCategories v-model="newBook.categories" placeholder="Categories" />
 
           <ButtonCRUD @click="handleAdd">
-            <ButtonText>
-              <template #text>ADD</template>
-            </ButtonText>
+            <template #btn-text>
+              <ButtonText>
+                <template #text>ADD</template>
+              </ButtonText>
+            </template>
           </ButtonCRUD>
+
         </div>
       </template>
     </CRUDMainForm>

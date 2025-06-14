@@ -15,21 +15,23 @@ import ManageIcon from '@/assets/icons-vue/manage.vue'
 import PeopleIcon from '@/assets/icons-vue/people.vue'
 import ReportIcon from '@/assets/icons-vue/report.vue'
 
+import { useAuthorStore } from '@/data/authors'
+import { useCategoryStore } from '@/data/categories'
 import { useUser } from '@/data/user'
 import { useRoute, useRouter } from 'vue-router'
-import { reactive, onMounted } from 'vue'
-import { useCategoryStore } from '@/data/categories'
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUser()
 const categoryStore = useCategoryStore()
+const authorStore = useAuthorStore()
 
 // Navigation actions
 const goDashboard = () => router.push('/dashboard')
 const goCatalog = () => router.push('/catalog')
 const goBooks = () => {
   categoryStore.fetchCategories();
+  authorStore.fetchAuthors();
   router.push('/books')
 }
 const goUsers = async () => {
