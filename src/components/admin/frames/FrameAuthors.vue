@@ -9,7 +9,6 @@
         v-model="selected"
         v-model:menu="menu"
         :items="authors"
-        :placeholder="(isFocused || selected.length) ? '' : placeholder"
         multiple
         chips
         :loading="loading"
@@ -144,7 +143,7 @@ async function handleAddAndClose() {
   transform: translateY(-50%);
   background: var(--vt-c-main-bg-color);
   padding: 0 4px;
-  color: #000;
+  color: #999;
   transition: all 0.3s;
   pointer-events: none;
   z-index: 1;
