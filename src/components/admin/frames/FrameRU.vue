@@ -78,7 +78,7 @@ const handleBlur = () => {
   font-family: Montserrat, sans-serif;
   color: #333;
   background: transparent;
-  padding-top: 8px; /* Tạo space cho floating label */
+  padding-top: 8px; 
 }
 
 .floating-label {

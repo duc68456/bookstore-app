@@ -2,7 +2,7 @@
   <div class="detail-wrapper">
     <CRUDMainForm title="Add Book" @close="$emit('close')">
       <template #title>
-        <TitleText>Add Book</TitleText>
+        <TitleText><template #text>Add Book</template></TitleText>
       </template>
       <template #content>
         <div class="frame-wrapper">
@@ -10,7 +10,6 @@
           <FrameAuthors v-model="newBook.author" placeholder="Authors" />
           <FrameRU v-model="newBook.published_year" placeholder="Published Year" />
 
-          <!-- đây là FrameCategories -->
           <FrameCategories v-model="newBook.categories" placeholder="Categories" />
 
           <ButtonCRUD @click="handleAdd">

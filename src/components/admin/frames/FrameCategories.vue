@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
-    <div class="frame" :class="{ focused: isFocused || selected.length }">
-      <label class="floating-label" :class="{ active: isFocused || selected.length }">
+    <div class="frame" :class="{ 'focused': shouldShowFloatingLabel }">
+      <label class="floating-label" :class="{ 'active': shouldShowFloatingLabel }">
         {{ placeholder }}
       </label>
 
