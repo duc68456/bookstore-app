@@ -70,6 +70,31 @@ export const useUser = defineStore('user', () => {
     if (idx !== -1) users.value[idx] = { ...updated }
   }
 
+ async function updateUserAPI(userId, payload) {
+    loading.value = true;
+    try {
+      const { data } = await api.put(`/users/${userId}`, payload);
+      // update local list nếu muốn:
+      const updated = data.result;
+      const idx = users.value.findIndex(u => u.id === updated.id);
+      if (idx !== -1) {
+        users.value[idx] = {
+          ...users.value[idx],
+          firstName: updated.firstName,
+          lastName: updated.lastName,
+          dob: updated.dob,
+          phone: updated.phone,
+          role: updated.roles?.[0]?.name ?? ''
+        };
+      }
+    } catch (e) {
+      console.error('[UserStore] updateUser failed', e);
+      throw e;
+    } finally {
+      loading.value = false;
+    }
+  }
+
   function deleteUser(user) {
     users.value = users.value.filter(u => u.id !== user.id)
   }
@@ -82,7 +107,7 @@ export const useUser = defineStore('user', () => {
     error,
     fetchUsers,
     addUser,
-    updateUser,
+    updateUserAPI,
     deleteUser
   }
 })

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useUser } from '@/data/user'
 
 import TitleText from './texts/TitleText.vue'
@@ -19,14 +19,48 @@ const selectedUser = ref(null)
 const editingUser = ref(null)
 const addingUser = ref(false)
 
+onMounted(() => {
+  userStore.fetchUsers()
+})
+
 const handleViewUser = (user) => selectedUser.value = user
-const handleEditUser = (user) => editingUser.value = user
+function handleEditUser(user) {
+  editingUser.value = { ...user }
+}
+
+async function handleUpdateUser(editedUser) {
+  try {
+    // chuyển Date → "YYYY-MM-DD"
+    const dobValue = editedUser.dob instanceof Date
+      ? editedUser.dob.toISOString().split('T')[0]
+      : editedUser.dob;  // nếu đã là string
+
+    const payload = {
+      password: editedUser.password,
+      firstName: editedUser.firstName,
+      lastName: editedUser.lastName,
+      dob: dobValue,        // → "2025-06-13"
+      phone: editedUser.phone,
+      roles: [editedUser.role] // backend mong List<String>
+    };
+
+    await userStore.updateUserAPI(editedUser.id, payload);
+    await userStore.fetchUsers();
+    editingUser.value = null;
+  } catch (err) {
+    console.error('Cập nhật user thất bại', err.response?.data || err.message);
+  }
+}
+
+function handleDeleteUser(user) {
+  userStore.deleteUser(user.id)
+}
+
 const handleAddUser = () => addingUser.value = true
 const closeDetail = () => selectedUser.value = null
 const closeAddUser = () => addingUser.value = false
 const closeEdit = () => cancelEditDialog.value = true
 
-const handleDeleteUser = (user) => userStore.deleteUser(user)
 const updateUser = (updatedUser) => userStore.updateUser(updatedUser)
 const addUser = (newUser) => {
   userStore.addUser(newUser)
@@ -58,12 +92,8 @@ const cancelCancelEdit = () => cancelEditDialog.value = false
         </div>
       </div>
 
-      <UserTable
-        :search="searchQuery"
-        @view-user="handleViewUser"
-        @edit-user="handleEditUser"
-        @delete-user="handleDeleteUser"
-      />
+      <UserTable :search="searchQuery" @view-user="handleViewUser" @edit-user="handleEditUser"
+        @delete-user="handleDeleteUser" />
 
       <ButtonCRUD @click="handleAddUser">
         <template #btn-text>
@@ -77,7 +107,7 @@ const cancelCancelEdit = () => cancelEditDialog.value = false
     </div>
 
     <div v-else-if="editingUser" class="user-detail-full">
-      <EditUser :user="editingUser" @close="closeEdit" @update-user="updateUser" />
+      <EditUser :user="editingUser" @close="closeEdit" @update-user="handleUpdateUser" />
     </div>
   </div>
 
@@ -86,7 +116,7 @@ const cancelCancelEdit = () => cancelEditDialog.value = false
     <v-card>
       <v-card-title class="text-h6">Confirm Cancel</v-card-title>
       <v-card-text>
-        Are you sure you want to cancel editing the user
+        Are you sure
         <strong>{{ editingUser?.name }}</strong>?
       </v-card-text>
       <v-card-actions>

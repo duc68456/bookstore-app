@@ -1,23 +1,12 @@
 <template>
   <v-container fluid>
     <!-- Search field -->
-    <v-text-field
-      v-model="searchQuery"
-      label="Tìm kiếm người dùng"
-      clearable
-      class="mb-4"
-    />
+    <v-text-field v-model="searchQuery" label="Tìm kiếm người dùng" clearable class="mb-4" />
 
     <!-- Table wrapper với scroll -->
     <div class="table-wrapper">
-      <v-data-table
-        :headers="headers"
-        :items="filteredUsers"
-        class="elevation-1"
-        item-value="id"
-        :items-per-page="-1"
-        hide-default-footer
-      >
+      <v-data-table :headers="headers" :items="filteredUsers" class="elevation-1" item-value="id" :items-per-page="-1"
+        hide-default-footer>
         <template #item.action="{ item }">
           <div class="action-icons">
             <v-tooltip text="View" location="top">
@@ -103,9 +92,11 @@ function confirmDelete() {
 const headers = [
   { title: 'ID', key: 'id' },
   { title: 'Name', key: 'name' },
-  { title: 'Email', key: 'email' },
   { title: 'Username', key: 'username' },
-  { title: 'Role', key: 'role' },
+  { title: 'Email', key: 'email' },
+  { title: 'Date of Birth', key: 'dob' },
+
+  { title: 'Roles', key: 'roles' },
   { title: 'Action', key: 'action', sortable: false }
 ]
 </script>
@@ -113,8 +104,10 @@ const headers = [
 <style scoped>
 /* Wrapper cho scroll */
 .table-wrapper {
-  max-height: 60vh;        /* chiều cao tối đa */
-  overflow-y: auto;        /* bật scroll dọc */
+  max-height: 60vh;
+  /* chiều cao tối đa */
+  overflow-y: auto;
+  /* bật scroll dọc */
 }
 
 .v-data-table {
