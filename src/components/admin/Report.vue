@@ -22,29 +22,17 @@ const userMonth = ref(new Date())
     <div class="table-wrappers">
       <div class="table-block">
         <div class="month-picker-wrapper">
-          <VueDatePicker
-            class="month-picker"
-            v-model="bookMonth"
-            month-picker
-            :format="'MM/yyyy'"
-            :clearable="false"
-          />
+          <VueDatePicker class="month-picker" v-model="bookMonth" month-picker :format="'MM/yyyy'" :clearable="false" />
         </div>
         <BookReportTable :month="bookMonth" />
       </div>
 
       <div class="table-block">
         <div class="month-picker-wrapper">
-          <VueDatePicker
-            class="month-picker"
-            v-model="userMonth"
-            month-picker
-            :format="'MM/yyyy'"
-            :clearable="false"
-          />
+          <VueDatePicker class="month-picker" v-model="userMonth" month-picker :format="'MM/yyyy'" :clearable="false" />
         </div>
         <UserReportTable :month="userMonth" />
-      </div> 
+      </div>
     </div>
   </div>
 </template>
@@ -88,8 +76,7 @@ const userMonth = ref(new Date())
   margin-bottom: 8px;
 }
 
-.month-picker {
-}
+.month-picker {}
 
 :deep(.month-picker .dp__input) {
   background-color: var(--vt-c-main-bg-color);
@@ -100,5 +87,4 @@ const userMonth = ref(new Date())
   text-align: center;
   color: var(--vt-c-second-bg-color);
 }
-
 </style>
