@@ -1,85 +1,75 @@
 <script setup>
-import { ref } from 'vue'
-
+import { defineProps, defineEmits, ref } from 'vue'
 import EditIcon from '@/assets/icons-vue/edit.vue'
+import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
 
-defineProps({
-  receipts: Array
-})
-
+const props = defineProps({ receipts: Array })
 const emit = defineEmits(['view-receipt', 'edit-receipt', 'delete-receipt'])
 
 const dialog = ref(false)
-const receiptToDelete = ref(null)
-
-const openDeleteDialog = (receipt) => {
-  receiptToDelete.value = receipt
-  dialog.value = true
-}
-
-const confirmDelete = () => {
-  emit('delete-receipt', receiptToDelete.value)
-  dialog.value = false
-  receiptToDelete.value = null
-}
+const toDelete = ref(null)
+function openDeleteDialog(id) { toDelete.value = id; dialog.value = true }
+function confirmDelete() { emit('delete-receipt', toDelete.value); dialog.value = false }
 
 const headers = [
-  { title: 'IDs', key: 'id' },
-  { title: 'Time', key: 'time' },
-  { title: 'Total Amount', key: 'total' },
+  { title: 'ID', key: 'id' },
+  { title: 'Admin', key: 'admin' },
+  { title: 'Date', key: 'date' },
+  { title: 'Total', key: 'total' },
   { title: 'Action', key: 'action', sortable: false }
 ]
 </script>
 
 <template>
-  <v-container fluid>
-    <v-data-table
-      :headers="headers"
-      :items="receipts"
-      class="elevation-1"
-      item-value="id"
-      :items-per-page="-1"
-      hide-default-footer
-    >
-      <template #item.action="{ item }">
-        <div class="action-icons">
+  <v-data-table :headers="headers" :items="props.receipts" item-value="id" hide-default-footer>
+    <template #item.action="{ item }">
+      <div class="action-icons">
+        <v-tooltip text="View" location="top">
+          <template #activator="{ props }">
+            <div v-bind="props" @click="$emit('view-receipt', item)" style="cursor: pointer;">
+              <ViewIcon />
+            </div>
+          </template>
+        </v-tooltip>
+        <v-tooltip text="Edit" location="top">
+          <template #activator="{ props }">
+            <div v-bind="props" @click="$emit('edit-receipt', item)" style="cursor: pointer;">
+              <EditIcon />
+            </div>
+          </template>
+        </v-tooltip>
+        <v-tooltip text="Delete" location="top">
+          <template #activator="{ props }">
+            <div v-bind="props" @click="openDeleteDialog(item.id)" style="cursor: pointer;">
+              <DeleteIcon />
+            </div>
+          </template>
+        </v-tooltip>
+      </div>
+    </template>
 
-          <v-tooltip text="Edit" location="top">
-            <template #activator="{ props }">
-              <div v-bind="props" @click="$emit('edit-receipt', item)" style="cursor: pointer;">
-                <EditIcon />
-              </div>
-            </template>
-          </v-tooltip>
+    <template #item.admin="{ item }">
+      <span>{{ item.admin }}</span>
+    </template>
+    <template #item.date="{ item }">
+      <span>{{ item.date }}</span>
+    </template>
+    <template #item.total="{ item }">
+      <span>{{ item.total }}</span>
+    </template>
+  </v-data-table>
 
-          <v-tooltip text="Delete" location="top">
-            <template #activator="{ props }">
-              <div v-bind="props" @click="openDeleteDialog(item)" style="cursor: pointer;">
-                <DeleteIcon />
-              </div>
-            </template>
-          </v-tooltip>
-        </div>
-      </template>
-    </v-data-table>
-
-    <!-- Delete confirmation dialog -->
-    <v-dialog v-model="dialog" width="400" class="delete-dialog" persistent scroll-strategy="block">
-      <v-card>
-        <v-card-title class="text-h6">Confirm Deletion</v-card-title>
-        <v-card-text>
-          Are you sure you want to delete receipt
-          <strong>{{ receiptToDelete?.id }}</strong>?
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn color="grey" variant="text" @click="dialog = false">Cancel</v-btn>
-          <v-btn color="var(--vt-c-second-bg-color)" variant="tonal" @click="confirmDelete">Delete</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-container>
+  <v-dialog v-model="dialog" width="400" persistent>
+    <v-card>
+      <v-card-title class="text-h6">Confirm Deletion</v-card-title>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn text @click="dialog = false">Cancel</v-btn>
+        <v-btn @click="confirmDelete">Delete</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped>

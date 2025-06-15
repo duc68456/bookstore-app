@@ -31,23 +31,13 @@ const handleBlur = () => {
 <template>
   <div class="wrapper">
     <div class="frame" :class="{ 'focused': shouldShowFloatingLabel }">
-      <label 
-        class="floating-label" 
-        :class="{ 'active': shouldShowFloatingLabel }"
-      >
+      <label class="floating-label" :class="{ 'active': shouldShowFloatingLabel }">
         {{ placeholder }}
       </label>
-      
-      <input 
-        class="input" 
-        type="text" 
-        :readonly="readonly" 
-        :placeholder="shouldShowFloatingLabel ? '' : placeholder"
-        :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
+
+      <input class="input" type="text" :readonly="readonly" :placeholder="shouldShowFloatingLabel ? '' : placeholder"
+        :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" @focus="handleFocus"
+        @blur="handleBlur" />
     </div>
   </div>
 </template>
@@ -67,7 +57,7 @@ const handleBlur = () => {
 }
 
 .frame.focused {
-  border-color: var(--vt-c-second-bg-color); 
+  border-color: var(--vt-c-second-bg-color);
 }
 
 .input {
@@ -78,7 +68,7 @@ const handleBlur = () => {
   font-family: Montserrat, sans-serif;
   color: #333;
   background: transparent;
-  padding-top: 8px; 
+  padding-top: 8px;
 }
 
 .floating-label {
@@ -99,7 +89,7 @@ const handleBlur = () => {
   top: 0;
   transform: translateY(-50%);
   font-size: 12px;
-  color: var(--vt-c-second-bg-color); 
+  color: var(--vt-c-second-bg-color);
   font-weight: 500;
 }
 

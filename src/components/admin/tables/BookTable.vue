@@ -1,41 +1,38 @@
 <script setup>
-import { useBook } from '@/data/book'
-import { computed, onMounted, ref } from 'vue'
-
 import EditIcon from '@/assets/icons-vue/edit.vue'
 import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import DeleteIcon from '@/assets/icons-vue/trash.vue'
+import { useBook } from '@/data/book'
+import { computed, ref } from 'vue'
 
-const book = useBook()  
-
+const book = useBook()
 const props = defineProps({
+  items: Array,
+  fullBookDetails: Object,
   showActions: { type: Boolean, default: true },
   showQuantity: { type: Boolean, default: true },
   showPrice:    { type: Boolean, default: true },
 })
-const emit = defineEmits(['view-book','edit-book','delete-book','select-book'])
-
-onMounted(() => {
-  book.fetchBooks()
-})
-
-const onRowClick = (bookRow) => {
-  const selected = book.fullBookDetails[bookRow.id]
-  emit('select-book', selected)
-}
+const emit = defineEmits(['view-book','edit-book','delete-book'])
 
 const dialog = ref(false)
-const bookToDelete = ref(null)
-const openDeleteDialog = (item) => { bookToDelete.value = item; dialog.value = true }
-const confirmDelete = () => { emit('delete-book', bookToDelete.value); dialog.value = false; bookToDelete.value = null }
+const toDelete = ref(null)
+function openDelete(item) {
+  toDelete.value = item; dialog.value = true
+}
+function confirmDelete() {
+  emit('delete-book', toDelete.value.id)
+  dialog.value = false
+}
 
 const rawHeaders = [
-  { title: 'ID', key: 'id' },
-  { title: 'Title', key: 'title' },
+  { title: 'ID',         key: 'id' },
+  { title: 'Title',      key: 'title' },
+  { title: 'Authors',    key: 'authors' },
   { title: 'Categories', key: 'categories' },
-  { title: 'Quantity', key: 'quantity' },
-  { title: 'Import Price', key: 'import_price' },
-  { title: 'Action', key: 'action', sortable: false },
+  { title: 'Quantity',   key: 'quantity' },
+  { title: 'Price',      key: 'import_price' },
+  { title: 'Action',     key: 'action', sortable: false },
 ]
 const headers = computed(() => rawHeaders.filter(h => {
   if (h.key==='action' && !props.showActions) return false
@@ -89,17 +86,13 @@ const headers = computed(() => rawHeaders.filter(h => {
       </template>
     </v-data-table>
 
-    <v-dialog v-model="dialog" width="400" class="delete-dialog" persistent>
+    <v-dialog v-model="dialog" width="400" persistent>
       <v-card>
-        <v-card-title class="text-h6">Confirm Deletion</v-card-title>
-        <v-card-text>
-          Are you sure you want to delete the book
-          <strong>{{ bookToDelete?.title }}</strong>?
-        </v-card-text>
+        <v-card-title>Confirm Deletion</v-card-title>
         <v-card-actions>
-          <v-spacer />
-          <v-btn color="grey" variant="text" @click="dialog = false">Cancel</v-btn>
-          <v-btn color="var(--vt-c-second-bg-color)" variant="tonal" @click="confirmDelete">Delete</v-btn>
+          <v-spacer/>
+          <v-btn text @click="dialog=false">Cancel</v-btn>
+          <v-btn @click="confirmDelete">Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -129,9 +122,6 @@ const headers = computed(() => rawHeaders.filter(h => {
   padding: 12px;
   font-family: Montserrat;
   font-size: 15px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 140%;
   color: var(--vt-c-second-bg-color);
 }
 .action-icons {
@@ -140,18 +130,7 @@ const headers = computed(() => rawHeaders.filter(h => {
 }
 .delete-dialog .v-card {
   width: 25vw;
-  height: 25vh;
-  border-radius: 50px;
+  border-radius: 20px;
   background: var(--vt-c-main-bg-color);
-  align-items: center;
-}
-.delete-dialog .v-card-title {
-  color: var(--vt-c-second-bg-color);
-  font-weight: bold;
-  text-align: center;
-}
-.delete-dialog .v-card-text {
-  font-size: 16px;
-  color: var(--vt-c-second-bg-color);
 }
 </style>

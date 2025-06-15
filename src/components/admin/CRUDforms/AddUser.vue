@@ -32,12 +32,13 @@ const handleAdd = () => {
 
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="newUser.name" placeholder="Name" />
+          <FrameRU v-model="newUser.username" placeholder="username" />
+          <FrameRU v-model="newUser.password" placeholder="password" />
+          <FrameRU v-model="newUser.firstName" placeholder="First Name" />
+          <FrameRU v-model="newUser.lastName" placeholder="Last Name" />
           <FrameRU v-model="newUser.email" placeholder="Email" />
-          <FrameRU v-model="newUser.username" placeholder="Username" />
-          <DatePickerFrame v-model="newUser.dob" placeholder="DOB" />
           <FrameRU v-model="newUser.phone" placeholder="Phone" />
-          <FrameRU v-model="newUser.role" placeholder="Role" />
+          <DatePickerFrame v-model="newUser.dob" placeholder="DOB" />
 
           <ButtonCRUD @click="handleAdd">
             <template #btn-text>
