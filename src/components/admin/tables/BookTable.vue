@@ -43,36 +43,48 @@ const headers = computed(() => rawHeaders.filter(h => {
 </script>
 
 <template>
-  <v-container fluid>
-    <div style="max-height:70vh; overflow-y:auto;">
-      <v-data-table
-        :headers="headers"
-        :items="items"
-        item-value="id"
-        :items-per-page="-1"
-        hide-default-footer
-      >
-        <template #item.authors="{ item }">
-          <span>{{ item.authors.join(', ') }}</span>
-        </template>
-        <template #item.categories="{ item }">
-          <span>{{ item.categories.join(', ') }}</span>
-        </template>
-        <template #item.action="{ item }">
-          <div class="action-icons">
-            <v-tooltip text="View"><template #activator="{ props }">
-              <div v-bind="props" @click="$emit('view-book', item.id)"><ViewIcon/></div>
-            </template></v-tooltip>
-            <v-tooltip text="Edit"><template #activator="{ props }">
-              <div v-bind="props" @click="$emit('edit-book', item.id)"><EditIcon/></div>
-            </template></v-tooltip>
-            <v-tooltip text="Delete"><template #activator="{ props }">
-              <div v-bind="props" @click="openDelete(item)" style="cursor: pointer"><DeleteIcon/></div>
-            </template></v-tooltip>
-          </div>
-        </template>
-      </v-data-table>
-    </div>
+  <div class="table-wrapper">
+    <v-data-table
+      :headers="headers"
+      :items="book.items"
+      class="elevation-1"
+      item-value="id"
+      :items-per-page="-1"
+      fixed-header
+      height="600"
+      @click:row="onRowClick"
+      hide-default-footer
+    >
+      <template #item.action="{ item }">
+        <div class="action-icons">
+          <v-tooltip text="View" location="top">
+            <template #activator="{ props }">
+              <div v-bind="props" @click="$emit('view-book', item.id)" style="cursor: pointer;">
+                <ViewIcon />
+              </div>
+            </template>
+          </v-tooltip>
+          <v-tooltip text="Edit" location="top">
+            <template #activator="{ props }">
+              <div v-bind="props" @click="$emit('edit-book', book.fullBookDetails[item.id])" style="cursor: pointer;">
+                <EditIcon />
+              </div>
+            </template>
+          </v-tooltip>
+          <v-tooltip text="Delete" location="top">
+            <template #activator="{ props }">
+              <div v-bind="props" @click="openDeleteDialog(item)" style="cursor: pointer;">
+                <DeleteIcon />
+              </div>
+            </template>
+          </v-tooltip>
+        </div>
+      </template>
+
+      <template #item.categories="{ item }">
+        <span>{{ book.fullBookDetails[item.id]?.categories.join(', ') }}</span>
+      </template>
+    </v-data-table>
 
     <v-dialog v-model="dialog" width="400" persistent>
       <v-card>
@@ -84,10 +96,26 @@ const headers = computed(() => rawHeaders.filter(h => {
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container>
+  </div>
 </template>
 
 <style scoped>
+
+::v-deep(.v-data-table__th) {
+  background-color: var(--vt-c-main-bg-color) !important;
+  color: var(--vt-c-second-bg-color) !important;
+  font-weight: 600 !important;
+}
+
+::v-deep(.v-data-table-header__sort-btn) {
+  color: var(--vt-c-second-bg-color) !important;
+}
+
+.table-wrapper {
+  max-height: 66vh;        /* chiều cao tối đa */
+  overflow-y: auto;        /* bật scroll dọc */
+}
+
 .v-data-table {
   background-color: var(--vt-c-main-bg-color);
   border-radius: 12px;
