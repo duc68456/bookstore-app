@@ -1,14 +1,5 @@
 <template>
   <v-container fluid>
-    <!-- Search field -->
-    <v-text-field
-      v-model="searchQuery"
-      label="Tìm kiếm người dùng"
-      clearable
-      class="mb-4"
-    />
-
-    <!-- Table wrapper với scroll -->
     <div class="table-wrapper">
       <v-data-table
         :headers="headers"
@@ -113,7 +104,7 @@ const headers = [
 <style scoped>
 /* Wrapper cho scroll */
 .table-wrapper {
-  max-height: 60vh;        /* chiều cao tối đa */
+  max-height: 66vh;        /* chiều cao tối đa */
   overflow-y: auto;        /* bật scroll dọc */
 }
 
