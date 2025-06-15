@@ -87,6 +87,7 @@ export const useUser = defineStore('user', () => {
           role: updated.roles?.[0]?.name ?? ''
         };
       }
+      await fetchUsers()
     } catch (e) {
       console.error('[UserStore] updateUser failed', e);
       throw e;
@@ -95,9 +96,21 @@ export const useUser = defineStore('user', () => {
     }
   }
 
-  function deleteUser(user) {
-    users.value = users.value.filter(u => u.id !== user.id)
+  async function deleteUserAPI(userId) {
+    loading.value = true; error.value = null
+    try {
+      await api.delete(`/users/${userId}`)
+      // sau khi xoá thành công, reload lại
+      await fetchUsers()
+    } catch (e) {
+      console.error('[UserStore] deleteUserAPI failed:', e)
+      error.value = e
+      throw e
+    } finally {
+      loading.value = false
+    }
   }
+
 
   return {
     users,
@@ -108,6 +121,6 @@ export const useUser = defineStore('user', () => {
     fetchUsers,
     addUser,
     updateUserAPI,
-    deleteUser
+    deleteUserAPI
   }
 })

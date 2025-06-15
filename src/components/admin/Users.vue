@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted } from 'vue'
 import { useUser } from '@/data/user'
+import { ref, onMounted } from 'vue'
 
 import TitleText from './texts/TitleText.vue'
 import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
@@ -19,77 +19,67 @@ const selectedUser = ref(null)
 const editingUser = ref(null)
 const addingUser = ref(false)
 
-onMounted(() => {
-  userStore.fetchUsers()
-})
+// load danh sách khi mount
+onMounted(userStore.fetchUsers)
 
-const handleViewUser = (user) => selectedUser.value = user
-function handleEditUser(user) {
-  editingUser.value = { ...user }
+// VIEW
+function handleViewUser(user) {
+  selectedUser.value = user
+}
+function closeDetail() {
+  selectedUser.value = null
 }
 
-async function handleUpdateUser(editedUser) {
-  try {
-    // chuyển Date → "YYYY-MM-DD"
-    const dobValue = editedUser.dob instanceof Date
-      ? editedUser.dob.toISOString().split('T')[0]
-      : editedUser.dob;  // nếu đã là string
-
-    const payload = {
-      password: editedUser.password,
-      firstName: editedUser.firstName,
-      lastName: editedUser.lastName,
-      dob: dobValue,        // → "2025-06-13"
-      phone: editedUser.phone,
-      roles: [editedUser.role] // backend mong List<String>
-    };
-
-    await userStore.updateUserAPI(editedUser.id, payload);
-    await userStore.fetchUsers();
-    editingUser.value = null;
-  } catch (err) {
-    console.error('Cập nhật user thất bại', err.response?.data || err.message);
-  }
+// ADD
+function handleAddUser() {
+  addingUser.value = true
 }
-
-function handleDeleteUser(user) {
-  userStore.deleteUser(user.id)
+function closeAddUser() {
+  addingUser.value = false
 }
-
-const handleAddUser = () => addingUser.value = true
-const closeDetail = () => selectedUser.value = null
-const closeAddUser = () => addingUser.value = false
-const closeEdit = () => cancelEditDialog.value = true
-
-const updateUser = (updatedUser) => userStore.updateUser(updatedUser)
-const addUser = (newUser) => {
-  userStore.addUser(newUser)
+function addUser(newUser) {
+  // ... gọi API tạo user ở đây nếu cần
   addingUser.value = false
 }
 
-// Dialog xác nhận hủy chỉnh sửa
-const cancelEditDialog = ref(false)
-const confirmCancelEdit = () => {
-  editingUser.value = null
-  cancelEditDialog.value = false
+// EDIT
+function handleEditUser(user) {
+  editingUser.value = { ...user }
 }
-const cancelCancelEdit = () => cancelEditDialog.value = false
+function closeEdit() {
+  editingUser.value = null
+}
+async function handleUpdateUser(payload) {
+  try {
+    await userStore.updateUserAPI(payload.id, payload)
+    editingUser.value = null
+  } catch (e) {
+    console.error('Cập nhật user thất bại', e.response?.data || e.message)
+  }
+}
+
+// DELETE
+async function handleDeleteUser(userId) {
+  try {
+    await userStore.deleteUserAPI(userId)
+  } catch (e) {
+    console.error('Xoá user thất bại', e.response?.data || e.message)
+  }
+}
 </script>
 
 <template>
   <div style="overflow-y: auto;">
-    <div v-if="addingUser" class="user-detail-full">
-      <AddUser @close="closeAddUser" @add-user="addUser" />
-    </div>
+    <!-- ADD -->
+    <AddUser v-if="addingUser" @close="closeAddUser" @add-user="addUser" class="user-detail-full" />
 
+    <!-- TABLE -->
     <div v-else-if="!selectedUser && !editingUser" class="content">
       <div class="top-bar">
-        <div class="left">
-          <TitleText><template #text>User Management</template></TitleText>
-        </div>
-        <div class="right">
-          <SearchFrame v-model="searchQuery" />
-        </div>
+        <TitleText class="left">
+          <template #text>User Management</template>
+        </TitleText>
+        <SearchFrame v-model="searchQuery" class="right" />
       </div>
 
       <UserTable :search="searchQuery" @view-user="handleViewUser" @edit-user="handleEditUser"
@@ -102,30 +92,14 @@ const cancelCancelEdit = () => cancelEditDialog.value = false
       </ButtonCRUD>
     </div>
 
-    <div v-else-if="selectedUser && !editingUser" class="user-detail-full">
-      <UserDetail :user="selectedUser" @close="closeDetail" />
-    </div>
+    <!-- DETAIL -->
+    <UserDetail v-else-if="selectedUser && !editingUser" :user="selectedUser" @close="closeDetail"
+      class="user-detail-full" />
 
-    <div v-else-if="editingUser" class="user-detail-full">
-      <EditUser :user="editingUser" @close="closeEdit" @update-user="handleUpdateUser" />
-    </div>
+    <!-- EDIT -->
+    <EditUser v-else-if="editingUser" :user="editingUser" @close="closeEdit" @update-user="handleUpdateUser"
+      class="user-detail-full" />
   </div>
-
-  <!-- Dialog xác nhận hủy chỉnh sửa -->
-  <v-dialog v-model="cancelEditDialog" width="400" class="delete-dialog" persistent scroll-strategy="block">
-    <v-card>
-      <v-card-title class="text-h6">Confirm Cancel</v-card-title>
-      <v-card-text>
-        Are you sure
-        <strong>{{ editingUser?.name }}</strong>?
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn color="grey" variant="text" @click="cancelCancelEdit">Cancel</v-btn>
-        <v-btn color="var(--vt-c-second-bg-color)" variant="tonal" @click="confirmCancelEdit">Yes</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
 </template>
 
 <style scoped>
