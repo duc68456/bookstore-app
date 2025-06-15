@@ -7,6 +7,7 @@
       <v-data-table :headers="headers" :items="filteredUsers" class="elevation-1" item-value="id" :items-per-page="-1"
         hide-default-footer>
         <template #item.action="{ item }">
+
           <div class="action-icons">
             <v-tooltip text="View" location="top">
               <template #activator="{ props }">
@@ -90,7 +91,7 @@ const headers = [
   { title: 'Username', key: 'username' },
   { title: 'Email', key: 'email' },
   { title: 'DOB', key: 'dob' },
-  { title: 'Roles', key: 'roles' },
+  { title: 'Roles', key: 'role' },
   { title: 'Action', key: 'action', sortable: false }
 ]
 </script>
