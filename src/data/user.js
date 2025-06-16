@@ -47,6 +47,8 @@ export const useUser = defineStore('user', () => {
         dob: u.dob,
         phone: u.phone,
         role: u.roles?.[0]?.name ?? '',
+        password: u.password ?? '',
+        debtAmount: u.debtAmount,
         _raw: u
       }))
     } catch (e) {
@@ -60,9 +62,19 @@ export const useUser = defineStore('user', () => {
     }
   }
 
-  function addUser(user) {
-    const newId = String(users.value.length + 1)
-    users.value.push({ ...user, id: newId })
+  async function addUser(userData) {
+    try {
+      loading.value = true
+      error.value = null
+      await api.post('/users', userData)
+      await fetchUsers()
+      return true
+    } catch (e) {
+      error.value = e
+      return false
+    } finally {
+      loading.value = false
+    }
   }
 
   function updateUser(updated) {

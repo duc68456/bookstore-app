@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useUser } from '@/data/user' 
+import { useUser } from '@/data/user'
 
 const user = useUser()
 
@@ -22,7 +22,7 @@ const headers = [
   { title: 'Name', key: 'name' },
   { title: 'Email', key: 'email' },
   { title: 'Phone', key: 'phone' },
-  { title: 'Current Debt', key: 'debt' },
+  { title: 'Current Debt', key: 'debtAmount' },
 ]
 
 const onRowClick = (paymentRow) => {
@@ -56,7 +56,7 @@ const selected = computed({
           <td>{{ item.name }}</td>
           <td>{{ item.email }}</td>
           <td>{{ item.phone }}</td>
-          <td>{{ item.debt }}</td>
+          <td>{{ item.debtAmount }}</td>
         </tr>
       </template>
     </v-data-table>

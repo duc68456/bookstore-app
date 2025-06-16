@@ -2,7 +2,6 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/data/user'
-import { useDebts } from '@/data/customerDebts'
 import { usePaymentReceipts } from '@/data/paymentReceipts'
 
 import CRUDMainForm from '../CRUDforms/CRUDMainForm.vue'
@@ -16,6 +15,7 @@ import ButtonText from '../texts/ButtonText.vue'
 import AppDialog from '../AppDialog.vue'
 
 import PaymentReceiptTable from '../tables/PaymentReceiptTable.vue'
+import { onMounted } from 'vue'
 
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
@@ -34,17 +34,20 @@ function showDialog(title, message, options = true, confirmCallback = () => {}) 
 
 const router = useRouter()
 const userStore = useUser()
+onMounted(() => {
+  userStore.fetchUsers()
+  paymentReceiptsStore.fetchPaymentReceipts()
+})
 const paymentReceiptsStore = usePaymentReceipts()
 
 const selectedCustomer = ref({})
 const paymentAmount = ref('')
 
-const customerDebts = useDebts()
 
 const customersWithDebt = computed(() => {
   return userStore.users.map(user => ({
     ...user,
-    debt: `$${customerDebts.debtsById[user.id]?.amount || 0.00}`,
+    debtAmount: `${user.debtAmount} VND`,
   }))
 })
 
@@ -75,35 +78,21 @@ function handlePayment() {
   )
 }
 
-function processPayment() {
-  const now = new Date()
-
-  const datePart = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(now)
-
-  const timePart = now.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true
-  })
-
-  const fullTime = `${datePart} - ${timePart}`
-
-  const newReceipt = {
-    customer: selectedCustomer.value.name,
-    amount: `$${paymentAmount.value}`,
-    time: fullTime,
+async function processPayment() {
+  const payload = {
+    payerId: selectedCustomer.value.id,               // 👈 lấy từ customer được chọn
+    totalAmount: paymentAmount.value // 👈 đảm bảo là số
   }
 
-  paymentReceiptsStore.addPaymentReceipt(newReceipt)
+  const success = await paymentReceiptsStore.addPaymentReceipt(payload)
 
-  showDialog('Payment Success', `Processed payment for: ${selectedCustomer.value.name}`, false, () => {})
-
-  selectedCustomer.value = {}
-  paymentAmount.value = ''
+  if (success) {
+    showDialog('Payment Success', `Processed payment for: ${selectedCustomer.value.name}`, false, () => {})
+    selectedCustomer.value = {}
+    paymentAmount.value = ''
+  } else {
+    showDialog('Error', 'Failed to process payment.', false)
+  }
 
   dialogVisible.value = false
   dialogTitle.value = ''

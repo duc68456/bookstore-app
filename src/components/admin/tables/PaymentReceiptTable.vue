@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { useUser } from '@/data/user'
 
 import ViewIcon from '@/assets/icons-vue/receipt.vue'
 import EditIcon from '@/assets/icons-vue/edit.vue'
@@ -27,8 +28,8 @@ const confirmDelete = () => {
 
 const headers = [
   { title: 'ID', key: 'id' },
-  { title: 'Time', key: 'time' },
-  { title: 'Total Amount', key: 'amount' },
+  { title: 'Time', key: 'createAt' },
+  { title: 'Total Amount', key: 'totalAmount' },
   { title: 'Customer', key: 'customer'},
   { title: 'Action', key: 'action', sortable: false },
 ]

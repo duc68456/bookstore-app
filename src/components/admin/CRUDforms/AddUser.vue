@@ -1,5 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
+import {useUser} from '@/data/user'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import DatePickerFrame from '../frames/DatePickerFrame.vue'
 import FrameRU from '../frames/FrameRU.vue'
@@ -8,18 +9,39 @@ import TitleText from '../texts/TitleText.vue'
 import CRUDMainForm from './CRUDMainForm.vue'
 
 const emit = defineEmits(['close', 'add-user'])
+const store = useUser()
 
 const newUser = reactive({
-  name: '',
+  firstName: '',
+  lastName: '',
   email: '',
   username: '',
   dob: '',
-  phone: ''
+  phone: '',
+  role: '',
+  password: 'PhucDepTrai102',
 })
 
-const handleAdd = () => {
-
-  emit('add-user', newUser)
+const handleAdd = async () => {
+  if (store.loading) return
+  const payload = {
+    firstName: newUser.firstName,
+    lastName: newUser.lastName,
+    email: newUser.email,
+    username: newUser.username,
+    dob: newUser.dob,
+    phone: newUser.phone,
+    roles: [newUser.role],
+    password: newUser.password
+  }
+  const ok = await store.addUser({ ...payload })
+  if (ok) {
+    alert('User added successfully!')
+    // Reset form...
+    emit('close')
+  } else {
+    alert('Failed to add user!')
+  }
 }
 </script>
 
@@ -32,7 +54,8 @@ const handleAdd = () => {
 
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="newUser.name" placeholder="Name" />
+          <FrameRU v-model="newUser.firstName" placeholder="Firstname" />
+          <FrameRU v-model="newUser.lastName" placeholder="Lastname" />
           <FrameRU v-model="newUser.email" placeholder="Email" />
           <FrameRU v-model="newUser.username" placeholder="Username" />
           <DatePickerFrame v-model="newUser.dob" placeholder="DOB" />
