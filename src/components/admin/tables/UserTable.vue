@@ -102,15 +102,15 @@ const headers = [
 <style scoped>
 /* Wrapper cho scroll */
 .table-wrapper {
-<<<<<<< HEAD
+
   max-height: 66vh;        /* chiều cao tối đa */
   overflow-y: auto;        /* bật scroll dọc */
-=======
+
   max-height: 60vh;
   /* chiều cao tối đa */
   overflow-y: auto;
   /* bật scroll dọc */
->>>>>>> ebdaaba5fc169175467ce0d43cc22106e9fba0ad
+
 }
 
 .v-data-table {
