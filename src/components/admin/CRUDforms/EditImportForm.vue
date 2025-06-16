@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-
+import {useImportReceiptFormStore} from '@/data/importReceipts.js'
 import CRUDMainForm from './CRUDMainForm.vue'
 import TitleText from '../texts/TitleText.vue'
 import BookTable from '../tables/BookTable.vue'
@@ -18,6 +18,7 @@ const props = defineProps({
     required: true
   }
 })
+const emit = defineEmits(['close'])
 const selectedBook = ref(null);
 
 const handleSelectBook = (book) => {
@@ -26,6 +27,7 @@ const handleSelectBook = (book) => {
 
 const quantity = ref('')
 const importPrice = ref('')
+const store = useImportReceiptFormStore()
 
 const addBookToReceipt = () => {
   if (!selectedBook.value || !quantity.value || !importPrice.value) return;
@@ -43,6 +45,38 @@ const addBookToReceipt = () => {
   importPrice.value = '';
 }
 
+async function handleSave() {
+  // Chuyển đổi books -> bookDetails theo đúng yêu cầu backend
+  const bookDetails = (props.importReceipt.books || []).map(b => ({
+    bookId:        b.bookId || b.id,
+    name:          b.title || b.name,
+    publishedYear: b.published_year || b.publishedYear,
+    importPrice:   b.import_price || b.importPrice,
+    quantity:      b.quantity,
+    authors:       Array.isArray(b.authors) ? b.authors : Object.values(b.authors || {}),
+    categories:    Array.isArray(b.categories) ? b.categories : Object.values(b.categories || {})
+  }));
+
+  // Debug payload gửi lên
+  const payload = {
+    adminId: props.importReceipt.admin || 'admin001',
+    bookDetails
+  };
+  console.log('Payload gửi lên:', payload);
+
+  if (!props.importReceipt.id && !props.importReceipt.importReceiptId) {
+    // Add mới
+    await store.createReceipt(payload);
+  } else {
+    // Update
+    await store.updateReceipt(
+        props.importReceipt.id || props.importReceipt.importReceiptId,
+        payload
+    );
+  }
+  emit('close');
+}
+
 </script>
 <template>
   <CRUDMainForm>
@@ -53,7 +87,7 @@ const addBookToReceipt = () => {
     </template>
     <template #content>
       <div class="scrollable-content">
-        <BookTableShort @select-book="handleSelectBook" 
+        <BookTableShort @select-book="handleSelectBook"
   :excludedBookIds="importReceipt.books.map(book => book.id)"/>
 
         <div class="frame-wrapper">
@@ -69,6 +103,17 @@ const addBookToReceipt = () => {
         </div>
 
         <BookInReceiptTable :books="importReceipt.books" />
+        <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+          <ButtonReceipt @click="handleSave">
+            <template #btn-text>
+              <ButtonText>
+                <template #text>
+                  {{ props.importReceipt.id || props.importReceipt.importReceiptId ? 'Save' : 'Create' }}
+                </template>
+              </ButtonText>
+            </template>
+          </ButtonReceipt>
+        </div>
       </div>
     </template>
   </CRUDMainForm>

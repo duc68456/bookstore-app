@@ -30,10 +30,10 @@ const onRowClick = (bookRow) => {
 }
 
 const headers = [
-  { title: 'ID', key: 'id' },
+  { title: 'ID', key: 'bookId' },
   { title: 'Title', key: 'title' },
-  { title: 'Author', key: 'author' },
-  { title: 'Published Year', key: 'published_year' },
+  { title: 'Authors', key: 'authors' },
+  { title: 'Published Year', key: 'publishedYear' },
   { title: 'Categories', key: 'categories' },
 ]
 
@@ -53,8 +53,8 @@ const headers = [
     <tr @click="onRowClick(item)">
       <td>{{ item.id }}</td>
       <td>{{ item.title }}</td>
-      <td>{{ item.author }}</td>
-      <td>{{ item.published_year }}</td>
+      <td>{{  book.fullBookDetails[item.id]?.authors.join(', ')}}</td>
+      <td>{{ item.publishedYear }}</td>
       <td>{{ book.fullBookDetails[item.id]?.categories.join(', ') }}</td>
     </tr>
   </template>

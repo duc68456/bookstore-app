@@ -28,11 +28,16 @@ async function deleteReceipt(id) {
 }
 async function handleAdd() {
   // Ví dụ khởi tạo giá trị mặc định
-  const now = new Date().toISOString().slice(0, 10)  // "YYYY-MM-DD"
-  await store.createReceipt({ admin: 'ADMIN1', date: now, total: 0 })
+  editingReceipt.value = {
+    admin: 'admin001',
+    date: new Date().toISOString().slice(0, 10),
+    total: 0,
+    books: []
+  }
 }
 function closeEdit() {
   editingReceipt.value = null
+  store.fetchReceipts()
 }
 function goBack() {
   router.push('/manage')
