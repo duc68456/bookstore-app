@@ -1,83 +1,126 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { useBook } from '@/data/book' 
+import { useBook } from '@/data/book'
+import { computed, onMounted, ref } from 'vue'
 
-import TitleText from './texts/TitleText.vue'
-import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
-import BookTable from '@/components/admin/tables/BookTable.vue'
+import ButtonCRUD from '@/components/admin/buttons/ButtonCRUD.vue'
+import AddBook from '@/components/admin/CRUDforms/AddBook.vue'
 import BookDetail from '@/components/admin/CRUDforms/BookDetail.vue'
 import EditBook from '@/components/admin/CRUDforms/EditBook.vue'
-import AddBook from '@/components/admin/CRUDforms/AddBook.vue'
+import SearchFrame from '@/components/admin/frames/SearchFrame.vue'
+import BookTable from '@/components/admin/tables/BookTable.vue'
+import ButtonText from '@/components/admin/texts/ButtonText.vue'
+import TitleText from '@/components/admin/texts/TitleText.vue'
 
-import ButtonCRUD from './buttons/ButtonCRUD.vue'
-import ButtonText from './texts/ButtonText.vue'
+const bookStore    = useBook()
+const searchQuery  = ref('')
+const addingBook   = ref(false)
+const selectedBook = ref(null)
+const editingBook  = ref(null)
 
-const book = useBook()
+onMounted(() => {
+  bookStore.fetchBooks()
+})
 
-const searchQuery = ref('')
 const filteredBooks = computed(() => {
   const q = searchQuery.value.toLowerCase()
-  return book.items.filter(book =>
-    book.id.toLowerCase().includes(q) ||
-    book.title.toLowerCase().includes(q)
+  return bookStore.items.filter(item =>
+    item.id.toLowerCase().includes(q) ||
+    item.title.toLowerCase().includes(q)
   )
 })
 
-const selectedBook = ref(null)
-const handleViewBook = (book) => {
-  selectedBook.value = book
+function handleAddBook() {
+  addingBook.value = true
 }
-const closeDetail = () => {
+function closeAddBook() {
+  addingBook.value = false
+}
+async function addBook(newBook) {
+  try {
+    await bookStore.createBook(newBook)
+    await bookStore.fetchBooks()
+  } catch (e) {
+    console.error('Tạo sách thất bại', e)
+  } finally {
+    addingBook.value = false
+  }
+}
+
+async function handleViewBook(bookId) {
+  try {
+    selectedBook.value = await bookStore.fetchBookById(bookId)
+  } catch (e) {
+    console.error('Không tải được chi tiết sách', e)
+  }
+}
+function closeDetail() {
   selectedBook.value = null
 }
 
-const editingBook = ref(null)
-const handleEditBook = (book) => {
-  editingBook.value = book
+async function handleEditBook(bookId) {
+  try {
+    editingBook.value = await bookStore.fetchBookById(bookId)
+  } catch (e) {
+    console.error('Không tải được sách để edit', e)
+  }
 }
-const updateBook = (updatedBook) => {
-  book.updateBook(updatedBook)
+async function updateBook(bookData) {
+  try {
+    await bookStore.editBook( bookData.bookId, {
+      name:          bookData.name,
+      publishedYear: bookData.publishedYear,
+      importPrice:   bookData.importPrice,
+      quantity:      bookData.quantity,
+      authors:       bookData.authors,
+      categories:    bookData.categories
+    })
+    await bookStore.fetchBooks()
+  } catch (e) {
+    console.error('Cập nhật sách thất bại', e)
+  } finally {
+    editingBook.value = null
+  }
 }
 
-const addingBook = ref(false)
-const handleAddBook = () => {
-  addingBook.value = true
+async function deleteBook(bookId) {
+  try {
+    await bookStore.deleteBook(bookId)
+    await bookStore.fetchBooks()
+  } catch (e) {
+    console.error('Xoá sách thất bại', e)
+  }
 }
-const closeAddBook = () => {
-  addingBook.value = false
-}
-const addBook = (newBook) => {
-  book.addBook(newBook)
-  addingBook.value = false
-}
-
-const deleteBook = (book) => {
-  book.deleteBook(book)
-}
-
-const closeEdit = () => {
+function closeEdit() {
   editingBook.value = null
 }
 </script>
 
 <template>
-  <div style="overflow-y: auto;">
-    <div v-if="addingBook" class="book-detail-full">
-      <AddBook @close="closeAddBook" @add-book="addBook" />
-    </div>
+  <div style="height:100%; overflow-y:auto;">
+    <!-- ADD -->
+    <AddBook
+      v-if="addingBook"
+      @close="closeAddBook"
+      @add-book="addBook"
+      class="book-detail-full"
+    />
 
+    <!-- TABLE -->
     <div v-else-if="!selectedBook && !editingBook" class="content">
       <div class="top-bar">
-        <div class="left">
-          <TitleText><template #text>Book Management</template></TitleText>
-        </div>
-        <div class="right">
-          <SearchFrame v-model="searchQuery" />
-        </div>
+        <TitleText class="left">
+          <template #text>Book Management</template>
+        </TitleText>
+        <SearchFrame v-model="searchQuery" class="right" />
       </div>
 
-      <BookTable :items="filteredBooks" :fullBookDetails="book.fullBookDetails" @view-book="handleViewBook"
-        @edit-book="handleEditBook" @delete-book="deleteBook" />
+      <BookTable
+        :items="filteredBooks"
+        :fullBookDetails="bookStore.fullBookDetails"
+        @view-book="handleViewBook"
+        @edit-book="handleEditBook"
+        @delete-book="deleteBook"
+      />
 
       <ButtonCRUD @click="handleAddBook">
         <template #btn-text>
@@ -86,38 +129,40 @@ const closeEdit = () => {
       </ButtonCRUD>
     </div>
 
-    <div v-else-if="selectedBook && !editingBook" class="book-detail-full">
-      <BookDetail :book="selectedBook" @close="closeDetail" />
-    </div>
+    <!-- DETAIL -->
+    <BookDetail
+      v-else-if="selectedBook && !editingBook"
+      :book="selectedBook"
+      @close="closeDetail"
+      class="book-detail-full"
+    />
 
-    <div v-else-if="editingBook" class="book-detail-full">
-      <EditBook :book="editingBook" @close="closeEdit" @update-book="updateBook" />
-    </div>
+    <!-- EDIT -->
+    <EditBook
+      v-else-if="editingBook"
+      :book="editingBook"
+      @close="closeEdit"
+      @update-book="updateBook"
+      class="book-detail-full"
+    />
   </div>
 </template>
-
 
 <style scoped>
 .content {
   width: 100%;
-  height: 100%;
   padding: 20px;
 }
-
 .top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
 }
-
-.left {
-  display: flex;
-  align-items: center;
-}
-
-.right {
-  flex-shrink: 0;
-  align-items: center;
+.left { flex: 1 }
+.right { flex-shrink: 0 }
+.book-detail-full {
+  width: 100%;
+  height: 100%;
 }
 </style>

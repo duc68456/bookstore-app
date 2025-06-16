@@ -33,9 +33,11 @@ const handleEdit = () => {
 
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU v-model="editedUser.name" placeholder="Name" />
-          <FrameRU v-model="editedUser.email" placeholder="Email" />
-          <FrameRU v-model="editedUser.username" placeholder="Username" />
+          <FrameRU v-model="editedUser.password" placeholder="Password" />
+          <FrameRU v-model="editedUser.firstName" placeholder="First Name" />
+          <FrameRU v-model="editedUser.lastName" placeholder="Last Name" />
+
+
           <DatePickerFrame v-model="editedUser.dob" placeholder="DOB" />
           <FrameRU v-model="editedUser.phone" placeholder="Phone" />
           <FrameRU v-model="editedUser.role" placeholder="Role" />

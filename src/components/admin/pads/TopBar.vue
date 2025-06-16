@@ -14,16 +14,16 @@ const currentDay = ref('')
 // Function to update time and date
 const updateDateTime = () => {
   const now = new Date()
-  currentTime.value = now.toLocaleTimeString([], { 
-    hour: '2-digit', 
-    minute: '2-digit', 
+  currentTime.value = now.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
     hour12: true // Sử dụng định dạng AM/PM
   }).toUpperCase()
-  currentDay.value = now.toLocaleDateString('en-US', { 
+  currentDay.value = now.toLocaleDateString('en-US', {
     weekday: 'long', // Hiển thị ngày trong tuần
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
   }) // Định dạng: Day, Month Date, Year
 }
 

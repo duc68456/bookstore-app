@@ -1,6 +1,54 @@
+<template>
+  <div class="wrapper">
+    <div class="frame" :class="{ focused: shouldShowFloatingLabel }">
+      <label class="floating-label" :class="{ active: shouldShowFloatingLabel }">
+        {{ placeholder }}
+      </label>
+
+      <v-select
+        v-model="selected"
+        v-model:menu="menu"
+        :items="categories"
+        item-title="categoryName"
+        item-value="categoryName"
+        multiple
+        chips
+        :loading="loading"
+        class="category-select"
+        @focus="handleFocus"
+        @blur="handleBlur"
+      />
+
+      <v-icon @click="openDialog" class="add-icon">mdi-plus-circle</v-icon>
+    </div>
+
+    <!-- Dialog thêm Category mới -->
+    <v-dialog v-model="dialog" width="400" persistent>
+      <v-card>
+        <v-card-title class="dialog-title">
+          <v-icon class="back-icon" @click="closeDialog">mdi-arrow-left</v-icon>
+          Thêm Category mới
+        </v-card-title>
+        <v-card-text class="dialog-body">
+          <v-text-field
+            v-model="newCategory"
+            label="Tên Category"
+            dense
+            hide-details
+          />
+        </v-card-text>
+        <v-card-actions class="dialog-actions">
+          <v-spacer />
+          <v-btn class="add-btn" @click="handleAddAndClose">THÊM</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
+
 <script setup>
-import { computed, ref } from 'vue'
-import { categoriesList } from '@/data/categories.js'
+import { useCategoryStore } from '@/data/categories'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps({
   modelValue: Array,
@@ -8,124 +56,90 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue'])
 
-const selectedCategories = computed({
-  get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
+const store      = useCategoryStore()
+const categories = computed(() => store.categories)
+const loading    = computed(() => store.loading)
+
+const menu        = ref(false)
+const dialog      = ref(false)
+const newCategory = ref('')
+const isFocused   = ref(false)
+
+// bind v-model cho selected
+const selected = computed({
+  get: () => props.modelValue || [],
+  set: v => emit('update:modelValue', v)
 })
 
-const newCategory = ref('')
-const dialog = ref(false)
+// fetch lần đầu
+store.fetchCategories()
 
-const openAddCategoriesDialog = () => {
-  dialog.value = true
+// khi dropdown mở mà chưa load thì fetch
+watch(menu, open => {
+  if (open && !store.categories.length && !store.loading) {
+    store.fetchCategories()
+  }
+})
+
+function handleFocus() {
+  isFocused.value = true
+  if (!store.categories.length && !store.loading) {
+    store.fetchCategories()
+  }
+}
+function handleBlur() {
+  isFocused.value = false
 }
 
-const closeDialog = () => {
+function openDialog() {
+  dialog.value = true
+}
+function closeDialog() {
   dialog.value = false
   newCategory.value = ''
 }
 
-const handleAddAndClose = () => {
+async function handleAddAndClose() {
   const name = newCategory.value.trim()
-  if (name && !categoriesList.includes(name)) {
-    categoriesList.push(name)
-    selectedCategories.value.push(name)
+  if (!name) return
+
+  try {
+    // gọi API tạo category mới
+    const created = await store.createCategory(name)
+    // thêm vào selection
+    selected.value = [...selected.value, created.categoryName]
+    closeDialog()
+  } catch (e) {
+    console.error('Tạo category thất bại', e)
+    // TODO: hiển thị snackbar hoặc toast báo lỗi
   }
-  closeDialog()
 }
 
-const isFocused = ref(false)
-
-const shouldShowFloatingLabel = computed(() => {
-  return isFocused.value || (props.modelValue && props.modelValue.length > 0)
-})
-
-
-const handleFocus = () => {
-  isFocused.value = true
-}
-
-const handleBlur = () => {
-  isFocused.value = false
-}
+// helper tính floating label
+const shouldShowFloatingLabel = computed(() =>
+  isFocused.value || selected.value.length
+)
 </script>
-
-<template>
-  <div class="wrapper">
-    <div class="frame" :class="{ 'focused': shouldShowFloatingLabel }">
-      <label 
-        class="floating-label" 
-        :class="{ 'active': shouldShowFloatingLabel }"
-      >
-        {{ placeholder }}
-      </label>
-      <v-select
-        v-model="selectedCategories"
-        :items="categoriesList"
-        :placeholder="shouldShowFloatingLabel ? '' : placeholder"
-        multiple
-        chips
-        variant="plain"
-        hide-details
-        density="comfortable"
-        menu-icon="mdi-chevron-down"
-        class="category-select"
-        @focus="handleFocus"
-        @blur="handleBlur"
-      />
-      <v-icon
-        @click="openAddCategoriesDialog"
-        color="grey"
-        small
-        class="add-icon"
-      >
-        mdi-plus-circle
-      </v-icon>
-    </div>
-
-    <v-dialog v-model="dialog" width="400" persistent>
-      <v-card class="dialog-card">
-        <v-card-title class="dialog-title">
-          <v-icon class="back-icon" @click="closeDialog">mdi-arrow-left</v-icon>
-          <span>Add New Category</span>
-        </v-card-title>
-        <v-card-text class="dialog-body">
-          <v-text-field
-            v-model="newCategory"
-            label="Category Name"
-            dense
-            hide-details
-          />
-        </v-card-text>
-        <v-card-actions class="justify-end pb-4 pr-4">
-          <v-btn class="add-btn" @click="handleAddAndClose">ADD</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
-</template>
 
 <style scoped>
 .wrapper {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-}
-
-.frame.focused {
-  border-color: var(--vt-c-second-bg-color); 
 }
 
 .frame {
+  position: relative;
   display: flex;
+  align-items: center;
   width: 441px;
   padding: 12px 16px;
-  align-items: center;
-  border-radius: 12px;
   border: 1px solid #3D3E3E;
+  border-radius: 12px;
   background-color: var(--vt-c-main-bg-color);
-  font-family: Montserrat, sans-serif;
-  position: relative;
+  transition: border-color 0.3s;
+}
+.frame.focused {
+  border-color: var(--vt-c-second-bg-color);
 }
 
 .floating-label {
@@ -133,16 +147,13 @@ const handleBlur = () => {
   left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 15px;
-  font-family: Montserrat, sans-serif;
-  color: #999;
-  pointer-events: none;
-  transition: all 0.3s ease;
-  background-color: var(--vt-c-main-bg-color);
+  background: var(--vt-c-main-bg-color);
   padding: 0 4px;
+  color: #999;
+  transition: all 0.3s;
+  pointer-events: none;
   z-index: 1;
 }
-
 .floating-label.active {
   top: 0;
   transform: translateY(-50%);
@@ -151,72 +162,46 @@ const handleBlur = () => {
   font-weight: 500;
 }
 
+.category-select {
+  flex: 1;
+}
+
 .add-icon {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
+  margin-left: 8px;
   cursor: pointer;
-}
-
-::v-deep(.category-select .v-field__input) {
-  color: black !important;
-  font-size: 15px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-top: 4px;
-  margin-bottom: 0px;
-}
-
-::v-deep(.v-chip__content) {
-  color: black !important;
-  font-weight: 500;
-  display: flex;
-  align-items: center;  /* Căn chỉnh item ngang */
-  justify-content: center;  /* Căn chỉnh item dọc */
-  height: 32px;  /* Điều chỉnh chiều cao cho cân đối */
-}
-
-::v-deep(.v-select__selections) {
-  padding-top: 0px;
-  padding-bottom: 0px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Pop-up dialog */
-.dialog-card {
-  border-radius: 16px;
-  font-family: Montserrat;
+  color: var(--vt-c-second-bg-color);
 }
 
 .dialog-title {
   display: flex;
   align-items: center;
+  gap: 8px;
   padding: 16px;
   font-weight: 600;
-  font-size: 18px;
 }
-
 .back-icon {
-  margin-right: 8px;
   cursor: pointer;
-  color: var(--vt-c-second-bg-color);
 }
-
+.dialog-body {
+  padding: 0 16px 16px;
+}
+.dialog-actions {
+  padding: 8px 16px;
+}
 .add-btn {
-  color: white;
   background-color: var(--vt-c-second-bg-color);
+  color: white;
   font-weight: bold;
 }
 
-::v-deep(.v-field__label) {
-  display: none !important;
+/* override màu chữ trong v-select */
+::v-deep(.category-select .v-field__input) {
+  color: #000 !important;
 }
-
-/* ✅ Tạo space cho floating label */
-::v-deep(.category-select) {
-  padding-top: 8px;
+::v-deep(.category-select .v-chip__content) {
+  color: #000 !important;
+}
+::v-deep(.category-select .v-list-item__title) {
+  color: #000 !important;
 }
 </style>
