@@ -3,10 +3,11 @@ import FrameRU from '../frames/FrameRU.vue'
 import FrameText from '../texts/FrameText.vue'
 import TitleText from '../texts/TitleText.vue'
 import CRUDMainForm from './CRUDMainForm.vue'
+
 defineProps(['book'])
 </script>
 
-<template> 
+<template>
   <div class="detail-wrapper">
     <CRUDMainForm title="Book Detail" :data="book" @close="$emit('close')">
       <template #title>
@@ -18,12 +19,12 @@ defineProps(['book'])
       </template>
       <template #content>
         <div class="frame-wrapper">
-          <FrameRU readonly v-model="book.name" placeholder="Title"/>
-          <FrameRU readonly v-model="book.authors" placeholder="Author" />
+          <FrameRU readonly v-model="book.name" placeholder="Title" />
+          <FrameRU readonly :modelValue="book.authors.join(', ')" placeholder="Author" />
           <FrameRU readonly v-model="book.importPrice" placeholder="Import Price" />
           <FrameRU readonly v-model="book.quantity" placeholder="Quantity" />
           <FrameRU readonly v-model="book.publishedYear" placeholder="Published Year" />
-          <FrameRU readonly :modelValue="book.categories" placeholder="Categories">
+          <FrameRU readonly :modelValue="book.categories.join(', ')" placeholder="Categories">
             <template #text-above>
               <FrameText>
                 <template #text>
@@ -31,14 +32,12 @@ defineProps(['book'])
                 </template>
               </FrameText>
             </template>
-          </FrameRU>     
+          </FrameRU>
         </div>
       </template>
     </CRUDMainForm>
   </div>
 </template>
-
-
 
 <style scoped>
 .detail-wrapper {
@@ -52,9 +51,8 @@ defineProps(['book'])
 .frame-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  gap: 18px;           
-  padding: 5vh 0;    
+  align-items: center;
+  gap: 18px;
+  padding: 5vh 0;
 }
 </style>
-

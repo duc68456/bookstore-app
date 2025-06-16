@@ -1,3 +1,4 @@
+// ✅ book.js (Pinia Store)
 import { api } from '@/plugins/axios'
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
@@ -14,15 +15,11 @@ export const useBook = defineStore('book', () => {
       const { data } = await api.get('/books')
       const list = Array.isArray(data.result) ? data.result : []
       items.value = list.map(b => ({
-        bookId: b.bookId,        // giữ nguyên để update
+        bookId: b.bookId,
         id:     String(b.bookId),
         title:  b.name,
-        authors: Array.isArray(b.authors)
-          ? b.authors.map(a => a.authorName)
-          : [],
-        categories: Array.isArray(b.categories)
-          ? b.categories.map(c => c.categoryName)
-          : [],
+        authors: b.authors?.map(a => a.authorName) || [],
+        categories: b.categories?.map(c => c.categoryName) || [],
         quantity: b.quantity,
         import_price: b.importPrice,
         _raw: b
@@ -35,6 +32,33 @@ export const useBook = defineStore('book', () => {
     }
   }
 
+  async function fetchBookById(id) {
+  loading.value = true
+  try {
+    const { data } = await api.get(`/books/dto/${id}`)
+    const b = data.result
+    if (!b) throw new Error('Book not found')
+
+    return {
+      bookId: b.bookId,
+      id: String(b.bookId),
+      name: b.name,
+      authors: b.authors.map(a => a.authorName),           // ✅ fix ở đây
+      categories: b.categories.map(c => c.categoryName),   // ✅ fix ở đây
+      quantity: b.quantity,
+      importPrice: b.importPrice,
+      publishedYear: b.publishedYear,
+    }
+  } catch (e) {
+    error.value = e
+    throw e
+  } finally {
+    loading.value = false
+  }
+}
+
+
+
   async function createBook(payload) {
     loading.value = true; error.value = null
     try {
@@ -43,26 +67,6 @@ export const useBook = defineStore('book', () => {
     } catch (e) {
       error.value = e
       throw e
-    } finally {
-      loading.value = false
-    }
-  }
-
-  async function fetchBookById(id) {
-    loading.value = true
-    try {
-      const { data } = await api.get(`/books/${id}`)
-      const b = data.result
-      return {
-        bookId: b.bookId,
-        id: String(b.bookId),
-        name: b.name,
-        authors: Array.isArray(b.authors) ? b.authors.map(a => a.authorName) : [],
-        categories: Array.isArray(b.categories) ? b.categories.map(c => c.categoryName) : [],
-        quantity: b.quantity,
-        importPrice: b.importPrice,
-        publishedYear: b.publishedYear,
-      }
     } finally {
       loading.value = false
     }
@@ -94,30 +98,14 @@ export const useBook = defineStore('book', () => {
     }
   }
 
-  async function deleteBook(bookId) {
-  loading.value = true
-  error.value   = null
-  try {
-    await api.delete(`/books/${bookId}`)
-    // sau khi xóa xong thì tải lại danh sách
-    await fetchBooks()
-  } catch (e) {
-    console.error('[BookStore] deleteBook failed:', e)
-    error.value = e
-    throw e
-  } finally {
-    loading.value = false
-  }
-}
-
   return {
     items,
     fullBookDetails,
     loading,
     error,
     fetchBooks,
-    createBook,
     fetchBookById,
+    createBook,
     editBook,
     deleteBook
   }
