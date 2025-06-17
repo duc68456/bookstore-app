@@ -1,6 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
-import {useUser} from '@/data/user'
+import { useUser } from '@/data/user'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
 import DatePickerFrame from '../frames/DatePickerFrame.vue'
 import FrameRU from '../frames/FrameRU.vue'
@@ -19,7 +19,7 @@ const newUser = reactive({
   dob: '',
   phone: '',
   role: '',
-  password: 'PhucDepTrai102',
+  password: '',
 })
 
 const handleAdd = async () => {
@@ -54,13 +54,15 @@ const handleAdd = async () => {
 
       <template #content>
         <div class="frame-wrapper">
+          <FrameRU v-model="newUser.username" placeholder="Username" />
+          <FrameRU v-model="newUser.password" placeholder="Password" />
           <FrameRU v-model="newUser.firstName" placeholder="Firstname" />
           <FrameRU v-model="newUser.lastName" placeholder="Lastname" />
           <FrameRU v-model="newUser.email" placeholder="Email" />
-          <FrameRU v-model="newUser.username" placeholder="Username" />
+
           <DatePickerFrame v-model="newUser.dob" placeholder="DOB" />
           <FrameRU v-model="newUser.phone" placeholder="Phone" />
-          <FrameRU v-model="newUser.role" placeholder="Role" />
+
 
           <ButtonCRUD @click="handleAdd">
             <template #btn-text>
