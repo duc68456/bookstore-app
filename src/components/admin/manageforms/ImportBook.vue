@@ -21,7 +21,9 @@ onMounted(() => {
 })
 
 async function handleEdit(item) {
-  editingReceipt.value = await store.fetchReceiptById(item.id)
+  // Lấy chi tiết phiếu nhập từ store, có đầy đủ books
+  const detail = await store.fetchReceiptById(item.id)
+  editingReceipt.value = { ...detail }
 }
 async function deleteReceipt(id) {
   await store.deleteReceipt(id)

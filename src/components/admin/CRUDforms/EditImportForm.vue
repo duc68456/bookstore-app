@@ -45,6 +45,12 @@ const addBookToReceipt = () => {
   importPrice.value = '';
 }
 
+function deleteBookInReceipt(book) {
+  // importReceipt từ props
+  const idx = props.importReceipt.books.findIndex(b => b.id === book.id)
+  if (idx !== -1) props.importReceipt.books.splice(idx, 1)
+}
+
 async function handleSave() {
   // Chuyển đổi books -> bookDetails theo đúng yêu cầu backend
   const bookDetails = (props.importReceipt.books || []).map(b => ({
@@ -102,7 +108,7 @@ async function handleSave() {
           </ButtonReceipt>
         </div>
 
-        <BookInReceiptTable :books="importReceipt.books" />
+        <BookInReceiptTable :books="importReceipt.books" @delete-book="deleteBookInReceipt" />
         <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
           <ButtonReceipt @click="handleSave">
             <template #btn-text>
