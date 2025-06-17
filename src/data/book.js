@@ -22,6 +22,7 @@ export const useBook = defineStore('book', () => {
         categories: b.categories?.map(c => c.categoryName) || [],
         quantity: b.quantity,
         import_price: b.importPrice,
+        publishedYear: b.publishedYear,
         _raw: b
       }))
       items.value.forEach(b => { fullBookDetails[b.id] = b })

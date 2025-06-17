@@ -35,12 +35,13 @@ export const useImportReceiptFormStore = defineStore('importReceipts', () => {
     try {
       const { data } = await api.get(`/import/${id}`)
       const r = data.result
+      console.log("DEBUG import receipt by id:", r)
       receiptDetails[id] = {
         id:    r.importReceiptId,
         admin: r.adminId,
         date:  r.importDate,
         total: r.totalAmount,
-        books: r.books.map(b => ({
+        books: r.bookDetails.map(b => ({
           id:           b.bookId,
           title:        b.name,
           quantity:     b.quantity,
@@ -57,45 +58,34 @@ export const useImportReceiptFormStore = defineStore('importReceipts', () => {
   }
 
   // 3) Tạo mới
-  async function createReceipt({ admin, date, total }) {
+  async function createReceipt({ adminId, bookDetails }) {
     loading.value = true; error.value = null
     try {
-      const { data } = await api.post('/import', {
-        adminId:     admin,
-        importDate:  date,
-        totalAmount: total
-      })
-      await fetchReceipts()
-      return data.result
+      const { data } = await api.post('/import', { adminId, bookDetails });
+      await fetchReceipts();
+      return data.result;
     } catch (e) {
-      console.error('[ImportReceipt] create failed', e)
-      throw e
+      console.error('[ImportReceipt] create failed', e);
+      throw e;
     } finally {
-      loading.value = false
+      loading.value = false;
     }
   }
 
   // 4) Cập nhật
-  async function updateReceipt(id, { admin, date, total, books }) {
+  async function updateReceipt(id, { adminId, bookDetails }) {
     loading.value = true; error.value = null
     try {
-      const { data } = await api.put(`/import/${id}`, {
-        adminId:     admin,
-        importDate:  date,
-        totalAmount: total,
-        books:       books.map(b => ({
-          bookId:      b.id,
-          quantity:    b.quantity,
-          importPrice: b.import_price
-        }))
-      })
-      await fetchReceipts()
-      return data.result
+      const payload = {adminId, bookDetails };
+      console.log('[DEBUG] Payload gửi PUT /import:', payload);
+      const { data } = await api.put(`/import/${id}`,  payload);
+      await fetchReceipts();
+      return data.result;
     } catch (e) {
-      console.error('[ImportReceipt] update failed', e)
-      throw e
+      console.error('[ImportReceipt] update failed', e);
+      throw e;
     } finally {
-      loading.value = false
+      loading.value = false;
     }
   }
 
