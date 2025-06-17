@@ -1,21 +1,36 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import TitleText from './texts/TitleText.vue'
-
-// Import icons (bạn cần tạo hoặc import các icon này)
 import ExportIcon from '@/assets/icons-vue/export.vue'
 import ImportIcon from '@/assets/icons-vue/import.vue'
 import PaymentIcon from '@/assets/icons-vue/payment.vue'
-
 import RegulationText from './texts/RegulationText.vue'
 import InputFrame from './frames/InputFrame.vue'
+import { useRegulation } from '@/data/regulation'
+import ButtonCRUD from './buttons/ButtonCRUD.vue'
+import ButtonText from './texts/ButtonText.vue'
+
+const { regulations, fetchRegulations, saveRegulations } = useRegulation()
+
+onMounted(() => {
+  fetchRegulations()
+})
 
 const router = useRouter()
 
-const regulationApply = ref(false) 
+function goToImportBook() {
+  router.push('/manage/import-book')
+}
 
-// Dữ liệu thống kê mẫu (trong thực tế nên lấy từ store)
+function goToExportBook() {
+  router.push('/manage/export-book')
+}
+
+function goToPaymentReceipt() {
+  router.push('/manage/payment-receipt')
+}
+
 const stats = ref({
   import: {
     count: 12,
@@ -33,24 +48,6 @@ const stats = ref({
     lastUpdate: 'May 16, 2025'
   }
 })
-
-function goToImportBook() {
-  router.push('/manage/import-book')
-}
-
-function goToExportBook() {
-  router.push('/manage/export-book')
-}
-
-function goToPaymentReceipt() { 
-  router.push('/manage/payment-receipt')
-}
-
-const minImportQuantity = ref(0)
-const minStockBeforeImport = ref(0)
-const maxDebt = ref(0)
-const minStockAfterExport = ref(0)
-
 </script>
 
 <template>
@@ -153,64 +150,44 @@ const minStockAfterExport = ref(0)
         </div>
       </div>
     </div>
+
     <div class="group-text">
       <div class="row-regulation">
-        <RegulationText>
-          <template #text>
-            Minimum import quantity
-          </template>
-        </RegulationText>
-        <InputFrame v-model="minImportQuantity"/>
+        <RegulationText><template #text>Minimum import quantity</template></RegulationText>
+        <InputFrame v-model="regulations.minImportQuantity" />
       </div>
       <div class="row-regulation">
-        <RegulationText>
-          <template #text>
-            Minimum stock before import
-          </template>
-        </RegulationText>
-        <InputFrame v-model="minStockBeforeImport"/>
+        <RegulationText><template #text>Minimum stock before import</template></RegulationText>
+        <InputFrame v-model="regulations.minStockBeforeImport" />
       </div>
       <div class="row-regulation">
-        <RegulationText>
-          <template #text>
-            Maximum Debt
-          </template>
-        </RegulationText>
-        <InputFrame v-model="maxDebt"/>
+        <RegulationText><template #text>Maximum Debt</template></RegulationText>
+        <InputFrame v-model="regulations.maxDebt" />
       </div>
       <div class="row-regulation">
-        <RegulationText>
-          <template #text>
-            Minimum stock after export
-          </template>
-        </RegulationText>
-        <InputFrame v-model="minStockAfterExport"/>
+        <RegulationText><template #text>Minimum stock after export</template></RegulationText>
+        <InputFrame v-model="regulations.minStockAfterExport" />
       </div>
       <div class="row-regulation">
-        <RegulationText>
-          <template #text>
-            The amount collected does not exceed the amount owed
-          </template>
-        </RegulationText>
+        <RegulationText><template #text>The amount collected does not exceed the amount owed</template></RegulationText>
         <div>
-          <v-switch
-            style="transform: translateY(8px);"
-            v-model="regulationApply"
-            :true-value="true"
-            :false-value="false"
-            color="var(--vt-c-second-bg-color)"
-            inset
-  density="compact"
-  class="ma-0 pa-0"
-          />
+          <v-switch style="transform: translateY(8px);" v-model="regulations.allowPartialPayment" :true-value="true"
+            :false-value="false" color="var(--vt-c-second-bg-color)" inset density="compact" class="ma-0 pa-0" />
         </div>
+      </div>
+
+      <div class="row-regulation">
+        <ButtonCRUD @click="saveRegulations">
+          <template #btn-text>
+            <ButtonText><template #text>SAVE</template></ButtonText>
+          </template>
+        </ButtonCRUD>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-
 .row-regulation {
   display: flex;
   flex-direction: row;
@@ -268,7 +245,7 @@ const minStockAfterExport = ref(0)
   padding: 16px 20px;
   display: flex;
   align-items: center;
-  gap: 12px;  
+  gap: 12px;
 }
 
 .icon-container {
@@ -341,12 +318,12 @@ const minStockAfterExport = ref(0)
   background-color: var(--vt-c-second-bg-color);
   background-size: 500% 100%;
   background-image: linear-gradient(to right,
-    var(--vt-c-second-bg-color),
-    var(--vt-c-gradient-bg-color),
-    var(--vt-c-gradient-bg-color),
-    var(--vt-c-second-bg-color));
+      var(--vt-c-second-bg-color),
+      var(--vt-c-gradient-bg-color),
+      var(--vt-c-gradient-bg-color),
+      var(--vt-c-second-bg-color));
   background-position: 0% 50%;
-  transition: background-position 0.4s ease-in-out; 
+  transition: background-position 0.4s ease-in-out;
   color: var(--vt-c-main-bg-color);
   border: none;
   border-radius: 6px;
@@ -357,11 +334,10 @@ const minStockAfterExport = ref(0)
 }
 
 .action-button:hover {
-  background-position: 100% 50%; 
+  background-position: 100% 50%;
 }
 
 .group-text {
   padding-top: 30px;
 }
-
 </style>
