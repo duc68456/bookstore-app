@@ -1,7 +1,7 @@
 <script setup>
 import { useExportReceiptFormStore } from '@/data/exportReceipts';
 import { useUser } from '@/data/user'; // Import useUser store
-import { computed, ref } from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import { useRouter } from 'vue-router';
 
 import CRUDMainForm from '../CRUDforms/CRUDMainForm.vue';
@@ -16,59 +16,39 @@ const router = useRouter()
 const store = useExportReceiptFormStore()
 const userStore = useUser() // Sử dụng user store
 
-const exportReceiptList = computed(() => store.forms)
+const exportReceiptList = computed(() => store.receipts)
 
 const editingReceipt = ref(null)
 const selectedCustomer = ref(null) // Lưu trữ toàn bộ đối tượng khách hàng được chọn
 
 // Thêm biến để quản lý nợ của khách hàng
-const customerDebts = ref({
-  '1': { amount: 120.00, lastPayment: 'May 10, 2025' },
-  '2': { amount: 85.50, lastPayment: 'May 15, 2025' }
+const customerDebts = ref([])
+
+onMounted(() => {
+  store.fetchReceipts()
 })
 
-function handleEdit(receipt) {
-  editingReceipt.value = store.formDetails[receipt.id]
+async function handleEdit(item) {
+  const detail = await store.fetchReceiptById(item.id)
+  editingReceipt.value = { ...detail, userId: item.userId }
 }
 
-function handleAddExport() {
+async function handleAddExport() {
   // Kiểm tra xem đã chọn khách hàng chưa
   if (!selectedCustomer.value) {
     alert('Please select a customer before adding an export receipt.')
     return
   }
 
-  const now = new Date()
+  editingReceipt.value = ({
+    adminId: userStore.currentUser?.id || 'admin001', // Nếu có
+    userId: selectedCustomer.value.id,
+    paidAmount: 0,
+    books: []
+  });
 
-  const datePart = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(now)
+  // Ghi nợ
 
-  const timePart = now.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true
-  })
-
-  const fullTime = `${datePart} - ${timePart}`
-
-  // Tạo một số tiền nợ ngẫu nhiên trong khoảng $50 đến $200
-  // Trong thực tế, số tiền này sẽ được tính từ giá trị sách trong phiếu xuất
-  const debtAmount = (Math.random() * 150 + 50).toFixed(2)
-  
-  // Tạo phiếu xuất sách
-  store.addExportReceiptForm({
-    time: fullTime,
-    total: `$${debtAmount}`,
-    customer: selectedCustomer.value.name,
-    customerId: selectedCustomer.value.id
-  })
-  
-  // Ghi nợ cho khách hàng
-  addCustomerDebt(selectedCustomer.value.id, debtAmount, fullTime)
-  
   // Reset khách hàng đã chọn
   selectedCustomer.value = null
 }

@@ -27,9 +27,9 @@ const confirmDelete = () => {
 
 const headers = [
   { title: 'ID', key: 'id' },
-  { title: 'Time', key: 'time' },
+  { title: 'Time', key: 'date' },
   { title: 'Total Amount', key: 'total' },
-  { title: 'Customer', key: 'customer'},
+  { title: 'Customer', key: 'userId'},
   { title: 'Action', key: 'action', sortable: false },
 ]
 </script>

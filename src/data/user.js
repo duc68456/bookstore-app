@@ -9,6 +9,7 @@ export const useUser = defineStore('user', () => {
   const searchQuery = ref('')
   const loading = ref(false)
   const error = ref(null)
+  const currentUser = ref(null)
 
   // Computed list đã lọc theo searchQuery
   const filteredUsers = computed(() => {
@@ -130,6 +131,7 @@ export const useUser = defineStore('user', () => {
     filteredUsers,
     loading,
     error,
+    currentUser,
     fetchUsers,
     addUser,
     updateUserAPI,
