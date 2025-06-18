@@ -83,29 +83,23 @@ export const useUser = defineStore('user', () => {
     if (idx !== -1) users.value[idx] = { ...updated }
   }
 
- async function updateUserAPI(userId, payload) {
-    loading.value = true;
+   async function updateUserAPI(userId, payload) {
+    // Normalize payload.dob nếu là Date
+    if (payload.dob instanceof Date) {
+      const y = payload.dob.getFullYear()
+      const m = String(payload.dob.getMonth() + 1).padStart(2, '0')
+      const d = String(payload.dob.getDate()).padStart(2, '0')
+      payload.dob = `${y}-${m}-${d}`
+    }
+    loading.value = true
     try {
-      const { data } = await api.put(`/users/${userId}`, payload);
-      // update local list nếu muốn:
-      const updated = data.result;
-      const idx = users.value.findIndex(u => u.id === updated.id);
-      if (idx !== -1) {
-        users.value[idx] = {
-          ...users.value[idx],
-          firstName: updated.firstName,
-          lastName: updated.lastName,
-          dob: updated.dob,
-          phone: updated.phone,
-          role: updated.roles?.[0]?.name ?? ''
-        };
-      }
+      const { data } = await api.put(`/users/${userId}`, payload)
       await fetchUsers()
     } catch (e) {
-      console.error('[UserStore] updateUser failed', e);
-      throw e;
+      console.error('[UserStore] updateUser failed', e)
+      throw e
     } finally {
-      loading.value = false;
+      loading.value = false
     }
   }
 

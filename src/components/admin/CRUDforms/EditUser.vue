@@ -1,22 +1,34 @@
 <script setup>
+import { useUser } from '@/data/user'
 import { reactive } from 'vue'
-import CRUDMainForm from './CRUDMainForm.vue'
-import TitleText from '../texts/TitleText.vue'
-import FrameRU from '../frames/FrameRU.vue'
-import DatePickerFrame from '../frames/DatePickerFrame.vue'
-import FrameText from '../texts/FrameText.vue'
 import ButtonCRUD from '../buttons/ButtonCRUD.vue'
+import DatePickerFrame from '../frames/DatePickerFrame.vue'
+import FrameRU from '../frames/FrameRU.vue'
 import ButtonText from '../texts/ButtonText.vue'
-
+import TitleText from '../texts/TitleText.vue'
+import CRUDMainForm from './CRUDMainForm.vue'
 const props = defineProps(['user'])
 const emit = defineEmits(['close', 'update-user'])
 
 const editedUser = reactive({ ...props.user })
-
-const handleEdit = () => {
-  console.log('Edited user:', editedUser)
-  emit('update-user', editedUser)
-  emit('close')
+const userStore = useUser()
+const handleEdit = async () => {
+  try {
+    // Gọi API update, trong đó có fetchUsers() để reload lại danh sách
+    await userStore.updateUserAPI(editedUser.id, {
+      firstName: editedUser.firstName,
+      lastName:  editedUser.lastName,
+      dob:        editedUser.dob,
+      phone:      editedUser.phone,
+      role:       editedUser.role
+    })
+    // Nếu updateUserAPI chưa fetch lại thì bạn có thể gọi thêm:
+    // await userStore.fetchUsers()
+  } catch (e) {
+    console.error('Update failed', e)
+  } finally {
+    emit('close')
+  }
 }
 </script>
 
