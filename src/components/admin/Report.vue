@@ -13,7 +13,7 @@ const userMonth = ref(new Date())
 </script>
 
 <template>
-  <div style="overflow-y: auto;" class="content">
+  <div style="overflow-y: auto; overflow-x: auto;" class="content">
     <div class="top-bar">
       <div class="left">
         <TitleText><template #text>Bookstore Report</template></TitleText>

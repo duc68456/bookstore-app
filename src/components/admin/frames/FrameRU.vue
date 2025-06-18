@@ -13,11 +13,14 @@ const isFocused = ref(false)
 
 const shouldShowFloatingLabel = computed(() => {
   if (isFocused.value) return true
-  if (!props.modelValue) return false
+  if (props.modelValue === null || props.modelValue === undefined) return false
   if (typeof props.modelValue === 'string') return props.modelValue.length > 0
   if (props.modelValue instanceof Date) return true
-  return (props.modelValue && props.modelValue.length > 0) || isFocused.value
+  if (typeof props.modelValue === 'number') return true // Thêm xử lý cho số
+  // Xử lý cho mảng hoặc đối tượng có thuộc tính length
+  return props.modelValue && props.modelValue.length > 0
 })
+
 
 const handleFocus = () => {
   isFocused.value = true

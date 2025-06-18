@@ -1,13 +1,8 @@
 <template>
   <v-container fluid>
-<<<<<<< HEAD
-=======
-    <!-- Search field -->
-    <v-text-field v-model="searchQuery" label="Tìm kiếm người dùng" clearable class="mb-4" />
 
->>>>>>> ebdaaba5fc169175467ce0d43cc22106e9fba0ad
     <div class="table-wrapper">
-      <v-data-table :headers="headers" :items="filteredUsers" class="elevation-1" item-value="id" :items-per-page="-1"
+      <v-data-table :headers="headers" :items="filteredUsers" class="elevation-1" item-value="id" :items-per-page="-1" height="600"
         hide-default-footer>
         <template #item.action="{ item }">
 
@@ -100,17 +95,10 @@ const headers = [
 </script>
 
 <style scoped>
-/* Wrapper cho scroll */
 .table-wrapper {
-
-  max-height: 66vh;        /* chiều cao tối đa */
-  overflow-y: auto;        /* bật scroll dọc */
-
   max-height: 60vh;
-  /* chiều cao tối đa */
   overflow-y: auto;
-  /* bật scroll dọc */
-
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .v-data-table {

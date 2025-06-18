@@ -213,8 +213,11 @@ function goToPaymentReceipt() { router.push('/manage/payment-receipt') }
 
 .content {
   width: 100%;
-  height: 100%;
+  height: 100%; /* Hoặc 100% nếu root đã setup */
   padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .top-bar {

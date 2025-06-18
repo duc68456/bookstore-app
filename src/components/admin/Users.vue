@@ -92,7 +92,6 @@ async function handleDeleteUser(userId) {
       </ButtonCRUD>
     </div>
 
-    <!-- DETAIL -->
     <UserDetail v-else-if="selectedUser && !editingUser" :user="selectedUser" @close="closeDetail"
       class="user-detail-full" />
 

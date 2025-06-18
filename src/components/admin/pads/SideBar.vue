@@ -119,6 +119,8 @@ const isActive = (path) => route.path === path || route.path.startsWith(path + '
   padding-top: 12px;
   padding-bottom: 20px;
   overflow: hidden;
+  box-shadow: 4px 0 0 rgba(0, 0, 0, 0.1);
+
 }
 
 .logo {
