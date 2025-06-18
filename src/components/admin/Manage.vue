@@ -1,54 +1,69 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+
+import { useRegulation } from '@/data/regulation'
+import { useImportReceiptFormStore } from '@/data/importReceipts'
+import { useExportReceiptFormStore } from '@/data/exportReceipts'
+import { usePaymentReceipts } from '@/data/paymentReceipts'
+
 import TitleText from './texts/TitleText.vue'
 import ExportIcon from '@/assets/icons-vue/export.vue'
 import ImportIcon from '@/assets/icons-vue/import.vue'
 import PaymentIcon from '@/assets/icons-vue/payment.vue'
 import RegulationText from './texts/RegulationText.vue'
 import InputFrame from './frames/InputFrame.vue'
-import { useRegulation } from '@/data/regulation'
 import ButtonCRUD from './buttons/ButtonCRUD.vue'
 import ButtonText from './texts/ButtonText.vue'
 
 const { regulations, fetchRegulations, saveRegulations } = useRegulation()
-
-onMounted(() => {
-  fetchRegulations()
-})
-
+const importStore = useImportReceiptFormStore()
+const exportStore = useExportReceiptFormStore()
+const paymentStore = usePaymentReceipts()
 const router = useRouter()
 
-function goToImportBook() {
-  router.push('/manage/import-book')
-}
-
-function goToExportBook() {
-  router.push('/manage/export-book')
-}
-
-function goToPaymentReceipt() {
-  router.push('/manage/payment-receipt')
-}
-
 const stats = ref({
-  import: {
-    count: 12,
-    lastUpdate: 'May 17, 2025',
-    pending: 3
-  },
-  export: {
-    count: 8,
-    lastUpdate: 'May 18, 2025',
-    pending: 5
-  },
-  payment: {
-    total: '$560.50',
-    pending: '$285.70',
-    lastUpdate: 'May 16, 2025'
-  }
+  import: { count: 0, lastUpdate: '', pending: 0 },
+  export: { count: 0, lastUpdate: '', pending: 0 },
+  payment: { total: 0, pending: 0, lastUpdate: '' }
 })
+
+onMounted(async () => {
+  await fetchRegulations()
+  await Promise.all([
+    importStore.fetchReceipts(),
+    exportStore.fetchReceipts(),
+    paymentStore.fetchPaymentReceipts()
+  ])
+
+  const imports = importStore.receipts
+  stats.value.import.count = imports.length
+  stats.value.import.pending = imports.filter(r => r.status === 'PENDING').length
+  stats.value.import.lastUpdate = imports.length
+      ? new Date(Math.max(...imports.map(i => new Date(i.date || i.createAt)))).toLocaleDateString()
+      : ''
+
+  const invoices = exportStore.receipts
+  stats.value.export.count = invoices.length
+  stats.value.export.pending = invoices.filter(r => r.status === 'PENDING').length
+  stats.value.export.lastUpdate = invoices.length
+      ? new Date(Math.max(...invoices.map(i => new Date(i.date || i.createAt)))).toLocaleDateString()
+      : ''
+
+  const payments = paymentStore.paymentReceipts
+  stats.value.payment.total = payments.reduce((sum, p) => sum + (parseFloat(p.totalAmount || 0)), 0)
+  stats.value.payment.pending = payments.filter(p => p.status === 'PENDING').reduce((sum, p) => sum + (parseFloat(p.amount || 0)), 0)
+  stats.value.payment.lastUpdate = payments.length
+      ? new Date(Math.max(...payments.map(i => new Date(i.date || i.createAt)))).toLocaleDateString()
+      : ''
+})
+
+function goToImportBook() { router.push('/manage/import-book') }
+function goToExportBook() { router.push('/manage/export-book') }
+function goToPaymentReceipt() { router.push('/manage/payment-receipt') }
+
 </script>
+
 
 <template>
   <div class="content">
