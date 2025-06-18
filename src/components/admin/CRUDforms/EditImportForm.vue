@@ -1,14 +1,13 @@
 <script setup>
+import { useImportReceiptFormStore } from '@/data/importReceipts.js'
 import { ref } from 'vue'
-import {useImportReceiptFormStore} from '@/data/importReceipts.js'
-import CRUDMainForm from './CRUDMainForm.vue'
-import TitleText from '../texts/TitleText.vue'
-import BookTable from '../tables/BookTable.vue'
-import BookTableShort from '../tables/BookTableShort.vue'
-import TitleFrame from '../frames/TitleFrame.vue'
-import ReceiptFormFrame from '../frames/ReceiptFormFrame.vue'
 import ButtonReceipt from '../buttons/ButtonReceipt.vue'
+import ReceiptFormFrame from '../frames/ReceiptFormFrame.vue'
+import TitleFrame from '../frames/TitleFrame.vue'
+import BookTableShort from '../tables/BookTableShort.vue'
 import ButtonText from '../texts/ButtonText.vue'
+import TitleText from '../texts/TitleText.vue'
+import CRUDMainForm from './CRUDMainForm.vue'
 
 import BookInReceiptTable from '../tables/BookInReceiptTable.vue'
 
@@ -85,7 +84,7 @@ async function handleSave() {
 
 </script>
 <template>
-  <CRUDMainForm>
+  <CRUDMainForm @close="emit('close')">
     <template #title>
       <TitleText>
         <template #text>Edit Import Receipt</template>
