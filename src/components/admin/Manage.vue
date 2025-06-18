@@ -22,7 +22,6 @@ const exportStore = useExportReceiptFormStore()
 const paymentStore = usePaymentReceipts()
 const router = useRouter()
 
-// State hiển thị stats
 const stats = ref({
   import: { count: 0, lastUpdate: '', pending: 0 },
   export: { count: 0, lastUpdate: '', pending: 0 },
@@ -37,7 +36,6 @@ onMounted(async () => {
     paymentStore.fetchPaymentReceipts()
   ])
 
-  // --- Import Books ---
   const imports = importStore.receipts
   stats.value.import.count = imports.length
   stats.value.import.pending = imports.filter(r => r.status === 'PENDING').length
@@ -45,7 +43,6 @@ onMounted(async () => {
       ? new Date(Math.max(...imports.map(i => new Date(i.date || i.createAt)))).toLocaleDateString()
       : ''
 
-  // --- Export/Invoices ---
   const invoices = exportStore.receipts
   stats.value.export.count = invoices.length
   stats.value.export.pending = invoices.filter(r => r.status === 'PENDING').length
@@ -53,7 +50,6 @@ onMounted(async () => {
       ? new Date(Math.max(...invoices.map(i => new Date(i.date || i.createAt)))).toLocaleDateString()
       : ''
 
-  // --- Payments ---
   const payments = paymentStore.paymentReceipts
   stats.value.payment.total = payments.reduce((sum, p) => sum + (parseFloat(p.totalAmount || 0)), 0)
   stats.value.payment.pending = payments.filter(p => p.status === 'PENDING').reduce((sum, p) => sum + (parseFloat(p.amount || 0)), 0)
@@ -62,7 +58,6 @@ onMounted(async () => {
       : ''
 })
 
-// --- Điều hướng ---
 function goToImportBook() { router.push('/manage/import-book') }
 function goToExportBook() { router.push('/manage/export-book') }
 function goToPaymentReceipt() { router.push('/manage/payment-receipt') }
